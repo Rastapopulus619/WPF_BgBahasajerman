@@ -1,4 +1,4 @@
-# WPF_BgBahasajerm
+# WPF_BgBahasajerman
 This is my first attempt to create a WPF app.
 The goals are:
 
