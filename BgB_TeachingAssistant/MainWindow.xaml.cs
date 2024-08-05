@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BgB_TeachingAssistant.Data;
+using Microsoft.Extensions.Configuration;
 using System.Reflection.Emit;
 using System.Text;
 using System.Windows;
@@ -20,6 +21,7 @@ namespace BgB_TeachingAssistant
     {
         private readonly IConfiguration _configuration;
         private readonly DataAccess _dataAccess;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,18 +40,43 @@ namespace BgB_TeachingAssistant
                 MessageBox.Show($"Error setting up configuration: {ex.Message}");
             }
         }
+
         private void ButtonDanCuk_Click(object sender, RoutedEventArgs e)
         {
-            string studentName = "Aaron";
+            try
+            {
+                // Retrieve all student names
+                List<string> studentNames = QueryExecutor.ExecuteQuery<string>(_dataAccess, "GetStudentlist");
+
+                // Bind the student names to the ComboBox
+                StudentComboBox.ItemsSource = studentNames;
+
+                // Optionally, select the first item if the list is not empty
+                if (studentNames.Any())
+                {
+                    StudentComboBox.SelectedIndex = 0;
+                }
+
+                MessageBox.Show("Student list loaded successfully!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving student list: {ex.Message}");
+            }
+        }
+    }
+    //private void ButtonDanCuk_Click(object sender, RoutedEventArgs e)
+    //    {
+    //        string studentName = "Aaron";
             //MessageBox.Show(studentName);
 
             //DataAccess db = new DataAccess();
 
             //string studentID = db.GetStudentID(studentName).ToString();
 
-            string studentID = _dataAccess.GetStudentID(studentName).ToString();
+            //string studentID = _dataAccess.GetStudentID(studentName).ToString();
 
-            myLabel.Content = $"Welcome, {studentName} with StudentID {studentID}!";
+            //myLabel.Content = $"Welcome, {studentName} with StudentID {studentID}!";
 
             /* ///
             string connectionString = "SERVER=localhost; DATABASE=bgbahasajerman; UID=root; PASSWORD=Burungnuri1212";
@@ -74,6 +101,6 @@ namespace BgB_TeachingAssistant
             //MessageBox.Show(dt.);
 
             //myLabel.Foreground = Brushes.Green;
-        }
-    }
+        //}
+    //}
 }

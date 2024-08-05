@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -12,11 +13,45 @@ namespace BgB_TeachingAssistant
     public class DataAccess
     {
         private readonly string _connectionString;
+        private readonly Dictionary<string, string> _queries = new Dictionary<string, string>();
+
         public DataAccess(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("MySQL");
-            //Checking whether the connection is fetched from appsetings.json
-            //MessageBox.Show($"Connection String: {_connectionString}"); // Debug output
+            LoadQueries();
+        }
+        private void LoadQueries()
+        {
+            var basePath = Path.Combine(Directory.GetCurrentDirectory(), "BgB_Queries");
+            LoadQueriesFromDirectory(basePath);
+        }
+        private void LoadQueriesFromDirectory(string directoryPath)
+        {
+            var sqlFiles = Directory.GetFiles(directoryPath, "*.sql", SearchOption.AllDirectories);
+
+            foreach (var file in sqlFiles)
+            {
+                var key = Path.GetFileNameWithoutExtension(file);
+                var query = File.ReadAllText(file);
+                if (!_queries.ContainsKey(key))
+                {
+                    _queries.Add(key, query);
+                }
+                else
+                {
+                    // Handle duplicate keys if necessary
+                    // For example, log a warning or throw an exception
+                }
+            }
+        }
+        public string GetQuery(string queryName)
+        {
+            return _queries.ContainsKey(queryName) ? _queries[queryName] : null;
+        }
+
+        public IDbConnection GetConnection()
+        {
+            return new MySqlConnection(_connectionString);
         }
 
         public int GetStudentID(string studentName)
