@@ -1,0 +1,15 @@
+﻿<Window x:Class="BgB_TeachingAssistant.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BgB_TeachingAssistant"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <Label>What's Up?</Label>
+        <Button x:Name="ButtonDanCuk" Width="150" Height="30" Click="ButtonDanCuk_Click">Hello Click Me!</Button>
+        <Label x:Name="myLabel">Whaddup?!</Label>
+        <DataGrid Name="dtGrid"  ItemsSource="{Binding}"/>
+    </StackPanel>
+</Window>
