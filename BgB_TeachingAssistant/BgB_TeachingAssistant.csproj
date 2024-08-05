@@ -22,4 +22,16 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BgB_Queries\ErrorCheckingQueries\" />
+    <Folder Include="BgB_Queries\LoggingQueries\" />
+    <Folder Include="BgB_Queries\RoutineQueries\" />
+    <Folder Include="BgB_Queries\PackageQueries\" />
+    <Folder Include="BgB_Queries\PricingQueries\" />
+    <Folder Include="BgB_Queries\OngoingLessonQueries\" />
+    <Folder Include="BgB_Queries\TimeQueries\" />
+    <Folder Include="BgB_Queries\StudentQueries\" />
+    <Folder Include="BgB_Queries\GeneralQueries\" />
+  </ItemGroup>
+
 </Project>
