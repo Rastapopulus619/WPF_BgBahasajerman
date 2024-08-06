@@ -57,6 +57,7 @@ namespace BgB_TeachingAssistant
                     StudentComboBox.SelectedIndex = 0;
                 }
 
+
                 MessageBox.Show("Student list loaded successfully!");
             }
             catch (Exception ex)
