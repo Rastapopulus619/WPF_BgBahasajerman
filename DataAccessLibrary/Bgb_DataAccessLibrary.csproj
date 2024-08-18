@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="SqlDataAccess.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="MySql.Data" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="BgB_Queries\ErrorCheckingQueries\" />
+    <Folder Include="BgB_Queries\GeneralQueries\" />
+    <Folder Include="BgB_Queries\LoggingQueries\" />
+    <Folder Include="BgB_Queries\OngoingLessonQueries\" />
+    <Folder Include="BgB_Queries\PackageQueries\" />
+    <Folder Include="BgB_Queries\PricingQueries\" />
+    <Folder Include="BgB_Queries\RoutineQueries\" />
+    <Folder Include="BgB_Queries\TimeQueries\" />
+    <Folder Include="Data\StudentProfileData\" />
+    <Folder Include="Data\Testing\" />
+    <Folder Include="Models\PackageModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="BgB_Queries\StudentQueries\GetStudentNames.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="BgB_Queries\StudentQueries\GetStudentList.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

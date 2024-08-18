@@ -1,8 +1,13 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Extensions.Configuration;
-using System.IO;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.QueryLoaders;
+using Bgb_DataAccessLibrary.QueryExecutor;
+using System;
+using Bgb_DataAccessLibrary;
+using Bgb_DataAccessLibrary.Logger;
 
 namespace BgB_TeachingAssistant
 {
@@ -11,24 +16,56 @@ namespace BgB_TeachingAssistant
     /// </summary>
     public partial class App : Application
     {
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; private set; }
+        private IHost _host;
 
         public App()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-            Configuration = builder.Build();
+            _host = CreateHostBuilder().Build();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
+        public static IHostBuilder CreateHostBuilder() =>
+            Host.CreateDefaultBuilder()
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    // Register IConfiguration
+                    services.AddSingleton<IConfiguration>(context.Configuration);
 
-            // Access the connection string
-            var connectionString = Configuration.GetConnectionString("MySQL");
-            // Use the connection string to set up your database connection
+                    // Register your services
+                    services
+                        .AddSingleton<ILoggerService>(sp => new LoggerService(@"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\BgB_TeachingAssistant\Logs"))
+                        .AddSingleton<IDataAccess, MySqlDataAccess>(sp => new MySqlDataAccess(context.Configuration.GetConnectionString("MySQL"), sp.GetRequiredService<ILoggerService>()))
+                        .AddSingleton<IQueryLoader, Bgb_QueryLoader>(sp => new Bgb_QueryLoader(@"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\DataAccessLibrary\BgB_Queries"))
+                        //.AddTransient<IDataAccess, MySqlDataAccess>() // Use passing IConfiguration automatically and fetching connectionString in the DataAccess class
+                        //.AddTransient<IDataAccess, MySqlDataAccess>(sp => new MySqlDataAccess(sp.GetRequiredService<IConfiguration>().GetConnectionString("MySQL")))
+                        
+                        .AddTransient<IQueryExecutor, QueryExecutor>()
+                        .AddTransient<IMessages, Messages>()
+
+                        .AddTransient<MainWindow>();
+                });
+
+        protected override async void OnStartup(StartupEventArgs e)
+        {
+            await _host.StartAsync();
+
+            // Resolve your main window (or other services) here
+            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+            mainWindow.Show();
+
+            base.OnStartup(e);
+        }
+
+        protected override async void OnExit(ExitEventArgs e)
+        {
+            await _host.StopAsync();
+            _host.Dispose();
+
+            base.OnExit(e);
         }
     }
 }

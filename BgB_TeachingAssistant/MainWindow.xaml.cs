@@ -1,5 +1,4 @@
-﻿using BgB_TeachingAssistant.Data;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Reflection.Emit;
 using System.Text;
 using System.Windows;
@@ -11,6 +10,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Google.Protobuf;
+using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary;
+using Bgb_DataAccessLibrary.QueryLoaders;
+using MySqlX.XDevAPI.Common;
+using Bgb_DataAccessLibrary.Models.StudentModels;
 
 namespace BgB_TeachingAssistant
 {
@@ -19,43 +24,42 @@ namespace BgB_TeachingAssistant
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly IConfiguration _configuration;
-        private readonly DataAccess _dataAccess;
+        private readonly IMessages _messages;
+        private readonly IDataAccess _dataAccess;
+        private readonly IQueryLoader _queryLoader;
 
-        public MainWindow()
+        public MainWindow(IMessages messages, IDataAccess dataAccess, IQueryLoader queryLoader)
         {
             InitializeComponent();
+            _messages = messages;
+            _dataAccess = dataAccess;
+            _queryLoader = queryLoader;
 
-            try
-            {
-                _configuration = new ConfigurationBuilder()
-                    .SetBasePath(AppContext.BaseDirectory)
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .Build();
-
-                _dataAccess = new DataAccess(_configuration);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error setting up configuration: {ex.Message}");
-            }
         }
 
-        private void ButtonDanCuk_Click(object sender, RoutedEventArgs e)
+        private async void ButtonDanCuk_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 // Retrieve all student names
-                List<string> studentNames = QueryExecutor.ExecuteQuery<string>(_dataAccess, "GetStudentlist");
 
-                // Bind the student names to the ComboBox
+                // with dynamic type:
+                //var result = _dataAccess.QueryAsync<dynamic>(_queryLoader.GetQuery("GetStudentList")).Result.ToList();
+
+                // Convert the result to a list of strings
+                //List<string> studentNames = result
+                //    .Select(item => (string)item.Name)  // Assuming the dynamic object has a property called StudentName
+                //    .ToList();
+
+
+                // Retrieve all student names
+                List<StudentModel> studentList = await GetStudentsAsync();
+
+                // Convert the list of students to a list of names
+                List<string> studentNames = studentList.Select(s => s.Name).ToList();
+
+                // Set the ComboBox's ItemsSource to the list of names
                 StudentComboBox.ItemsSource = studentNames;
-
-                // Optionally, select the first item if the list is not empty
-                if (studentNames.Any())
-                {
-                    StudentComboBox.SelectedIndex = 0;
-                }
 
 
                 MessageBox.Show("Student list loaded successfully!");
@@ -64,6 +68,11 @@ namespace BgB_TeachingAssistant
             {
                 MessageBox.Show($"Error retrieving student list: {ex.Message}");
             }
+        }
+        private async Task<List<StudentModel>> GetStudentsAsync()
+        {
+            var query = _queryLoader.GetQuery("GetStudentList");
+            return (await _dataAccess.QueryAsync<StudentModel>(query)).ToList();
         }
     }
     //private void ButtonDanCuk_Click(object sender, RoutedEventArgs e)

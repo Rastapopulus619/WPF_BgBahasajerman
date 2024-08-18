@@ -1,8 +1,19 @@
 ﻿<Application x:Class="BgB_TeachingAssistant.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:BgB_TeachingAssistant"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:BgB_TeachingAssistant">
+    
+            <!-- StartupUri="MainWindow.xaml"-->
+    
+            <!-- 
+    
+                The StartupUri property defines the initial window that is shown when the application starts.
+                If you are configuring the startup window programmatically in the App.xaml.cs file or using 
+                dependency injection to manage the application's main window, you might remove the StartupUri 
+                line. Removing this line allows for greater flexibility in determining the startup sequence 
+                through code.
+    
+                -->
     <Application.Resources>
          
     </Application.Resources>
