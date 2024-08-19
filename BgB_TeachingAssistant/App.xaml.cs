@@ -40,17 +40,17 @@ namespace BgB_TeachingAssistant
                         .AddSingleton<IQueryLoader, Bgb_QueryLoader>(sp => new Bgb_QueryLoader(@"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\DataAccessLibrary\BgB_Queries"))
                         //.AddTransient<IDataAccess, MySqlDataAccess>() // Use passing IConfiguration automatically and fetching connectionString in the DataAccess class
                         //.AddTransient<IDataAccess, MySqlDataAccess>(sp => new MySqlDataAccess(sp.GetRequiredService<IConfiguration>().GetConnectionString("MySQL")))
-                        
+
                         .AddTransient<IQueryExecutor, QueryExecutor>()
                         .AddTransient<IMessages, Messages>()
 
                         // Register ViewModel
-                        .AddSingleton<ApplicationView>()
                         .AddSingleton<ApplicationViewModel>()
                         .AddSingleton<StudentViewModel>()
 
                         // Register MainWindow
-                        .AddSingleton<MainWindow>();
+                        .AddSingleton<ApplicationView>();
+                        //.AddSingleton<MainWindow>();
                 });
 
         protected override async void OnStartup(StartupEventArgs e)
@@ -59,12 +59,8 @@ namespace BgB_TeachingAssistant
 
             // Resolve your main window (or other services) here
             var appView = _host.Services.GetRequiredService<ApplicationView>();
-            var appViewModel = _host.Services.GetRequiredService<ApplicationViewModel>();
-
-            appView.DataContext = appViewModel;
+            // Show the ApplicationView
             appView.Show();
-            //var mainWindow = _host.Services.GetRequiredService<MainWindow>();
-            //mainWindow.Show();
 
             base.OnStartup(e);
         }

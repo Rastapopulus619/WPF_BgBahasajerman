@@ -15,6 +15,12 @@
     
                 -->
     <Application.Resources>
-         
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <!-- Add more styles for other control types as needed -->
     </Application.Resources>
 </Application>
