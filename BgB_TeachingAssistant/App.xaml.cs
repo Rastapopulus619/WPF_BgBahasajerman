@@ -45,6 +45,8 @@ namespace BgB_TeachingAssistant
                         .AddTransient<IMessages, Messages>()
 
                         // Register ViewModel
+                        .AddSingleton<ApplicationView>()
+                        .AddSingleton<ApplicationViewModel>()
                         .AddSingleton<StudentViewModel>()
 
                         // Register MainWindow
@@ -56,8 +58,13 @@ namespace BgB_TeachingAssistant
             await _host.StartAsync();
 
             // Resolve your main window (or other services) here
-            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            var appView = _host.Services.GetRequiredService<ApplicationView>();
+            var appViewModel = _host.Services.GetRequiredService<ApplicationViewModel>();
+
+            appView.DataContext = appViewModel;
+            appView.Show();
+            //var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+            //mainWindow.Show();
 
             base.OnStartup(e);
         }
