@@ -1,4 +1,6 @@
-﻿using BgB_TeachingAssistant.Commands;
+﻿using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.QueryLoaders;
+using BgB_TeachingAssistant.Commands;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -11,11 +13,11 @@ namespace BgB_TeachingAssistant.ViewModels
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
 
-        public ApplicationViewModel()
+        public ApplicationViewModel(IDataAccess dataAccess, IQueryLoader queryLoader)
         {
             // Add available pages
             PageViewModels.Add(new DashboardViewModel());
-
+            PageViewModels.Add(new StudentViewModel(dataAccess, queryLoader)); // Add StudentViewModel
             // Set starting page
             CurrentPageViewModel = PageViewModels[0];
         }
@@ -54,18 +56,17 @@ namespace BgB_TeachingAssistant.ViewModels
                 if (_currentPageViewModel != value)
                 {
                     _currentPageViewModel = value;
-                    OnPropertyChanged("CurrentPageViewModel");
+                    OnPropertyChanged(nameof(CurrentPageViewModel));
                 }
             }
         }
 
         private void ChangeViewModel(IPageViewModel viewModel)
         {
-            if (!PageViewModels.Contains(viewModel))
-                PageViewModels.Add(viewModel);
-
-            CurrentPageViewModel = PageViewModels
-                .FirstOrDefault(vm => vm == viewModel);
+            if (viewModel != null && CurrentPageViewModel != viewModel)
+            {
+                CurrentPageViewModel = viewModel;
+            }
         }
     }
 }

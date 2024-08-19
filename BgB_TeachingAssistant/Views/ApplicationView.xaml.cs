@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Bgb_DataAccessLibrary;
+using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.QueryLoaders;
+using BgB_TeachingAssistant.ViewModels;
+using Google.Protobuf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +24,18 @@ namespace BgB_TeachingAssistant.Views
     /// </summary>
     public partial class ApplicationView : Window
     {
-        public ApplicationView()
+        private readonly IMessages _messages;
+        private readonly IDataAccess _dataAccess;
+        private readonly IQueryLoader _queryLoader;
+        public ApplicationView(IMessages messages, IDataAccess dataAccess, IQueryLoader queryLoader)
         {
             InitializeComponent();
+
+            _messages = messages;
+            _dataAccess = dataAccess;
+            _queryLoader = queryLoader;
+
+            DataContext = new ApplicationViewModel(dataAccess, queryLoader);
         }
     }
 }

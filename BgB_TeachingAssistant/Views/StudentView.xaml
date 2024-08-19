@@ -6,5 +6,34 @@
              xmlns:local="clr-namespace:BgB_TeachingAssistant.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
+        <!-- Left Column -->
+        <StackPanel Grid.Column="0" Margin="10">
+            <Button Content="Hello Click Me!" 
+                    Command="{Binding DanCukCommand}" 
+                    Width="150" 
+                    Height="30" 
+                    Margin="0,0,0,5"/>
+            <Button Content="Load Students" 
+                    Command="{Binding LoadStudentsCommand}" 
+                    Width="150" 
+                    Height="30" 
+                    Margin="0,0,0,10"/>
+            <ComboBox Name="StudentComboBox" Width="200"/>
+        </StackPanel>
+
+        <!-- Right Column -->
+        <DockPanel Grid.Column="1" Margin="10">
+            <DataGrid ItemsSource="{Binding Students}" 
+                      AutoGenerateColumns="True" 
+                      Margin="0,0,0,10" 
+                      VerticalAlignment="Stretch" 
+                      HorizontalAlignment="Stretch"/>
+        </DockPanel>
+    </Grid>
 </UserControl>

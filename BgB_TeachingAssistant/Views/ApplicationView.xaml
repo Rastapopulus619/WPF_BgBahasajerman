@@ -9,6 +9,9 @@
         <DataTemplate DataType="{x:Type viewModel:DashboardViewModel}">
             <local:DashboardView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:StudentViewModel}">
+            <local:StudentView />
+        </DataTemplate>
     </Window.Resources>
 
     <DockPanel>
