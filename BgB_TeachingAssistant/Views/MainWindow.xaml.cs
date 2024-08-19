@@ -16,8 +16,9 @@ using Bgb_DataAccessLibrary;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using MySqlX.XDevAPI.Common;
 using Bgb_DataAccessLibrary.Models.StudentModels;
+using BgB_TeachingAssistant.ViewModels;
 
-namespace BgB_TeachingAssistant
+namespace BgB_TeachingAssistant.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -34,6 +35,9 @@ namespace BgB_TeachingAssistant
             _messages = messages;
             _dataAccess = dataAccess;
             _queryLoader = queryLoader;
+
+            // Set DataContext to a new instance of StudentViewModel
+            DataContext = new StudentViewModel(dataAccess, queryLoader);
 
         }
 
@@ -75,42 +79,43 @@ namespace BgB_TeachingAssistant
             return (await _dataAccess.QueryAsync<StudentModel>(query)).ToList();
         }
     }
-    //private void ButtonDanCuk_Click(object sender, RoutedEventArgs e)
-    //    {
-    //        string studentName = "Aaron";
-            //MessageBox.Show(studentName);
-
-            //DataAccess db = new DataAccess();
-
-            //string studentID = db.GetStudentID(studentName).ToString();
-
-            //string studentID = _dataAccess.GetStudentID(studentName).ToString();
-
-            //myLabel.Content = $"Welcome, {studentName} with StudentID {studentID}!";
-
-            /* ///
-            string connectionString = "SERVER=localhost; DATABASE=bgbahasajerman; UID=root; PASSWORD=Burungnuri1212";
-            MySqlConnection con = new MySqlConnection(connectionString);
-
-            MySqlCommand cmd = new MySqlCommand("SELECT StudentID FROM students WHERE Name = 'Aaron'", con);
-            con.Open();
-
-            DataTable dt = new DataTable();
-            dt.Load(cmd.ExecuteReader());
-
-            con.Close();
-
-            dtGrid.DataContext = dt;
-
-            myLabel.Content = dt.Rows[0]["StudentID"].ToString();
-            /// */
-
-
-
-            //con.Open();
-            //MessageBox.Show(dt.);
-
-            //myLabel.Foreground = Brushes.Green;
-        //}
-    //}
 }
+
+//private void ButtonDanCuk_Click(object sender, RoutedEventArgs e)
+//    {
+//        string studentName = "Aaron";
+//MessageBox.Show(studentName);
+
+//DataAccess db = new DataAccess();
+
+//string studentID = db.GetStudentID(studentName).ToString();
+
+//string studentID = _dataAccess.GetStudentID(studentName).ToString();
+
+//myLabel.Content = $"Welcome, {studentName} with StudentID {studentID}!";
+
+/* ///
+string connectionString = "SERVER=localhost; DATABASE=bgbahasajerman; UID=root; PASSWORD=Burungnuri1212";
+MySqlConnection con = new MySqlConnection(connectionString);
+
+MySqlCommand cmd = new MySqlCommand("SELECT StudentID FROM students WHERE Name = 'Aaron'", con);
+con.Open();
+
+DataTable dt = new DataTable();
+dt.Load(cmd.ExecuteReader());
+
+con.Close();
+
+dtGrid.DataContext = dt;
+
+myLabel.Content = dt.Rows[0]["StudentID"].ToString();
+/// */
+
+
+
+//con.Open();
+//MessageBox.Show(dt.);
+
+//myLabel.Foreground = Brushes.Green;
+//}
+//}

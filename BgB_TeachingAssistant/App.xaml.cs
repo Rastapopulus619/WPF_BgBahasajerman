@@ -5,15 +5,13 @@ using Microsoft.Extensions.Hosting;
 using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using Bgb_DataAccessLibrary.QueryExecutor;
-using System;
+using BgB_TeachingAssistant.ViewModels;
+using BgB_TeachingAssistant.Views;
 using Bgb_DataAccessLibrary;
 using Bgb_DataAccessLibrary.Logger;
 
 namespace BgB_TeachingAssistant
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         public IConfiguration Configuration { get; private set; }
@@ -46,7 +44,11 @@ namespace BgB_TeachingAssistant
                         .AddTransient<IQueryExecutor, QueryExecutor>()
                         .AddTransient<IMessages, Messages>()
 
-                        .AddTransient<MainWindow>();
+                        // Register ViewModel
+                        .AddSingleton<StudentViewModel>()
+
+                        // Register MainWindow
+                        .AddSingleton<MainWindow>();
                 });
 
         protected override async void OnStartup(StartupEventArgs e)
