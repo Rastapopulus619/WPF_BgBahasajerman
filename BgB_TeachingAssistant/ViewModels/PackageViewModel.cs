@@ -9,13 +9,11 @@ using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class StudentViewModel : BaseViewModel
+    public class PackageViewModel : BaseViewModel
     {
         public override string Name => "Student";
         private readonly IDataAccess _dataAccess;
         private readonly IQueryLoader _queryLoader;
-        public ICommand DanCukCommand { get; }
-        public ICommand LoadStudentsCommand { get; }
 
         private ObservableCollection<StudentModel> _students;
         public ObservableCollection<StudentModel> Students
@@ -30,24 +28,16 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _studentNames;
             set => SetProperty(ref _studentNames, value, nameof(StudentNames));
         }
-        public StudentViewModel(IServiceFactory serviceFactory, IDataAccess dataAccess, IQueryLoader queryLoader)
+        public PackageViewModel(IServiceFactory serviceFactory)
             : base(serviceFactory)
         {
             _dataAccess = dataAccess;
             _queryLoader = queryLoader;
-            LoadStudentsCommand = new RelayCommand(async () => await LoadStudentsAsync());
-            DanCukCommand = new RelayCommand(DanCukMethod);
-        }
-        private async Task LoadStudentsAsync()
-        {
-            var query = _queryLoader.GetQuery("GetStudentList");
-            var students = await _dataAccess.QueryAsync<StudentModel>(query);
-            Students = new ObservableCollection<StudentModel>(students.ToList());
+            PopulateStudentList();
 
-            // Populate StudentNames for ComboBox automatically ****
-            //StudentNames = new ObservableCollection<string>(Students.Select(s => s.Name).ToList());
         }
-        private async void DanCukMethod()
+
+        private async void PopulateStudentList()
         {
             try
             {
@@ -72,7 +62,7 @@ namespace BgB_TeachingAssistant.ViewModels
                 StudentNames = new ObservableCollection<string>(studentNames);
 
 
-                MessageBox.Show("Student list loaded successfully!");
+                //MessageBox.Show("Student list loaded successfully!");
             }
             catch (Exception ex)
             {

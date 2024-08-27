@@ -1,8 +1,16 @@
-﻿namespace BgB_TeachingAssistant.ViewModels
+﻿using Bgb_DataAccessLibrary.Factories;
+
+namespace BgB_TeachingAssistant.ViewModels
 {
-    public class DashboardViewModel : ObservableObject, IPageViewModel
+    public class DashboardViewModel : BaseViewModel
     {
-        // Add properties, commands, and methods as needed.
-        public string Name => "Dashboard";
+        // Constructor for injecting the factory
+        public DashboardViewModel(IServiceFactory serviceFactory)
+            : base(serviceFactory)
+        {
+        }
+
+        // Override the Name property from IPageViewModel
+        public override string Name => "Dashboard";
     }
 }

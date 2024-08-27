@@ -1,4 +1,5 @@
 ﻿using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using BgB_TeachingAssistant.Commands;
 using System.Collections.Generic;
@@ -7,17 +8,25 @@ using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class ApplicationViewModel : ObservableObject
+    public class ApplicationViewModel : BaseViewModel
     {
         private ICommand _changePageCommand;
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
+        private readonly IDataAccess _dataAccess;
+        private readonly IQueryLoader _queryLoader;
 
-        public ApplicationViewModel(IDataAccess dataAccess, IQueryLoader queryLoader)
+        public ApplicationViewModel(IServiceFactory serviceFactory, IDataAccess dataAccess, IQueryLoader queryLoader)
+            : base(serviceFactory)
         {
+            // Resolve dependencies using the service factory
+            _dataAccess = dataAccess;
+            _queryLoader = queryLoader;
+
             // Add available pages
-            PageViewModels.Add(new DashboardViewModel());
-            PageViewModels.Add(new StudentViewModel(dataAccess, queryLoader)); // Add StudentViewModel
+            PageViewModels.Add(new DashboardViewModel(serviceFactory));
+            PageViewModels.Add(new StudentViewModel(serviceFactory));
+            PageViewModels.Add(new PackageViewModel(serviceFactory));
             // Set starting page
             CurrentPageViewModel = PageViewModels[0];
         }

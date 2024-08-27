@@ -2,11 +2,12 @@
 
 namespace BgB_TeachingAssistant.Views
 {
-    public partial class DashboardView : UserControl
+    public partial class PackageView : UserControl
     {
-        public DashboardView()
+        public PackageView()
         {
             InitializeComponent();
+
         }
     }
 }

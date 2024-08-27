@@ -9,6 +9,8 @@ using BgB_TeachingAssistant.ViewModels;
 using BgB_TeachingAssistant.Views;
 using Bgb_DataAccessLibrary;
 using Bgb_DataAccessLibrary.Logger;
+using Bgb_DataAccessLibrary.Data.DataServices;
+using Bgb_DataAccessLibrary.Factories;
 
 namespace BgB_TeachingAssistant
 {
@@ -42,15 +44,27 @@ namespace BgB_TeachingAssistant
                         //.AddTransient<IDataAccess, MySqlDataAccess>(sp => new MySqlDataAccess(sp.GetRequiredService<IConfiguration>().GetConnectionString("MySQL")))
 
                         .AddTransient<IQueryExecutor, QueryExecutor>()
-                        .AddTransient<IMessages, Messages>()
+                        .AddTransient<IMessages, Messages>();
 
-                        // Register ViewModel
-                        .AddSingleton<ApplicationViewModel>()
-                        .AddSingleton<StudentViewModel>()
+                    //.AddTransient<GeneralDataService>()
+                    //.AddTransient<StudentProfileDataService>()
 
-                        // Register MainWindow
-                        .AddSingleton<ApplicationView>();
-                        //.AddSingleton<MainWindow>();
+                    // Register additional services from ServiceRegistration
+                    ServiceRegistration.RegisterDataServices(services, context.Configuration);
+                    services.AddSingleton<IServiceFactory, ServiceFactory>();
+
+                    services
+                    // Register view models
+                    .AddTransient<ApplicationViewModel>()
+                    .AddTransient<DashboardViewModel>()
+                    .AddTransient<StudentViewModel>()
+                    .AddTransient<PackageViewModel>()
+
+                    // Register MainWindow
+                    .AddSingleton<ApplicationView>();
+                    //.AddSingleton<MainWindow>();
+
+                        
                 });
 
         protected override async void OnStartup(StartupEventArgs e)

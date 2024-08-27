@@ -16,6 +16,12 @@
         <DataTemplate DataType="{x:Type viewModel:StudentViewModel}">
             <local:StudentView />
         </DataTemplate>
+
+        <!-- Template for StudentViewModel -->
+        <DataTemplate DataType="{x:Type viewModel:PackageViewModel}">
+            <local:PackageView />
+        </DataTemplate>
+        
     </Window.Resources>
 
     <!-- Define the layout of the window -->

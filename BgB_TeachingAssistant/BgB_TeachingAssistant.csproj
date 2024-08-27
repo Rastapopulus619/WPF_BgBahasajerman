@@ -38,6 +38,7 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\UserControls\" />
   </ItemGroup>
 
 </Project>
