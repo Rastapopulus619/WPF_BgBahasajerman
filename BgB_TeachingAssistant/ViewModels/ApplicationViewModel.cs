@@ -13,15 +13,10 @@ namespace BgB_TeachingAssistant.ViewModels
         private ICommand _changePageCommand;
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
-        private readonly IDataAccess _dataAccess;
-        private readonly IQueryLoader _queryLoader;
 
-        public ApplicationViewModel(IServiceFactory serviceFactory, IDataAccess dataAccess, IQueryLoader queryLoader)
+        public ApplicationViewModel(IServiceFactory serviceFactory)
             : base(serviceFactory)
         {
-            // Resolve dependencies using the service factory
-            _dataAccess = dataAccess;
-            _queryLoader = queryLoader;
 
             // Add available pages
             PageViewModels.Add(new DashboardViewModel(serviceFactory));

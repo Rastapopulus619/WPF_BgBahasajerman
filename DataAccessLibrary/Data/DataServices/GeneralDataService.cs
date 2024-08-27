@@ -16,10 +16,16 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
             _queryLoader = queryLoader;
         }
 
-        private async Task<List<StudentModel>> GetStudentsAsync()
+        public async Task<List<StudentModel>> GetStudentsAsync()
         {
             var query = _queryLoader.GetQuery("GetStudentList");
             return (await _dataAccess.QueryAsync<StudentModel>(query)).ToList();
+        }
+        public async Task<List<string>> GetStudentNamesAsync()
+        {
+            var query = _queryLoader.GetQuery("GetStudentList");
+            var students = await _dataAccess.QueryAsync<StudentModel>(query);
+            return students.Select(s => s.Name).ToList();
         }
     }
 }

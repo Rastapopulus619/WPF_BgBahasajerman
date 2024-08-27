@@ -55,14 +55,14 @@ namespace BgB_TeachingAssistant
 
                     services
                     // Register view models
-                    .AddTransient<ApplicationViewModel>()
-                    .AddTransient<DashboardViewModel>()
-                    .AddTransient<StudentViewModel>()
-                    .AddTransient<PackageViewModel>()
+                        .AddTransient<ApplicationViewModel>()
+                        .AddTransient<DashboardViewModel>()
+                        .AddTransient<StudentViewModel>()
+                        .AddTransient<PackageViewModel>()
 
-                    // Register MainWindow
-                    .AddSingleton<ApplicationView>();
-                    //.AddSingleton<MainWindow>();
+                        // Register MainWindow
+                        .AddSingleton<ApplicationView>();
+                        //.AddSingleton<MainWindow>();
 
                         
                 });

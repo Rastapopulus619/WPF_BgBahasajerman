@@ -1,4 +1,5 @@
-﻿using Bgb_DataAccessLibrary.Databases;
+﻿using Bgb_DataAccessLibrary.Data.DataServices;
+using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_DataAccessLibrary.QueryLoaders;
@@ -12,8 +13,7 @@ namespace BgB_TeachingAssistant.ViewModels
     public class StudentViewModel : BaseViewModel
     {
         public override string Name => "Student";
-        private readonly IDataAccess _dataAccess;
-        private readonly IQueryLoader _queryLoader;
+        private readonly GeneralDataService _generalDataService;
         public ICommand DanCukCommand { get; }
         public ICommand LoadStudentsCommand { get; }
 
@@ -30,60 +30,32 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _studentNames;
             set => SetProperty(ref _studentNames, value, nameof(StudentNames));
         }
-        public StudentViewModel(IServiceFactory serviceFactory, IDataAccess dataAccess, IQueryLoader queryLoader)
+        public StudentViewModel(IServiceFactory serviceFactory)
             : base(serviceFactory)
         {
-            _dataAccess = dataAccess;
-            _queryLoader = queryLoader;
+            _generalDataService = serviceFactory.CreateGeneralDataService();
             LoadStudentsCommand = new RelayCommand(async () => await LoadStudentsAsync());
             DanCukCommand = new RelayCommand(DanCukMethod);
         }
         private async Task LoadStudentsAsync()
         {
-            var query = _queryLoader.GetQuery("GetStudentList");
-            var students = await _dataAccess.QueryAsync<StudentModel>(query);
-            Students = new ObservableCollection<StudentModel>(students.ToList());
-
-            // Populate StudentNames for ComboBox automatically ****
-            //StudentNames = new ObservableCollection<string>(Students.Select(s => s.Name).ToList());
+                // Retrieve students using the data service
+                var students = await _generalDataService.GetStudentsAsync();
+                Students = new ObservableCollection<StudentModel>(students);
         }
         private async void DanCukMethod()
-        {
-            try
             {
-                // Retrieve all student names
-
-                // with dynamic type:
-                //var result = _dataAccess.QueryAsync<dynamic>(_queryLoader.GetQuery("GetStudentList")).Result.ToList();
-
-                // Convert the result to a list of strings
-                //List<string> studentNames = result
-                //    .Select(item => (string)item.Name)  // Assuming the dynamic object has a property called StudentName
-                //    .ToList();
-
-
-                // Retrieve all student names
-                List<StudentModel> studentList = await GetStudentsAsync();
-
-                // Convert the list of students to a list of names
-                List<string> studentNames = studentList.Select(s => s.Name).ToList();
-
-                // Set the StudentNames property to update the ComboBox
-                StudentNames = new ObservableCollection<string>(studentNames);
-
-
-                MessageBox.Show("Student list loaded successfully!");
+                try
+                {
+                    // Retrieve and set student names
+                    var studentNames = await _generalDataService.GetStudentNamesAsync();
+                    MessageBox.Show($"first value in student list: {studentNames[0]}");
+                    StudentNames = new ObservableCollection<string>(studentNames);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error retrieving student list: {ex.Message}");
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error retrieving student list: {ex.Message}");
-            }
-
-        }
-        private async Task<List<StudentModel>> GetStudentsAsync()
-        {
-            var query = _queryLoader.GetQuery("GetStudentList");
-            return (await _dataAccess.QueryAsync<StudentModel>(query)).ToList();
-        }
     }
 }
