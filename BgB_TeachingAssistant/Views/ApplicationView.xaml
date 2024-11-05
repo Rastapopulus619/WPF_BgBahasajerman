@@ -26,8 +26,8 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Content="{Binding Name}"
-                                Command="{Binding DataContext.ChangePageCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                CommandParameter="{Binding }"
+                                Command="{Binding DataContext.ChangeViewModelCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                CommandParameter="{Binding .}"
                                 Margin="5"
                                 Background="LightGray"
                                 Foreground="Black"/>

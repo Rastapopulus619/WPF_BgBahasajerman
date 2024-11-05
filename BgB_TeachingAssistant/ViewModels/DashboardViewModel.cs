@@ -27,6 +27,7 @@ namespace BgB_TeachingAssistant.ViewModels
         public DashboardViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
             Console.WriteLine("DashboardViewModel created.");
+            Message = "default display-message";
             TriggerDataProcessingCommand = new RelayCommand(NewEventTester);
         }
 
@@ -41,6 +42,7 @@ namespace BgB_TeachingAssistant.ViewModels
         }
         public void Dispose()
         {
+            Console.WriteLine($"Message variable value at time of execution of the Dispose Method: {Message}");
             Console.WriteLine("DashboardViewModel disposed.");
             // Cleanup resources if needed
         }
