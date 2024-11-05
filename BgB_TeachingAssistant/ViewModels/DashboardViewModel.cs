@@ -1,15 +1,18 @@
 ﻿using Bgb_DataAccessLibrary.Factories;
+using BgB_TeachingAssistant.Commands;
 using BgB_TeachingAssistant.Services;
 using BgB_TeachingAssistant.Services.Infrastructure;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
     public class DashboardViewModel : ViewModelBase
     {
         // Override the Name property from IPageViewModel
+        public ICommand TriggerDataProcessingCommand { get; }
         public override string Name => "Dashboard";
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -36,6 +39,8 @@ namespace BgB_TeachingAssistant.ViewModels
         public DashboardViewModel(IServiceFactory serviceFactory)
             : base(serviceFactory)
         {
+            TriggerDataProcessingCommand = new RelayCommand(NewEventTester);
+
             EventAggregator eventAggregator = new EventAggregator();
             //*****
             //event Aggregator test
@@ -49,7 +54,8 @@ namespace BgB_TeachingAssistant.ViewModels
             _dashboardEventTesting = new DashboardEventTesting();
 
             
-            NewVM_EA_Exchange(eventAggregator);
+            //******NewVM_EA_Exchange(eventAggregator);
+            //NewEventTester();
 
             //NormalVM_DS_Exchange();
 
@@ -57,6 +63,24 @@ namespace BgB_TeachingAssistant.ViewModels
             //no communication
             //TriggerDelegateTest();
 
+        }
+
+        private void NewEventTester()
+        {
+            //Console.WriteLine("Would you like to trigger the DataProcessing?");
+            //string userInput = Console.ReadLine();
+
+            //if (userInput == "y")
+            //{
+            //        Message = "DataProcessing triggered.. ";
+            //}
+
+            // Ensure that the property change happens on the UI thread
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Message = "DataProcessing triggered.. ";
+                Console.WriteLine("PropertyChanged triggered for Message"); // Debug line
+            });
         }
 
         private async void NewVM_EA_Exchange(EventAggregator eventAggregator)
@@ -109,6 +133,8 @@ namespace BgB_TeachingAssistant.ViewModels
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
+            Console.WriteLine("OnPropertyChanged method is running..");
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 

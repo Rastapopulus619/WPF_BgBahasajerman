@@ -14,5 +14,6 @@ namespace BgB_TeachingAssistant.ViewModels
 
         // Implement the Name property from IPageViewModel
         public virtual string Name { get; }
+
     }
 }
