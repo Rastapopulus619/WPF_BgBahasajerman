@@ -35,35 +35,12 @@ namespace BgB_TeachingAssistant
                     // Register IConfiguration
                     services.AddSingleton<IConfiguration>(context.Configuration);
 
-                    // Register your services
-                    services
-                        .AddSingleton<ILoggerService>(sp => new LoggerService(@"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\BgB_TeachingAssistant\Logs"))
-                        .AddSingleton<IDataAccess, MySqlDataAccess>(sp => new MySqlDataAccess(context.Configuration.GetConnectionString("MySQL"), sp.GetRequiredService<ILoggerService>()))
-                        .AddSingleton<IQueryLoader, Bgb_QueryLoader>(sp => new Bgb_QueryLoader(@"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\DataAccessLibrary\BgB_Queries"))
-                        //.AddTransient<IDataAccess, MySqlDataAccess>() // Use passing IConfiguration automatically and fetching connectionString in the DataAccess class
-                        //.AddTransient<IDataAccess, MySqlDataAccess>(sp => new MySqlDataAccess(sp.GetRequiredService<IConfiguration>().GetConnectionString("MySQL")))
+                    ServiceRegistration.RegisterAllServices(services, context.Configuration);
 
-                        .AddTransient<IQueryExecutor, QueryExecutor>()
-                        .AddTransient<IMessages, Messages>();
+                    ViewModelRegistration.RegisterViewModels(services);
 
-                    //.AddTransient<GeneralDataService>()
-                    //.AddTransient<StudentProfileDataService>()
-
-                    // Register additional services from ServiceRegistration
-                    ServiceRegistration.RegisterDataServices(services, context.Configuration);
-                    services.AddSingleton<IServiceFactory, ServiceFactory>();
-
-                    services
-                    // Register view models
-                        .AddTransient<ApplicationViewModel>()
-                        .AddTransient<DashboardViewModel>()
-                        .AddTransient<StudentViewModel>()
-                        .AddTransient<PackageViewModel>()
-
-                        // Register MainWindow
-                        .AddSingleton<ApplicationView>();
-                        //.AddSingleton<MainWindow>();
-
+                    // Register MainWindow
+                    services.AddSingleton<ApplicationView>();
                         
                 });
 

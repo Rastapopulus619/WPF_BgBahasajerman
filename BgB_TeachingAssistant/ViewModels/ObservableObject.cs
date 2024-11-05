@@ -1,17 +1,23 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
     public class ObservableObject : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged(string propertyName)
+        //protected void OnPropertyChanged(string propertyName)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool SetProperty<T>(ref T field, T value, string propertyName)
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (!Equals(field, value))
             {
@@ -21,5 +27,13 @@ namespace BgB_TeachingAssistant.ViewModels
             }
             return false;
         }
+
+        /*HOW TO USE SET PROPERTY!
+         * 
+         * public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value); // propertyName is automatically filled as "Name"
+        }*/
     }
 }

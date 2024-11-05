@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModel="clr-namespace:BgB_TeachingAssistant.ViewModels"
+                    xmlns:local="clr-namespace:BgB_TeachingAssistant.Views">
+
+    <DataTemplate DataType="{x:Type viewModel:DashboardViewModel}">
+        <local:DashboardView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:StudentViewModel}">
+        <local:StudentView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:PackageViewModel}">
+        <local:PackageView />
+    </DataTemplate>
+
+</ResourceDictionary>

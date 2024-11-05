@@ -4,34 +4,36 @@ using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using BgB_TeachingAssistant.Commands;
+using BgB_TeachingAssistant.Services;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class PackageViewModel : BaseViewModel
+    public class PackageViewModel : ViewModelBase
     {
-        public override string Name => "Package";
+        public override string Name => "Packages";
         private readonly GeneralDataService _generalDataService;
+        private readonly PackageNavigationService _packageNavigationService;
+        public PackageCommands PackageCommands { get; }
 
-        private ObservableCollection<StudentModel> _students;
-        public ObservableCollection<StudentModel> Students
+        public ObservableCollection<string> StudentNames { get; private set; }
+
+        private int _selectedPackageNumber = 3;
+        public int SelectedPackageNumber
         {
-            get => _students;
-            set => SetProperty(ref _students, value, nameof(Students));  // Provide the property name
+            get => _selectedPackageNumber;
+            set => SetProperty(ref _selectedPackageNumber, value);
         }
 
-        private ObservableCollection<string> _studentNames;
-        public ObservableCollection<string> StudentNames
+        public PackageViewModel(IServiceFactory serviceFactory, GeneralDataService generalDataService, PackageNavigationService packageNavigationService)
+            : base(serviceFactory)  // Passing serviceFactory to the base class
         {
-            get => _studentNames;
-            set => SetProperty(ref _studentNames, value, nameof(StudentNames));
-        }
-        public PackageViewModel(IServiceFactory serviceFactory)
-            : base(serviceFactory)
-        {
-            _generalDataService = serviceFactory.CreateGeneralDataService();
+            _generalDataService = generalDataService;
+            _packageNavigationService = packageNavigationService;
+
+            PackageCommands = new PackageCommands(this, packageNavigationService);
             LoadStudentList();
         }
 
@@ -39,7 +41,6 @@ namespace BgB_TeachingAssistant.ViewModels
         {
             try
             {
-                // Retrieve and set student names
                 var studentNames = await _generalDataService.GetStudentNamesAsync();
                 StudentNames = new ObservableCollection<string>(studentNames);
             }
@@ -48,10 +49,6 @@ namespace BgB_TeachingAssistant.ViewModels
                 MessageBox.Show($"Error retrieving student list: {ex.Message}");
             }
         }
-        //private async Task<List<StudentModel>> GetStudentsAsync()
-        //{
-        //    var query = _queryLoader.GetQuery("GetStudentList");
-        //    return (await _dataAccess.QueryAsync<StudentModel>(query)).ToList();
-        //}
     }
+
 }

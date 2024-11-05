@@ -33,10 +33,12 @@
             <ComboBox Grid.Column="0" Grid.Row="0" Name="StudentComboBox" ItemsSource="{Binding StudentNames}" Width="200" Margin="5"/>
             
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Grid.Column="1" Grid.Row="0" Content="&lt;" Margin="5"></Button>
-                <TextBox Grid.Column="1" Margin="5" VerticalAlignment="Center">PackageNumber</TextBox>
-                <Button  Grid.Column="1" Grid.Row="0" Content="&gt;" Margin="5"></Button>
+                <Button Grid.Column="1" Grid.Row="0" Content="&lt;" Margin="5" Command="{Binding PreviousPackageCommand}"></Button>
+                <TextBox Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding SelectedPackageNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Button  Grid.Column="1" Grid.Row="0" Content="&gt;" Margin="5" Command="{Binding NextPackageCommand}"></Button>
             </StackPanel>
+            <!-- New TextBox to display the SelectedPackageNumber -->
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Text="{Binding SelectedPackageNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
         </Grid>
         
         <WebBrowser Grid.Column="1" Name="webBrowser" />

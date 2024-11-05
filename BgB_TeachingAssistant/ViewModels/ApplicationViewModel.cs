@@ -1,6 +1,5 @@
 ﻿using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.Factories;
-using Bgb_DataAccessLibrary.QueryLoaders;
 using BgB_TeachingAssistant.Commands;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,22 +7,19 @@ using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class ApplicationViewModel : BaseViewModel
+    public class ApplicationViewModel : ViewModelBase
     {
         private ICommand _changePageCommand;
         private IPageViewModel _currentPageViewModel;
-        private List<IPageViewModel> _pageViewModels;
+        public List<IPageViewModel> PageViewModels { get; }
 
-        public ApplicationViewModel(IServiceFactory serviceFactory)
+        // The constructor now accepts IEnumerable<IPageViewModel> and assigns it directly.
+        public ApplicationViewModel(IServiceFactory serviceFactory, IEnumerable<IPageViewModel> pageViewModels)
             : base(serviceFactory)
         {
-
-            // Add available pages
-            PageViewModels.Add(new DashboardViewModel(serviceFactory));
-            PageViewModels.Add(new StudentViewModel(serviceFactory));
-            PageViewModels.Add(new PackageViewModel(serviceFactory));
-            // Set starting page
-            CurrentPageViewModel = PageViewModels[0];
+            // Populate the PageViewModels list from the injected IEnumerable
+            PageViewModels = pageViewModels.ToList();
+            CurrentPageViewModel = PageViewModels.FirstOrDefault(); // Set the initial ViewModel
         }
 
         public ICommand ChangePageCommand
@@ -33,24 +29,28 @@ namespace BgB_TeachingAssistant.ViewModels
                 if (_changePageCommand == null)
                 {
                     _changePageCommand = new RelayCommand(
-                        p => ChangeViewModel((IPageViewModel)p),
-                        p => p is IPageViewModel);
+                        ExecuteChangePageCommand,
+                        CanExecuteChangePageCommand);
                 }
-
                 return _changePageCommand;
             }
         }
 
-        public List<IPageViewModel> PageViewModels
+        private void ExecuteChangePageCommand(object parameter)
         {
-            get
+            // Explicitly cast the parameter to IPageViewModel and call the change method.
+            if (parameter is IPageViewModel viewModel)
             {
-                if (_pageViewModels == null)
-                    _pageViewModels = new List<IPageViewModel>();
-
-                return _pageViewModels;
+                ChangeViewModel(viewModel);
             }
         }
+
+        private bool CanExecuteChangePageCommand(object parameter)
+        {
+            // Check if the parameter is of type IPageViewModel.
+            return parameter is IPageViewModel;
+        }
+
 
         public IPageViewModel CurrentPageViewModel
         {
@@ -64,12 +64,14 @@ namespace BgB_TeachingAssistant.ViewModels
                 }
             }
         }
-
-        private void ChangeViewModel(IPageViewModel viewModel)
+        public void ChangeViewModel(IPageViewModel viewModel)
         {
             if (viewModel != null && CurrentPageViewModel != viewModel)
             {
                 CurrentPageViewModel = viewModel;
+
+                // Log the name of the current view model to the console
+                Console.WriteLine($"Current ViewModel Changed: {CurrentPageViewModel.Name}");
             }
         }
     }

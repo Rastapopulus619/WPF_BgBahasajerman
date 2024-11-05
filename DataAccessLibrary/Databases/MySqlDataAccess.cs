@@ -42,6 +42,25 @@ namespace Bgb_DataAccessLibrary.Databases
                 throw; // rethrow the exception after logging
             }
         }
+        public async Task<DataTable> GetDataTableAsync(string sql, object parameters = null)
+        {
+            try
+            {
+                using (IDbConnection connection = new MySqlConnection(_connectionString))
+                {
+                    var dataTable = new DataTable();
+                    var reader = await connection.ExecuteReaderAsync(sql, parameters);
+                    dataTable.Load(reader);
+                    return dataTable;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+                throw;
+            }
+        }
+
         public async Task<int> ExecuteAsync(string sql, object parameters = null)
         {
             try

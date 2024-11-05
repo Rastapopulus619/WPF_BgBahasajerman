@@ -5,23 +5,12 @@
         xmlns:viewModel="clr-namespace:BgB_TeachingAssistant.ViewModels"
         Title="ApplicationView" MinHeight="850" MinWidth="1000">
 
-    <!-- Define resources for DataTemplates -->
     <Window.Resources>
-        <!-- Template for DashboardViewModel -->
-        <DataTemplate DataType="{x:Type viewModel:DashboardViewModel}">
-            <local:DashboardView />
-        </DataTemplate>
-
-        <!-- Template for StudentViewModel -->
-        <DataTemplate DataType="{x:Type viewModel:StudentViewModel}">
-            <local:StudentView />
-        </DataTemplate>
-
-        <!-- Template for StudentViewModel -->
-        <DataTemplate DataType="{x:Type viewModel:PackageViewModel}">
-            <local:PackageView />
-        </DataTemplate>
-        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DataTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <!-- Define the layout of the window -->

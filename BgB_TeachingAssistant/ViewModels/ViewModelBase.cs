@@ -2,12 +2,12 @@
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class BaseViewModel : ObservableObject, IPageViewModel
+    public class ViewModelBase : ObservableObject, IPageViewModel
     {
         protected readonly IServiceFactory ServiceFactory;
 
         // Constructor for injecting the factory
-        public BaseViewModel(IServiceFactory serviceFactory)
+        public ViewModelBase(IServiceFactory serviceFactory)
         {
             ServiceFactory = serviceFactory;
         }

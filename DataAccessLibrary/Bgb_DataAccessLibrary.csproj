@@ -29,7 +29,6 @@
     <Folder Include="BgB_Queries\TimeQueries\" />
     <Folder Include="Data\StudentProfileData\" />
     <Folder Include="Data\Testing\" />
-    <Folder Include="Models\PackageModels\" />
   </ItemGroup>
 
   <ItemGroup>

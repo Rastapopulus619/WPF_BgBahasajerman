@@ -20,12 +20,12 @@ namespace BgB_TeachingAssistant.Commands
             _execute = execute != null ? new Action<object>(o => execute()) : null;
             _canExecute = canExecute != null ? new Func<object, bool>(o => canExecute()) : null;
         }
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             return _canExecute == null || _canExecute(parameter);
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
             _execute(parameter);
         }

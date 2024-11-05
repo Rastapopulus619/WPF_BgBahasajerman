@@ -10,8 +10,8 @@ using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class StudentViewModel : BaseViewModel
-    {
+    public class StudentViewModel : ViewModelBase
+    { 
         public override string Name => "Student";
         private readonly GeneralDataService _generalDataService;
         public ICommand DanCukCommand { get; }
@@ -49,7 +49,8 @@ namespace BgB_TeachingAssistant.ViewModels
                 {
                     // Retrieve and set student names
                     var studentNames = await _generalDataService.GetStudentNamesAsync();
-                    MessageBox.Show($"first value in student list: {studentNames[0]}");
+                    Console.WriteLine($"first value in student list: {studentNames[0]}");
+                    //MessageBox.Show($"first value in student list: {studentNames[0]}");
                     StudentNames = new ObservableCollection<string>(studentNames);
                 }
                 catch (Exception ex)
