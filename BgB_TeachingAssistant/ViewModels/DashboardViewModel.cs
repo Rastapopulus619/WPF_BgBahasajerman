@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class DashboardViewModel : ViewModelBase
+    public class DashboardViewModel : ViewModelBase, IDisposable
     {
         public override string Name => "Dashboard"; // Implementing the Name property
 
@@ -19,13 +19,14 @@ namespace BgB_TeachingAssistant.ViewModels
             {
                 if (SetProperty(ref _message, value)) // Using SetProperty from ViewModelBase
                 {
-                    // Additional logic can go here if needed
+                    Console.WriteLine($"Message changed to: {_message}");
                 }
             }
         }
 
         public DashboardViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
+            Console.WriteLine("DashboardViewModel created.");
             TriggerDataProcessingCommand = new RelayCommand(NewEventTester);
         }
 
@@ -38,5 +39,11 @@ namespace BgB_TeachingAssistant.ViewModels
                 Console.WriteLine("PropertyChanged triggered for Message"); // Debug line
             });
         }
+        public void Dispose()
+        {
+            Console.WriteLine("DashboardViewModel disposed.");
+            // Cleanup resources if needed
+        }
     }
+
 }

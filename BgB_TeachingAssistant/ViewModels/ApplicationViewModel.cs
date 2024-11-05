@@ -70,8 +70,7 @@ namespace BgB_TeachingAssistant.ViewModels
             {
                 CurrentPageViewModel = viewModel;
 
-                // Log the name of the current view model to the console
-                Console.WriteLine($"Current ViewModel Changed: {CurrentPageViewModel.Name}");
+                Console.WriteLine($"Switching from {CurrentPageViewModel?.Name} to {viewModel.Name}");
             }
         }
     }
