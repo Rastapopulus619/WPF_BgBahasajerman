@@ -16,11 +16,13 @@ namespace BgB_TeachingAssistant
             services.AddTransient<DashboardViewModel>();
             services.AddTransient<StudentViewModel>();
             services.AddTransient<PackageViewModel>();
+            services.AddTransient<TestPage1ViewModel>();
 
             // Register them as IPageViewModel for collection injection
             services.AddTransient<IPageViewModel, DashboardViewModel>();
             services.AddTransient<IPageViewModel, StudentViewModel>();
             services.AddTransient<IPageViewModel, PackageViewModel>();
+            services.AddTransient<IPageViewModel, TestPage1ViewModel>();
 
             // Register the ApplicationViewModel itself
             services.AddTransient<ApplicationViewModel>();

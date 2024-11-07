@@ -1,4 +1,6 @@
-﻿using BgB_TeachingAssistant.Services.Infrastructure;
+﻿using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
+using Bgb_DataAccessLibrary.Data.DataServices;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +25,9 @@ namespace BgB_TeachingAssistant.Services
             //normal communication
             //DataProcessed?.Invoke(processedData);
         }
-        public void ProcessData(EventAggregator eventAggregator)
+        public async Task ProcessData(IEventAggregator eventAggregator, GeneralDataService dataService)
         {
+            List<string> studentNames = await dataService.GetStudentNamesAsync();
             string processedData = "Processed data at " + DateTime.Now;
             eventAggregator.Publish(processedData);
         }

@@ -5,6 +5,7 @@ using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Logger;
 using Bgb_DataAccessLibrary.QueryExecutor;
 using Bgb_DataAccessLibrary.QueryLoaders;
+using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using BgB_TeachingAssistant.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,8 +45,7 @@ public static class ServiceRegistration
 
         services.AddTransient<IQueryExecutor, QueryExecutor>();
 
-        // Register testing service
-        services.AddTransient<IMessages, Messages>();
+        services.AddSingleton<IEventAggregator, EventAggregator>();
     }
 
     private static void RegisterDataServices(IServiceCollection services)
@@ -64,6 +64,10 @@ public static class ServiceRegistration
 
     private static void RegisterOtherServices(IServiceCollection services)
     {
+        // Register testing service
+        services.AddTransient<IMessages, Messages>();
+
+        services.AddTransient<IDataServiceTestClass, DataServiceTestClass>();
         // Optionally, add other dependencies here as needed
     }
 }

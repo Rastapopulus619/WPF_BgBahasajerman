@@ -15,4 +15,8 @@
         <local:PackageView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewModel:TestPage1ViewModel}">
+        <local:TestPage1View />
+    </DataTemplate>
+
 </ResourceDictionary>

@@ -1,11 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BgB_TeachingAssistant.Services.Infrastructure
+﻿namespace Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators
 {
     public class EventAggregator : IEventAggregator
     {

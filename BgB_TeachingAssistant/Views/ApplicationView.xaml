@@ -30,7 +30,8 @@
                                 CommandParameter="{Binding .}"
                                 Margin="5"
                                 Background="LightGray"
-                                Foreground="Black"/>
+                                Foreground="Black"
+                                MinHeight="30"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
