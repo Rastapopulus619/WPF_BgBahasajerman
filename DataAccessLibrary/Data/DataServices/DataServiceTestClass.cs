@@ -31,12 +31,14 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
         private readonly IDataAccess _dataAccess;
         private readonly IQueryLoader _queryLoader;
         private readonly IQueryExecutor _queryExecutor;
+        private readonly IEventAggregator _eventAggregator;
 
-        public DataServiceTestClass(IDataAccess dataAccess, IQueryLoader queryLoader, IQueryExecutor queryExecutor)
+        public DataServiceTestClass(IDataAccess dataAccess, IQueryLoader queryLoader, IQueryExecutor queryExecutor, IEventAggregator eventAggregator)
         {
             _dataAccess = dataAccess;
             _queryLoader = queryLoader;
             _queryExecutor = queryExecutor;
+            _eventAggregator = eventAggregator;
         }
         public async Task ProcessData(IEventAggregator eventAggregator, GeneralDataService dataService)
         {
@@ -60,10 +62,10 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
 
         public async Task<string> GetStudentNameByStudentID(string studentID)
         {
-            return await _queryExecutor.ExecuteQuerySingleAsync<string>("GetStudentNameByStudentID", new { StudentID = studentID });
-            //var query = _queryLoader.GetQuery("GetStudentList");
-            //var students = await _dataAccess.QueryAsync<StudentModel>(query);
-            //return students.Select(s => s.Name).ToList().FirstOrDefault();
+            //return await _queryExecutor.ExecuteQuerySingleAsync<string>("GetStudentNameByStudentID", new { StudentID = studentID });
+            string studentName = await _queryExecutor.ExecuteQuerySingleAsync<string>("GetStudentNameByStudentID", new { StudentID = studentID });
+            _eventAggregator.Publish(studentName);
+            return studentName;
         }
 
     }

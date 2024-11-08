@@ -14,6 +14,7 @@ namespace BgB_TeachingAssistant.ViewModels
 {
     public class TestPage1ViewModel : ViewModelBase
     {
+        public IDataServiceTestClass DataService { get; set; }
         public override string Name => "Test1";
 
         private string _studentID;
@@ -50,7 +51,7 @@ namespace BgB_TeachingAssistant.ViewModels
         //public TestPage1ViewModel(IServiceFactory serviceFactory, IDataServiceTestClass dataService) : base(serviceFactory)
         public TestPage1ViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
-            // Configure necessary services for this view model
+            // Configure necessary services for this view model     /////*********** USING REFLECTION?? WTF!!!!
             serviceFactory.ConfigureServicesFor(this);
 
             //DataService = dataService;
@@ -79,12 +80,5 @@ namespace BgB_TeachingAssistant.ViewModels
                 Console.WriteLine($"Newly Stored StudentName is: {StudentName}");
             }
         }
-
-        //public event PropertyChangedEventHandler PropertyChanged;
-
-        //protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
     }
 }

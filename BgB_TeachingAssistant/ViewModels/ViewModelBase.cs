@@ -16,7 +16,7 @@ namespace BgB_TeachingAssistant.ViewModels
 
         // Implement the Name property from IPageViewModel
         public virtual string Name { get; }
-        public IDataServiceTestClass DataService { get; set; }
+        //public IDataServiceTestClass DataService { get; set; }
 
 
     }
