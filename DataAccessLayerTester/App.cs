@@ -1,6 +1,7 @@
 ﻿using Bgb_DataAccessLibrary;
 using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.QueryLoaders;
+using Bgb_DataAccessLibrary.Data.DataServices;
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
+using Bgb_DataAccessLibrary.QueryExecutor;
 
 namespace DataAccessLayerTester
 {
@@ -16,12 +18,13 @@ namespace DataAccessLayerTester
         private readonly IMessages _messages;
         private readonly IDataAccess _dataAccess;
         private readonly IQueryLoader _queryLoader;
-
-        public App(IMessages messages, IDataAccess dataAccess, IQueryLoader queryLoader)
+        private readonly IQueryExecutor _queryExecutor;
+        public App(IMessages messages, IDataAccess dataAccess, IQueryLoader queryLoader, IQueryExecutor queryExecutor)
         {
             _messages = messages;
             _dataAccess = dataAccess;
             _queryLoader = queryLoader;
+            _queryExecutor = queryExecutor;
 
             ShowMessages();
         }
@@ -53,13 +56,24 @@ namespace DataAccessLayerTester
             //{
             //    Console.WriteLine($"ID: {student.StudentID}, Number: {student.StudentNumber}, Name: {student.Name}, Title: {student.Title}");
             //}
-
-
-            Console.ReadLine();
+            TestDataServiceAsync();
+        Console.ReadLine();
 
 
         }
-        private void ShowMessages()
+
+        
+    public async Task TestDataServiceAsync()
+        {
+            DataServiceTestClass dataService = new DataServiceTestClass(_dataAccess, _queryLoader);
+            // Await the asynchronous method
+            string name = await dataService.GetStudentNameByStudentID(1.ToString());
+
+            // Now `name` is the result of the async call, and you can use it as a string.
+            Console.WriteLine($"Retrieved Name: {name}");
+        }
+
+    private void ShowMessages()
         {
             Console.WriteLine(_messages.SayHello());
             Console.WriteLine(_messages.SayGoodbye());

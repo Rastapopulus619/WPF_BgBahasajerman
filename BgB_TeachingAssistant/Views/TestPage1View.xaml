@@ -11,7 +11,7 @@
         <StackPanel>
             <Label Content="Enter Student ID:" HorizontalAlignment="Center"/>
             <TextBox x:Name="StudentIDTextBox" Width="200" Margin="0,5" 
-                     Text="{Binding StudentID}" />
+                     Text="{Binding StudentID, UpdateSourceTrigger=PropertyChanged}" />
             <Button Content="Lookup" Command="{Binding LookupCommand}" Margin="0,5" />
             <Label Content="Student Name" HorizontalAlignment="Center"/>
             <TextBlock Text="{Binding StudentName, UpdateSourceTrigger=PropertyChanged}" Margin="0,5" HorizontalAlignment="Center"/>

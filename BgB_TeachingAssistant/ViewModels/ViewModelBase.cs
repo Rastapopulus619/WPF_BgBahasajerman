@@ -1,4 +1,6 @@
-﻿using Bgb_DataAccessLibrary.Factories;
+﻿using Bgb_DataAccessLibrary.Models.Interfaces;
+using Bgb_DataAccessLibrary.Data.DataServices;
+using Bgb_DataAccessLibrary.Factories;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
@@ -14,6 +16,8 @@ namespace BgB_TeachingAssistant.ViewModels
 
         // Implement the Name property from IPageViewModel
         public virtual string Name { get; }
+        public IDataServiceTestClass DataService { get; set; }
+
 
     }
 }

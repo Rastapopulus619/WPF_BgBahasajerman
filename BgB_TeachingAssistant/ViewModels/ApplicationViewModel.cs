@@ -1,4 +1,5 @@
 ﻿using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.Models.Interfaces;
 using Bgb_DataAccessLibrary.Factories;
 using BgB_TeachingAssistant.Commands;
 using Microsoft.Extensions.DependencyInjection;

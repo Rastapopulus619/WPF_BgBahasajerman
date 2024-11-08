@@ -20,6 +20,7 @@
     <Compile Remove="DashboardView.xaml.cs" />
     <Compile Remove="PackageView.xaml.cs" />
     <Compile Remove="StudentView.xaml.cs" />
+    <Compile Remove="ViewModels\IPageViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bgb_SharedLibrary\Bgb_SharedLibrary.csproj" />
     <ProjectReference Include="..\DataAccessLibrary\Bgb_DataAccessLibrary.csproj" />
   </ItemGroup>
 
