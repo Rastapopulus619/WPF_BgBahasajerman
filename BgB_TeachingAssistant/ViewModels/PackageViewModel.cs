@@ -3,6 +3,7 @@ using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_DataAccessLibrary.QueryLoaders;
+using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using BgB_TeachingAssistant.Commands;
 using BgB_TeachingAssistant.Services;
 using System.Collections.ObjectModel;
@@ -14,6 +15,7 @@ namespace BgB_TeachingAssistant.ViewModels
     public class PackageViewModel : ViewModelBase
     {
         public override string Name => "Packages";
+        private readonly IEventAggregator _eventAggregator;
         private readonly GeneralDataService _generalDataService;
         private readonly PackageNavigationService _packageNavigationService;
         public PackageCommands PackageCommands { get; }
@@ -27,9 +29,10 @@ namespace BgB_TeachingAssistant.ViewModels
             set => SetProperty(ref _selectedPackageNumber, value);
         }
 
-        public PackageViewModel(IServiceFactory serviceFactory, GeneralDataService generalDataService, PackageNavigationService packageNavigationService)
-            : base(serviceFactory)  // Passing serviceFactory to the base class
+        public PackageViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator, GeneralDataService generalDataService, PackageNavigationService packageNavigationService)
+            : base(serviceFactory, eventAggregator)  // Passing serviceFactory to the base class
         {
+            _eventAggregator = eventAggregator;
             _generalDataService = generalDataService;
             _packageNavigationService = packageNavigationService;
 

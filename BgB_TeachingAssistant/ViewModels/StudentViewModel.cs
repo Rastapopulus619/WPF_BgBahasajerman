@@ -3,6 +3,7 @@ using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_DataAccessLibrary.QueryLoaders;
+using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using BgB_TeachingAssistant.Commands;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -16,6 +17,8 @@ namespace BgB_TeachingAssistant.ViewModels
         private readonly GeneralDataService _generalDataService;
         public ICommand DanCukCommand { get; }
         public ICommand LoadStudentsCommand { get; }
+        private readonly IEventAggregator _eventAggregator;
+
 
         private ObservableCollection<StudentModel> _students;
         public ObservableCollection<StudentModel> Students
@@ -30,9 +33,10 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _studentNames;
             set => SetProperty(ref _studentNames, value, nameof(StudentNames));
         }
-        public StudentViewModel(IServiceFactory serviceFactory)
-            : base(serviceFactory)
+        public StudentViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator)
+            : base(serviceFactory, eventAggregator)
         {
+            _eventAggregator = eventAggregator;
             _generalDataService = serviceFactory.CreateGeneralDataService();
             LoadStudentsCommand = new RelayCommand(async () => await LoadStudentsAsync());
             DanCukCommand = new RelayCommand(DanCukMethod);

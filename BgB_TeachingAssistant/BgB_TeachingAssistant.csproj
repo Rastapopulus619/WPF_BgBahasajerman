@@ -46,6 +46,7 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
+    <Folder Include="Services\Infrastructure\" />
     <Folder Include="Views\UserControls\" />
   </ItemGroup>
 

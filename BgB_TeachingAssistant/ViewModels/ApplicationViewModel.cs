@@ -7,25 +7,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
     public class ApplicationViewModel : ViewModelBase
     {
         private readonly IServiceProvider _serviceProvider; // Added for DI
+        private readonly IEventAggregator _eventAggregator;
+
         private ICommand _changePageCommand;
-        public ICommand ChangeViewModelCommand => new RelayCommand(ChangeViewModel);
+        public ICommand ChangeViewModelCommand => new RelayCommand(obj => ChangeViewModel((PageDescriptor)obj));
 
         private IPageViewModel _currentPageViewModel;
         public List<IPageViewModel> PageViewModels { get; }
+        public List<PageDescriptor> PageDescriptors { get; }
 
         // Constructor now accepts IServiceProvider and IEnumerable<IPageViewModel>
-        public ApplicationViewModel(IServiceFactory serviceFactory, IServiceProvider serviceProvider, IEnumerable<IPageViewModel> pageViewModels)
-            : base(serviceFactory)
+        public ApplicationViewModel(IServiceFactory serviceFactory, IServiceProvider serviceProvider, IEnumerable<PageDescriptor> pageDescriptors, IEventAggregator eventAggregator)
+            : base(serviceFactory, eventAggregator)
         {
             _serviceProvider = serviceProvider; // Assign the injected service provider
-            PageViewModels = pageViewModels.ToList();
-            CurrentPageViewModel = PageViewModels.FirstOrDefault(); // Set the initial ViewModel
+            _eventAggregator = eventAggregator;
+
+            PageDescriptors = pageDescriptors.ToList();
+            CurrentPageViewModel = GetPageViewModel(PageDescriptors.FirstOrDefault()); // Set the initial ViewModel
+
         }
 
         public ICommand ChangePageCommand
@@ -45,16 +52,16 @@ namespace BgB_TeachingAssistant.ViewModels
         private void ExecuteChangePageCommand(object parameter)
         {
             // Explicitly cast the parameter to IPageViewModel and call the change method.
-            if (parameter is IPageViewModel viewModel)
+            if (parameter is PageDescriptor descriptor)
             {
-                ChangeViewModel(viewModel);
+                ChangeViewModel(descriptor);
             }
         }
 
         private bool CanExecuteChangePageCommand(object parameter)
         {
             // Check if the parameter is of type IPageViewModel.
-            return parameter is IPageViewModel;
+            return parameter is PageDescriptor;
         }
 
         public IPageViewModel CurrentPageViewModel
@@ -64,35 +71,32 @@ namespace BgB_TeachingAssistant.ViewModels
             {
                 if (_currentPageViewModel != value)
                 {
-                    // Dispose of the old ViewModel if it implements IDisposable
-                    if (_currentPageViewModel is IDisposable disposable)
-                    {
-                        disposable.Dispose();
-                    }
-
+                    DisposeCurrentViewModel();
                     _currentPageViewModel = value;
                     OnPropertyChanged(nameof(CurrentPageViewModel));
                 }
             }
         }
 
-        private void ChangeViewModel(object parameter)
+        private void ChangeViewModel(PageDescriptor descriptor)
         {
-            if (parameter is IPageViewModel viewModel)
+            if (descriptor != null)
             {
-                // Dispose of the current ViewModel if it implements IDisposable
-                if (CurrentPageViewModel is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-
-                // Resolve a new instance of the ViewModel from the DI container
-                CurrentPageViewModel = _serviceProvider.GetRequiredService(viewModel.GetType()) as IPageViewModel;
-
-                Console.WriteLine($"Switched to {CurrentPageViewModel?.Name}");
+                CurrentPageViewModel = GetPageViewModel(descriptor);
             }
         }
-
+        // Dispose the current ViewModel if it's IDisposable
+        private void DisposeCurrentViewModel()
+        {
+            if (_currentPageViewModel is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+        private IPageViewModel GetPageViewModel(PageDescriptor descriptor)
+        {
+            return _serviceProvider.GetRequiredService(descriptor.ViewModelType) as IPageViewModel;
+        }
 
         public void NavigateTo<TViewModel>() where TViewModel : IPageViewModel
         {

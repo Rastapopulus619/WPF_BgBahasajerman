@@ -1,13 +1,15 @@
 ﻿using Bgb_DataAccessLibrary.Factories; // Ensure this namespace is correct
+using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using BgB_TeachingAssistant.Commands;
 using System.Windows;
 using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class DashboardViewModel : ViewModelBase, IDisposable
+    public class DashboardViewModel : ViewModelBase
     {
         public override string Name => "Dashboard"; // Implementing the Name property
+        private readonly IEventAggregator _eventAggregator;
 
         public ICommand TriggerDataProcessingCommand { get; }
 
@@ -24,10 +26,11 @@ namespace BgB_TeachingAssistant.ViewModels
             }
         }
 
-        public DashboardViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
+        public DashboardViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator) : base(serviceFactory, eventAggregator)
         {
             Console.WriteLine("DashboardViewModel created.");
             Message = "default display-message";
+            _eventAggregator = eventAggregator;
             TriggerDataProcessingCommand = new RelayCommand(NewEventTester);
         }
 

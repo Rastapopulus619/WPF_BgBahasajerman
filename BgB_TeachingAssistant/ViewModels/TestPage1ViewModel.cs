@@ -1,6 +1,8 @@
 ﻿using Bgb_DataAccessLibrary.Data.DataServices;
 using Bgb_DataAccessLibrary.Factories;
+using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using BgB_TeachingAssistant.Commands;
+using Bgb_DataAccessLibrary.Events;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +16,8 @@ namespace BgB_TeachingAssistant.ViewModels
 {
     public class TestPage1ViewModel : ViewModelBase
     {
+        private readonly IEventAggregator _eventAggregator;
+
         public IDataServiceTestClass DataService { get; set; }
         public override string Name => "Test1";
 
@@ -49,35 +53,44 @@ namespace BgB_TeachingAssistant.ViewModels
 
         public ICommand LookupCommand { get; }
         //public TestPage1ViewModel(IServiceFactory serviceFactory, IDataServiceTestClass dataService) : base(serviceFactory)
-        public TestPage1ViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
+        public TestPage1ViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator) : base(serviceFactory, eventAggregator)
         {
             // Configure necessary services for this view model     /////*********** USING REFLECTION?? WTF!!!!
             serviceFactory.ConfigureServicesFor(this);
+
+            _eventAggregator = eventAggregator;
+
+            // Subscribe to the event
+            SubscribeToEvent<StudentNameByIDEvent>(OnStudentNameReceived);
 
             //DataService = dataService;
             Console.WriteLine("BreakPoint");
 
             LookupCommand = new AsyncRelayCommand(GetStudentNameByID);   ///in XAML:  <Button Content="Lookup" Command="{Binding LookupCommand}" Margin="0,5" />////
         }
+
+        // Handle the event here
+        private void OnStudentNameReceived(string studentName)
+        {
+            StudentName = studentName;
+        }
+        private void OnStudentNameReceived(StudentNameByIDEvent studentEvent)
+        {
+            StudentName = studentEvent.StudentName;
+        }
+
         private async Task GetStudentNameByID()
         {
             Console.WriteLine($"Current Student ID: {StudentID}");
 
-            // Simulate a lookup. Replace with actual logic to retrieve student name by ID.
-            if (int.TryParse(StudentID, out int id))
+            if (int.TryParse(StudentID, out _))
             {
-                // For demonstration, let's say the student name for ID 1 is "John Doe"
-                // Replace this logic with a call to your data access layer or service.
-                StudentName = await DataService.GetStudentNameByStudentID(StudentID);
-
+                // Call the data service, which will trigger the event
+                await DataService.GetStudentNameByStudentID(StudentID);
             }
             else
             {
-                string name = await DataService.GetStudentNameByStudentID(StudentID);
-
-                StudentName = $"{name}";
-                //StudentName = "Invalid ID";
-                Console.WriteLine($"Newly Stored StudentName is: {StudentName}");
+                StudentName = "Invalid ID";
             }
         }
     }

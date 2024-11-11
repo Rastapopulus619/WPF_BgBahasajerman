@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:BgB_TeachingAssistant.Views"
         xmlns:viewModel="clr-namespace:BgB_TeachingAssistant.ViewModels"
-        Title="ApplicationView" MinHeight="850" MinWidth="1000">
+        Title="ApplicationView" MinHeight="850" MinWidth="1000"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -22,7 +23,7 @@
                 BorderBrush="Black"
                 BorderThickness="0,0,1,0"
                 Background="Black">
-            <ItemsControl ItemsSource="{Binding PageViewModels}">
+            <ItemsControl ItemsSource="{Binding PageDescriptors}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Content="{Binding Name}"

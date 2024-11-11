@@ -3,6 +3,7 @@ using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_DataAccessLibrary.QueryExecutor;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
+using Bgb_DataAccessLibrary.Events;
 using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
@@ -62,11 +63,13 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
 
         public async Task<string> GetStudentNameByStudentID(string studentID)
         {
-            //return await _queryExecutor.ExecuteQuerySingleAsync<string>("GetStudentNameByStudentID", new { StudentID = studentID });
             string studentName = await _queryExecutor.ExecuteQuerySingleAsync<string>("GetStudentNameByStudentID", new { StudentID = studentID });
-            _eventAggregator.Publish(studentName);
+
+            // Publish the event with the strongly-typed event class
+            _eventAggregator.Publish(new StudentNameByIDEvent(studentName));
             return studentName;
         }
+
 
     }
 }
