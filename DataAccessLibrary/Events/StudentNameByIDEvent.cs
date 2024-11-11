@@ -1,11 +1,14 @@
 ﻿namespace Bgb_DataAccessLibrary.Events
 {
-    public class StudentNameByIDEvent
+    public class StudentNameByIDEvent : IStudentNameByIDEvent
     {
         public string StudentName { get; }
+        public StudentNameByIDEvent()
+        {
+        }
         public StudentNameByIDEvent(string studentName)
         {
-            StudentName = studentName;  
+            StudentName = studentName;
         }
     }
 }

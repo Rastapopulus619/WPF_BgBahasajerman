@@ -17,7 +17,7 @@ namespace BgB_TeachingAssistant.ViewModels
     public class TestPage1ViewModel : ViewModelBase
     {
         private readonly IEventAggregator _eventAggregator;
-
+        public IStudentNameByIDEvent StudentNameByIDEvent { get; set; }
         public IDataServiceTestClass DataService { get; set; }
         public override string Name => "Test1";
 
@@ -61,7 +61,8 @@ namespace BgB_TeachingAssistant.ViewModels
             _eventAggregator = eventAggregator;
 
             // Subscribe to the event
-            SubscribeToEvent<StudentNameByIDEvent>(OnStudentNameReceived);
+            //**********SubscribeToEvent<StudentNameByIDEvent>(OnStudentNameReceived);
+            _eventAggregator.Subscribe<StudentNameByIDEvent>(OnStudentNameReceived);
 
             //DataService = dataService;
             Console.WriteLine("BreakPoint");

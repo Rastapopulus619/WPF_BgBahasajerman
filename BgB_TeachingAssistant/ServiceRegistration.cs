@@ -1,6 +1,7 @@
 ﻿using Bgb_DataAccessLibrary;
 using Bgb_DataAccessLibrary.Data.DataServices;
 using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.Events;
 using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Logger;
 using Bgb_DataAccessLibrary.QueryExecutor;
@@ -28,6 +29,9 @@ public static class ServiceRegistration
 
         // Register other application services
         RegisterOtherServices(services);
+
+        // Register Events
+        RegisterEvents(services);
     }
 
     private static void RegisterCoreServices(IServiceCollection services, IConfiguration configuration)
@@ -69,6 +73,15 @@ public static class ServiceRegistration
 
         services.AddTransient<IDataServiceTestClass, DataServiceTestClass>();
         // Optionally, add other dependencies here as needed
+    }
+    private static void RegisterEvents(IServiceCollection services)
+    {
+        // Register testing service
+        services.AddSingleton<IStudentNameByIDEvent, StudentNameByIDEvent>();
+
+        // Register other event interfaces similarly
+        // Register other event interfaces similarly
+        // Register other event interfaces similarly
     }
 }
 
