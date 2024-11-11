@@ -62,7 +62,7 @@ namespace BgB_TeachingAssistant.ViewModels
 
             // Subscribe to the event
             //**********SubscribeToEvent<StudentNameByIDEvent>(OnStudentNameReceived);
-            _eventAggregator.Subscribe<StudentNameByIDEvent>(OnStudentNameReceived);
+            SubscribeToEvent<StudentNameByIDEvent>(OnStudentNameReceived);
 
             //DataService = dataService;
             Console.WriteLine("BreakPoint");
