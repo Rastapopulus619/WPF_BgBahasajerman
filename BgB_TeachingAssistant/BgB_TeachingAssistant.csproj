@@ -30,6 +30,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2849.39" />
     <PackageReference Include="MySqlConnector" Version="2.3.7" />
   </ItemGroup>
 
@@ -45,6 +46,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="HtmlContent\Templates\" />
+    <Folder Include="HtmlContent\TestFiles\" />
+    <Folder Include="HtmlContent\TemporaryFiles\" />
     <Folder Include="Logs\" />
     <Folder Include="Services\Infrastructure\" />
     <Folder Include="Views\UserControls\" />

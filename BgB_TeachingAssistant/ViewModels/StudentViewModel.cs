@@ -14,7 +14,7 @@ namespace BgB_TeachingAssistant.ViewModels
     public class StudentViewModel : ViewModelBase
     { 
         public override string Name => "Student";
-        private readonly GeneralDataService _generalDataService;
+        private readonly IGeneralDataService _generalDataService;
         public ICommand DanCukCommand { get; }
         public ICommand LoadStudentsCommand { get; }
         private readonly IEventAggregator _eventAggregator;
@@ -36,8 +36,9 @@ namespace BgB_TeachingAssistant.ViewModels
         public StudentViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator)
             : base(serviceFactory, eventAggregator)
         {
+            serviceFactory.ConfigureServicesFor(this);
+
             _eventAggregator = eventAggregator;
-            _generalDataService = serviceFactory.CreateGeneralDataService();
             LoadStudentsCommand = new RelayCommand(async () => await LoadStudentsAsync());
             DanCukCommand = new RelayCommand(DanCukMethod);
         }
