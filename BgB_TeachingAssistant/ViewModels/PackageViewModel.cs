@@ -26,7 +26,7 @@ namespace BgB_TeachingAssistant.ViewModels
         private readonly PackageNavigationService _packageNavigationService;
 
         // The HtmlContentToNavigateConverter property
-        public HtmlContentToNavigateConverter HtmlContentToNavigateConverter { get; set; }
+        //public HtmlContentToNavigateConverter HtmlContentToNavigateConverter { get; set; }
         private FileSystemWatcher _fileWatcher;
 
         public IPopulateStudentPickerEvent PopulateStudentPickerEvent { get; set; }

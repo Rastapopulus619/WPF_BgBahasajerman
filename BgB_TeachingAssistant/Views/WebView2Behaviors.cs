@@ -1,6 +1,7 @@
 ﻿using Microsoft.Web.WebView2.Wpf;
 using System.Windows;
 
+/*
 public static class WebView2Behaviors
 {
     public static readonly DependencyProperty HtmlContentProperty =
@@ -28,3 +29,4 @@ public static class WebView2Behaviors
         }
     }
 }
+*/
