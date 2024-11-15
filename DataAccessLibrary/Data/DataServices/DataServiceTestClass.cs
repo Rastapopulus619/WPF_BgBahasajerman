@@ -15,20 +15,6 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
 {
     public class DataServiceTestClass : IDataServiceTestClass
     {
-        //*****
-        //normal communication
-        //Define delegate signature/format
-        //public delegate void DataProcessedEventHandler(string data);
-        //public event DataProcessedEventHandler DataProcessed;
-
-        //public void ProcessData()
-        //{
-        //    string processedData = "Processed data at " + DateTime.Now;
-
-        //*****
-        //normal communication
-        //DataProcessed?.Invoke(processedData);
-        //}
         private readonly IDataAccess _dataAccess;
         private readonly IQueryLoader _queryLoader;
         private readonly IQueryExecutor _queryExecutor;
@@ -61,13 +47,14 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
             return students.Select(s => s.Name).ToList();
         }
 
-        public async Task<string> GetStudentNameByStudentID(string studentID)
+        //public async Task<string> GetStudentNameByStudentID(string studentID)
+        public async Task GetStudentNameByStudentID(string studentID)
         {
             string studentName = await _queryExecutor.ExecuteQuerySingleAsync<string>("GetStudentNameByStudentID", new { StudentID = studentID });
 
             // Publish the event with the strongly-typed event class
             _eventAggregator.Publish(new StudentNameByIDEvent(studentName));
-            return studentName;
+            //return studentName;
         }
 
 

@@ -1,12 +1,18 @@
 ﻿using Bgb_DataAccessLibrary.Data.DataServices;
 using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.Events;
 using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using BgB_TeachingAssistant.Commands;
+using BgB_TeachingAssistant.Helpers;
 using BgB_TeachingAssistant.Services;
 using System.Collections.ObjectModel;
+using System;
+using System.ComponentModel;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -16,42 +22,172 @@ namespace BgB_TeachingAssistant.ViewModels
     {
         public override string Name => "Packages";
         private readonly IEventAggregator _eventAggregator;
-        private readonly GeneralDataService _generalDataService;
+        public IGeneralDataService _generalDataService { get; set; }
         private readonly PackageNavigationService _packageNavigationService;
+
+        // The HtmlContentToNavigateConverter property
+        //public HtmlContentToNavigateConverter HtmlContentToNavigateConverter { get; set; }
+        private FileSystemWatcher _fileWatcher;
+
+        public IPopulateStudentPickerEvent PopulateStudentPickerEvent { get; set; }
         public PackageCommands PackageCommands { get; }
+        public ICommand RefreshContentCommand { get; }
 
         public ObservableCollection<string> StudentNames { get; private set; }
 
-        private int _selectedPackageNumber = 3;
+        private ObservableCollection<StudentPickerStudentModel> _students;
+
+        public ObservableCollection<StudentPickerStudentModel> Students
+        {
+            get => _students;
+            set
+            {
+                _students = value;
+                OnPropertyChanged(nameof(Students));
+            }
+        }
+
+
+        private int _selectedStudentID;
+        // This would be bound to the ComboBox
+        public int SelectedStudentID
+        {
+            get { return _selectedStudentID; }
+            set
+            {
+                if (_selectedStudentID != value)
+                {
+                    _selectedStudentID = value;
+                    Console.WriteLine($"Selected StudentID is: {value}");
+                    // Do something with the selected StudentID, e.g., database interaction
+                }
+            }
+        }
+        private int _selectedPackageNumber;
         public int SelectedPackageNumber
         {
             get => _selectedPackageNumber;
             set => SetProperty(ref _selectedPackageNumber, value);
         }
 
-        public PackageViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator, GeneralDataService generalDataService, PackageNavigationService packageNavigationService)
+        private string _htmlDisplayContent;
+        public string HtmlDisplayContent
+        {
+            get => _htmlDisplayContent;
+            set
+            {
+                if (SetProperty(ref _htmlDisplayContent, value))
+                {
+                    Console.WriteLine($"HtmlDisplayContent changed to: {_htmlDisplayContent}");
+                }
+            } 
+                
+        }
+        private string _url;
+        public string Url
+        {
+            get => _url;
+            set
+            {
+                if (SetProperty(ref _url, value))
+                {
+                    Console.WriteLine($"HtmlDisplayContent changed to: {_url}");
+                }
+            } 
+                
+        }
+
+        public PackageViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator, PackageNavigationService packageNavigationService)
             : base(serviceFactory, eventAggregator)  // Passing serviceFactory to the base class
         {
+            serviceFactory.ConfigureServicesFor(this);
+
             _eventAggregator = eventAggregator;
-            _generalDataService = generalDataService;
             _packageNavigationService = packageNavigationService;
 
             PackageCommands = new PackageCommands(this, packageNavigationService);
+
+            SubscribeToEvent<PopulateStudentPickerEvent>(OnStudentListReceived);
+
             LoadStudentList();
+            SelectedPackageNumber = 1;
+
+            // Initialize the converter in the ViewModel constructor
+            //HtmlContentToNavigateConverter = new HtmlContentToNavigateConverter();
+
+            RefreshContentCommand = new AsyncRelayCommand(async () => await LoadHtmlContentAsync());
+
+            string localFilePath = @"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\BgB_TeachingAssistant\HtmlContent\TestFiles\testFile.html";
+            Url = localFilePath;
+
+            InitializeFileWatcher(localFilePath);
+            LoadHtmlContentAsync().ConfigureAwait(false);
+
+            string htmlContent = "<html><body><h1>Welcome to the Teaching Assistant App</h1><p>This is a sample HTML content.</p></body></html>";
+            HtmlDisplayContent = htmlContent; ///******************** check ChatGPT for instructions how to get the string to XAML!!!
+            
+        }
+        private async void LoadStudentList()
+        {
+            await _generalDataService.populateStudentPicker();
+        }
+        private void OnStudentListReceived(PopulateStudentPickerEvent e)
+        {
+            // Cast the object to the correct type
+            if (e.StudentList is List<IStudentPickerStudentModel> studentList)
+            {
+                // Convert to ObservableCollection
+                Students = new ObservableCollection<StudentPickerStudentModel>(studentList.Cast<StudentPickerStudentModel>());
+            }
+            else
+            {
+                // Handle the case where the casting fails (optional)
+                MessageBox.Show("Failed to cast StudentList.");
+            }
         }
 
-        private async void LoadStudentList()
+        #region
+
+        private void InitializeFileWatcher(string filePath)
+        {
+            _fileWatcher = new FileSystemWatcher
+            {
+                Path = Path.GetDirectoryName(filePath),
+                Filter = Path.GetFileName(filePath),
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName
+            };
+
+            _fileWatcher.Changed += OnHtmlFileChanged;
+            _fileWatcher.EnableRaisingEvents = true;
+        }
+
+        private async void OnHtmlFileChanged(object sender, FileSystemEventArgs e)
+        {
+            await LoadHtmlContentAsync();
+        }
+
+        private async Task LoadHtmlContentAsync()
         {
             try
             {
-                var studentNames = await _generalDataService.GetStudentNamesAsync();
-                StudentNames = new ObservableCollection<string>(studentNames);
+                // Read the HTML content from the file asynchronously
+                HtmlDisplayContent = await File.ReadAllTextAsync(Url);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error retrieving student list: {ex.Message}");
+                Console.WriteLine($"Failed to load HTML content: {ex.Message}");
             }
         }
+
+        // Override Cleanup to perform PackageViewModel-specific disposal logic
+        protected override void Cleanup()
+        {
+            // Insert any additional disposal or cleanup logic specific to PackageViewModel here
+            Console.WriteLine("PackageViewModel-specific cleanup.");
+        }
+
+        #endregion
+
     }
 
 }

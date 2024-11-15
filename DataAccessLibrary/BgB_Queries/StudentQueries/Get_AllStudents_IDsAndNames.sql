@@ -1,0 +1,1 @@
+﻿ SELECT StudentID, Name FROM students;

@@ -26,6 +26,24 @@ namespace BgB_TeachingAssistant.ViewModels
             {
                 if (SetProperty(ref _studentID, value)) // ◀️◀️◀️ Using SetProperty from ViewModelBase
                 {
+                    #region Explanation of SetProperty Parameters
+
+                    /*
+                    Let's break down each line:
+
+                    - ref T field: This parameter is the backing field (like _studentName) for the property being set. 
+                      The ref keyword allows SetProperty to directly modify the field in the calling property.
+
+                    - T value: This is the new value being assigned to the property. It will be compared to the current value of field.
+
+                    - [CallerMemberName] string propertyName = null: This attribute is used to automatically pass the 
+                      name of the calling property (in this case, StudentName) as the propertyName parameter. 
+                      If you change the property name, this still works without needing updates to the string in SetProperty, 
+                      reducing error-proneness.
+                    */
+
+                    #endregion
+
                     Console.WriteLine($"Message changed to: {_studentID}");
                     //GetStudentNameByID();
                     //***for instant change  uncomment this and add ``UpdateSourceTrigger=PropertyChanged`` into the XAML code
@@ -44,7 +62,7 @@ namespace BgB_TeachingAssistant.ViewModels
                     }
             }
         }
-        private readonly IEventAggregator _eventAggregator;
+        public IEventAggregator _eventAggregator;
         public IDataServiceTestClass DataService { get; set; }
         public IStudentNameByIDEvent StudentNameByIDEvent { get; set; }
         public ICommand LookupCommand { get; }

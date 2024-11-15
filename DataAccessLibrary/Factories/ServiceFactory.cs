@@ -52,11 +52,11 @@ namespace Bgb_DataAccessLibrary.Factories
                 Console.WriteLine("viewModel is not a IPageViewModel");
             }
         }
-        public GeneralDataService CreateGeneralDataService() =>
-            _serviceProvider.GetRequiredService<GeneralDataService>();
+        //public GeneralDataService CreateGeneralDataService() =>
+        //    _serviceProvider.GetRequiredService<GeneralDataService>();
 
-        public StudentProfileDataService CreateStudentProfileDataService() =>
-            _serviceProvider.GetRequiredService<StudentProfileDataService>();
+        //public StudentProfileDataService CreateStudentProfileDataService() =>
+        //    _serviceProvider.GetRequiredService<StudentProfileDataService>();
 
         // Other methods...
     }

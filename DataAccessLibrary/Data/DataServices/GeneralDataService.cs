@@ -2,18 +2,28 @@
 using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_DataAccessLibrary.QueryLoaders;
+using System.Data;
+using Bgb_DataAccessLibrary.Helpers.Conversion;
+using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
+using Bgb_DataAccessLibrary.Events;
+
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {
-    public class GeneralDataService
+    public class GeneralDataService : IGeneralDataService
     {
         private readonly IDataAccess _dataAccess;
         private readonly IQueryLoader _queryLoader;
+        private readonly IQueryExecutor _queryExecutor;
+        private readonly IEventAggregator _eventAggregator;
 
-        public GeneralDataService(IDataAccess dataAccess, IQueryLoader queryLoader)
+
+        public GeneralDataService(IDataAccess dataAccess, IQueryLoader queryLoader, IQueryExecutor queryExecutor, IEventAggregator eventAggregator)
         {
             _dataAccess = dataAccess;
             _queryLoader = queryLoader;
+            _queryExecutor = queryExecutor;
+            _eventAggregator = eventAggregator;
         }
 
         public async Task<List<StudentModel>> GetStudentsAsync()
@@ -27,5 +37,14 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
             var students = await _dataAccess.QueryAsync<StudentModel>(query);
             return students.Select(s => s.Name).ToList();
         }
+        public async Task populateStudentPicker()
+        {
+            DataTable dt = await _queryExecutor.ExecuteQueryAsDataTableAsync("Get_AllStudents_IDsAndNames");
+            StudentDataConverter studentDataConverter = new StudentDataConverter();
+            List<IStudentPickerStudentModel> studentList = studentDataConverter.ConvertDataTableToStudentDTOList(dt);
+            _eventAggregator.Publish(new PopulateStudentPickerEvent(studentList));
+
+        }
+
     }
 }

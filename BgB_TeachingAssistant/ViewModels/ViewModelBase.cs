@@ -77,6 +77,9 @@ namespace BgB_TeachingAssistant.ViewModels
         // IDisposable implementation for cleaning up subscriptions
         public void Dispose()
         {
+            // Call to custom cleanup logic before unsubscribing events
+            Cleanup();
+
             // Dispose will automatically unsubscribe from all events
             UnsubscribeEvents();
 
@@ -85,6 +88,11 @@ namespace BgB_TeachingAssistant.ViewModels
 
             // Log disposal
             Console.WriteLine($"{this.GetType().Name} disposed and unsubscribed from all events.");
+        }
+        // Optional Cleanup method for derived classes
+        protected virtual void Cleanup()
+        {
+            // Derived classes can override this to perform additional cleanup tasks if needed.
         }
     }
 }

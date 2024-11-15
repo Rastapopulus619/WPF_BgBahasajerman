@@ -55,7 +55,7 @@ public static class ServiceRegistration
     private static void RegisterDataServices(IServiceCollection services)
     {
         // Register data services
-        services.AddTransient<GeneralDataService>();
+        services.AddTransient<IGeneralDataService, GeneralDataService>();
         services.AddTransient<StudentProfileDataService>();
     }
 
@@ -77,7 +77,8 @@ public static class ServiceRegistration
     private static void RegisterEvents(IServiceCollection services)
     {
         // Register testing service
-        services.AddSingleton<IStudentNameByIDEvent, StudentNameByIDEvent>();
+        services.AddTransient<IStudentNameByIDEvent, StudentNameByIDEvent>();
+        services.AddTransient<IPopulateStudentPickerEvent, PopulateStudentPickerEvent>();
 
         // Register other event interfaces similarly
         // Register other event interfaces similarly
