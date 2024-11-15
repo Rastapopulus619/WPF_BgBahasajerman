@@ -33,7 +33,7 @@
                 <!-- Add more rows as needed -->
             </Grid.RowDefinitions>
 
-            <ComboBox Grid.Column="0" Grid.Row="0" Name="StudentComboBox" ItemsSource="{Binding StudentNames}" Width="200" Margin="5"/>
+            <ComboBox Grid.Column="0" Grid.Row="0" Name="StudentComboBox" ItemsSource="{Binding Students}" DisplayMemberPath="StudentName" SelectedValuePath="StudentID" SelectedValue="{Binding SelectedStudentID}" Width="200" Margin="5"/>
 
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
                 <Button Grid.Column="1" Grid.Row="0" Content="&lt;" Margin="5" Command="{Binding PreviousPackageCommand}"></Button>
