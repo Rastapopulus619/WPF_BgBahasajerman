@@ -44,7 +44,7 @@ namespace BgB_TeachingAssistant.ViewModels
             {
                 //_students = value;
                 //OnPropertyChanged(nameof(Students));
-                if (SetProperty(ref _students, value)) // ◀️◀️◀️ Using SetProperty from ViewModelBase
+                if (SetProperty(ref _students, value))
                 {
                     Console.WriteLine($"First Student is: {_students[0].StudentName}");
                 }
