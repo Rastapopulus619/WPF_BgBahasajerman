@@ -57,7 +57,7 @@ namespace BgB_TeachingAssistant.ViewModels
             set
             {
                     if (SetProperty(ref _studentName, value)) // ◀️◀️◀️ Using SetProperty from ViewModelBase
-                {
+                    {
                         Console.WriteLine($"Message changed to: {_studentName}");
                     }
             }

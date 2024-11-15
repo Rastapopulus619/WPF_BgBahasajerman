@@ -42,8 +42,13 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _students;
             set
             {
-                _students = value;
-                OnPropertyChanged(nameof(Students));
+                //_students = value;
+                //OnPropertyChanged(nameof(Students));
+                if (SetProperty(ref _students, value)) // ◀️◀️◀️ Using SetProperty from ViewModelBase
+                {
+                    Console.WriteLine($"First Student is: {_students[0].StudentName}");
+                }
+
             }
         }
 
@@ -145,7 +150,7 @@ namespace BgB_TeachingAssistant.ViewModels
                 MessageBox.Show("Failed to cast StudentList.");
             }
         }
-
+        /*
         #region
 
         private void InitializeFileWatcher(string filePath)
@@ -185,8 +190,9 @@ namespace BgB_TeachingAssistant.ViewModels
             // Insert any additional disposal or cleanup logic specific to PackageViewModel here
             Console.WriteLine("PackageViewModel-specific cleanup.");
         }
-
+        
         #endregion
+        */
 
     }
 
