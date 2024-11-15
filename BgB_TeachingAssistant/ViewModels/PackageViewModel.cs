@@ -115,16 +115,16 @@ namespace BgB_TeachingAssistant.ViewModels
             // Initialize the converter in the ViewModel constructor
             //HtmlContentToNavigateConverter = new HtmlContentToNavigateConverter();
 
-            RefreshContentCommand = new AsyncRelayCommand(async () => await LoadHtmlContentAsync());
+            //RefreshContentCommand = new AsyncRelayCommand(async () => await LoadHtmlContentAsync());
 
-            string localFilePath = @"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\BgB_TeachingAssistant\HtmlContent\TestFiles\testFile.html";
-            Url = localFilePath;
+            //string localFilePath = @"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\BgB_TeachingAssistant\HtmlContent\TestFiles\testFile.html";
+            //Url = localFilePath;
 
-            InitializeFileWatcher(localFilePath);
-            LoadHtmlContentAsync().ConfigureAwait(false);
+            //InitializeFileWatcher(localFilePath);
+            //LoadHtmlContentAsync().ConfigureAwait(false);
 
-            string htmlContent = "<html><body><h1>Welcome to the Teaching Assistant App</h1><p>This is a sample HTML content.</p></body></html>";
-            HtmlDisplayContent = htmlContent; ///******************** check ChatGPT for instructions how to get the string to XAML!!!
+            //string htmlContent = "<html><body><h1>Welcome to the Teaching Assistant App</h1><p>This is a sample HTML content.</p></body></html>";
+            //HtmlDisplayContent = htmlContent; ///******************** check ChatGPT for instructions how to get the string to XAML!!!
             
         }
         private async void LoadStudentList()
