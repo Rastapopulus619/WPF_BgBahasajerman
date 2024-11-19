@@ -7,6 +7,7 @@ using Bgb_DataAccessLibrary.Logger;
 using Bgb_DataAccessLibrary.QueryExecutor;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
+using Bgb_DataAccessLibrary.Services.Navigation;
 using BgB_TeachingAssistant.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,7 +63,7 @@ public static class ServiceRegistration
     private static void RegisterNavigationServices(IServiceCollection services)
     {
         services.AddTransient<PackageNavigationService>();
-        services.AddSingleton<NavigationService>();
+        services.AddSingleton<INavigationService, Bgb_DataAccessLibrary.Services.Navigation.NavigationService>();
         services.AddSingleton<IServiceFactory, ServiceFactory>();
     }
 

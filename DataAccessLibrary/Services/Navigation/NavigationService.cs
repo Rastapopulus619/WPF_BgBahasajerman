@@ -1,11 +1,10 @@
-﻿/*
-using Bgb_DataAccessLibrary.Factories;
+﻿using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Models.Interfaces;
 using System;
 
-namespace BgB_TeachingAssistant.Services
+namespace Bgb_DataAccessLibrary.Services.Navigation
 {
-    public class NavigationService
+    public class NavigationService : INavigationService
     {
         private readonly IServiceFactory _serviceFactory;
         private IPageViewModel _currentViewModel;
@@ -31,14 +30,14 @@ namespace BgB_TeachingAssistant.Services
             }
         }
 
-        public void NavigateTo(PageDescriptor descriptor)
+        public void NavigateTo(IPageDescriptor descriptor)
         {
             if (descriptor == null) throw new ArgumentNullException(nameof(descriptor));
             var viewModel = GetPageViewModel(descriptor);
             CurrentViewModel = viewModel;
         }
 
-        private IPageViewModel GetPageViewModel(PageDescriptor descriptor)
+        private IPageViewModel GetPageViewModel(IPageDescriptor descriptor)
         {
             var viewModel = _serviceFactory.GetService(descriptor.ViewModelType) as IPageViewModel;
             _serviceFactory.ConfigureServicesFor(viewModel); // Inject services if needed
@@ -54,4 +53,3 @@ namespace BgB_TeachingAssistant.Services
         }
     }
 }
-*/

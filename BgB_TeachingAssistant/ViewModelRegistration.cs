@@ -23,7 +23,7 @@ namespace BgB_TeachingAssistant
 
 
             // Register descriptors as IEnumerable<PageDescriptor>
-            services.AddSingleton<IEnumerable<PageDescriptor>>(new List<PageDescriptor>
+            services.AddSingleton<IEnumerable<IPageDescriptor>>(new List<PageDescriptor>
     {
         new PageDescriptor
         {

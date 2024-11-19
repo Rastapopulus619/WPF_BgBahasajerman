@@ -1,6 +1,11 @@
-﻿public class PageDescriptor
+﻿using Bgb_DataAccessLibrary.Models.Interfaces;
+
+namespace BgB_TeachingAssistant.ViewModels
 {
-    public string Name { get; set; }
-    public Type ViewModelType { get; set; }
-    public string Icon { get; set; }  // Optional, can be a path to an icon or other descriptor
+    public class PageDescriptor : IPageDescriptor
+    {
+        public string Name { get; set; }
+        public Type ViewModelType { get; set; }
+        public string Icon { get; set; }  // Optional, can be a path to an icon or other descriptor
+    }
 }

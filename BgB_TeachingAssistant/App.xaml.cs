@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using static Bgb_DataAccessLibrary.Helpers.ExtensionMethods.StringExtensionMethods;
+using Bgb_DataAccessLibrary.Models.Interfaces;
+using static Bgb_DataAccessLibrary.Logger.DependencyInjectionLogger;
 using Bgb_DataAccessLibrary.Logger;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +24,6 @@ namespace BgB_TeachingAssistant
             _host = CreateHostBuilder().Build();
 
             // Note: LoggingServiceProviderFactory handles logging of service registrations
-            // So no need to log here
 
             // Log the PageDescriptors
             LogPageDescriptors(_host.Services);
@@ -44,6 +45,9 @@ namespace BgB_TeachingAssistant
 
                     // Register ViewModels
                     ViewModelRegistration.RegisterViewModels(services);
+
+                    LogStartup(services);
+
 
                     // Register MainWindow
                     services.AddSingleton<ApplicationView>();
@@ -79,7 +83,7 @@ namespace BgB_TeachingAssistant
 
         private void LogPageDescriptors(IServiceProvider serviceProvider)
         {
-            var pageDescriptors = serviceProvider.GetService<IEnumerable<PageDescriptor>>();
+            var pageDescriptors = serviceProvider.GetService<IEnumerable<IPageDescriptor>>();
             if (pageDescriptors != null)
             {
                 Console.WriteLine("=== Registered Page Descriptors ===");
