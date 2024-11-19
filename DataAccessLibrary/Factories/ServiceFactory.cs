@@ -19,10 +19,14 @@ namespace Bgb_DataAccessLibrary.Factories
         public T GetService<T>()
         {
             var service = _serviceProvider.GetService<T>();
-
-            // Log using the existing DependencyInjectionLogger
             DependencyInjectionLogger.LogResolution(typeof(T), service);
+            return service;
+        }
 
+        public object GetService(Type serviceType)
+        {
+            var service = _serviceProvider.GetService(serviceType);
+            DependencyInjectionLogger.LogResolution(serviceType, service);
             return service;
         }
         public void ConfigureServicesFor(object viewModel)
