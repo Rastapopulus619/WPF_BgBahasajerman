@@ -14,7 +14,7 @@
             _subscriptions[typeof(T)].Add(handler);
             Console.WriteLine($"Subscribed to event of type {typeof(T).Name} with handler {handler.Method.Name}. Total subscriptions: {_subscriptions[typeof(T)].Count}");
         }
-
+        
         public void Publish<T>(T eventData)
         {
             if (_subscriptions.ContainsKey(typeof(T)))

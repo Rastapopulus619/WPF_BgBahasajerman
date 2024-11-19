@@ -28,7 +28,7 @@ namespace BgB_TeachingAssistant.ViewModels
 
         public DashboardViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator) : base(serviceFactory, eventAggregator)
         {
-            Console.WriteLine("DashboardViewModel created.");
+
             Message = "default display-message";
             _eventAggregator = eventAggregator;
             TriggerDataProcessingCommand = new RelayCommand(NewEventTester);

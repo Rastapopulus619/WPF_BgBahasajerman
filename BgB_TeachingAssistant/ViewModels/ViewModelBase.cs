@@ -15,8 +15,17 @@ namespace BgB_TeachingAssistant.ViewModels
         // Constructor for injecting the factory and event aggregator
         public ViewModelBase(IServiceFactory serviceFactory, IEventAggregator eventAggregator)
         {
+            LogViewModelCreation();
             ServiceFactory = serviceFactory;
             _eventAggregator = eventAggregator;
+        }
+        public void LogViewModelCreation()
+        {
+            $"+[{GetType().Name}] "
+                .ColorizeMulti(ConsoleColor.Blue)
+                .Append($"Created at {DateTime.Now}, Instance Hash: ", ConsoleColor.DarkGray)
+                .Append($"{this.GetHashCode()}", ConsoleColor.DarkYellow)
+                .WriteLine();
         }
 
         // Implement the Name property from IPageViewModel

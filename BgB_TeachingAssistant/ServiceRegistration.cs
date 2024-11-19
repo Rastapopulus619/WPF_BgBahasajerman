@@ -61,7 +61,6 @@ public static class ServiceRegistration
 
     private static void RegisterNavigationServices(IServiceCollection services)
     {
-        // Register navigation services
         services.AddTransient<PackageNavigationService>();
         services.AddSingleton<IServiceFactory, ServiceFactory>();
     }

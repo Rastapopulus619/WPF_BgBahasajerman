@@ -1,16 +1,13 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Bgb_DataAccessLibrary.Helpers.ExtensionMethods.StringExtensionMethods;
+using Bgb_DataAccessLibrary.Logger;
+using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Bgb_DataAccessLibrary.Databases;
-using Bgb_DataAccessLibrary.QueryLoaders;
-using Bgb_DataAccessLibrary.QueryExecutor;
-using BgB_TeachingAssistant.ViewModels;
 using BgB_TeachingAssistant.Views;
-using Bgb_DataAccessLibrary;
-using Bgb_DataAccessLibrary.Logger;
-using Bgb_DataAccessLibrary.Data.DataServices;
-using Bgb_DataAccessLibrary.Factories;
 
 namespace BgB_TeachingAssistant
 {
@@ -21,7 +18,14 @@ namespace BgB_TeachingAssistant
 
         public App()
         {
+            // Build the host with the custom LoggingServiceProviderFactory
             _host = CreateHostBuilder().Build();
+
+            // Note: LoggingServiceProviderFactory handles logging of service registrations
+            // So no need to log here
+
+            // Log the PageDescriptors
+            LogPageDescriptors(_host.Services);
         }
 
         public static IHostBuilder CreateHostBuilder() =>
@@ -35,22 +39,28 @@ namespace BgB_TeachingAssistant
                     // Register IConfiguration
                     services.AddSingleton<IConfiguration>(context.Configuration);
 
+                    // Register all services
                     ServiceRegistration.RegisterAllServices(services, context.Configuration);
 
+                    // Register ViewModels
                     ViewModelRegistration.RegisterViewModels(services);
 
                     // Register MainWindow
                     services.AddSingleton<ApplicationView>();
-                        
                 });
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            // Start the host
             await _host.StartAsync();
 
-            // Resolve your main window (or other services) here
+            // Log the startup completion
+            ColorizeLine(("[App] Application started.",ConsoleColor.Blue));
+
+            // Resolve and show the main application view
             var appView = _host.Services.GetRequiredService<ApplicationView>();
-            // Show the ApplicationView
+            DependencyInjectionLogger.LogResolution(typeof(ApplicationView), appView);
+
             appView.Show();
 
             base.OnStartup(e);
@@ -58,10 +68,32 @@ namespace BgB_TeachingAssistant
 
         protected override async void OnExit(ExitEventArgs e)
         {
+            // Log the application shutdown
+            ColorizeLine(("[App] Application shutting down...", ConsoleColor.Blue));
+
             await _host.StopAsync();
             _host.Dispose();
 
             base.OnExit(e);
+        }
+
+        private void LogPageDescriptors(IServiceProvider serviceProvider)
+        {
+            var pageDescriptors = serviceProvider.GetService<IEnumerable<PageDescriptor>>();
+            if (pageDescriptors != null)
+            {
+                Console.WriteLine("=== Registered Page Descriptors ===");
+                foreach (var descriptor in pageDescriptors)
+                {
+                    ColorizeLine(
+                    ("Reg. ", ConsoleColor.Magenta),
+                    ($"{descriptor.Name} -> ", ConsoleColor.DarkGray),
+                    ($"{descriptor.ViewModelType.Name}", ConsoleColor.White));
+
+                    //Console.WriteLine($"Name: {descriptor.Name}, ViewModelType: {descriptor.ViewModelType.Name}");
+                }
+                Console.WriteLine("===================================");
+            }
         }
     }
 }

@@ -69,6 +69,7 @@ namespace BgB_TeachingAssistant.ViewModels
 
         public TestPage1ViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator) : base(serviceFactory, eventAggregator)
         {
+
             // Configure necessary services for this view model 🔻🔻🔻    ////******* USING REFLECTION!! WTF!!!! ******
             serviceFactory.ConfigureServicesFor(this);
 

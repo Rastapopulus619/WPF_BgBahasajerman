@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection; // Add this using directive
-using Bgb_DataAccessLibrary.Data.DataServices; // Ensure this is correct
+﻿using Microsoft.Extensions.DependencyInjection;
+using Bgb_DataAccessLibrary.Data.DataServices;
 using Bgb_DataAccessLibrary.Models.Interfaces;
+using Bgb_DataAccessLibrary.Logger;
+using System;
 using System.Reflection;
 
 namespace Bgb_DataAccessLibrary.Factories
@@ -16,7 +18,12 @@ namespace Bgb_DataAccessLibrary.Factories
 
         public T GetService<T>()
         {
-            return _serviceProvider.GetService<T>();
+            var service = _serviceProvider.GetService<T>();
+
+            // Log using the existing DependencyInjectionLogger
+            DependencyInjectionLogger.LogResolution(typeof(T), service);
+
+            return service;
         }
         public void ConfigureServicesFor(object viewModel)
         {
@@ -33,10 +40,14 @@ namespace Bgb_DataAccessLibrary.Factories
                         // Attempt to resolve the service from the service provider
                         var service = _serviceProvider.GetService(property.PropertyType);
 
+                        // Log the resolution
+                        DependencyInjectionLogger.LogResolution(property.PropertyType, service);
+
                         if (service != null)
                         {
                             // Inject the service into the view model property
                             property.SetValue(viewModel, service);
+
                             // Confirmation message to the console
                             Console.WriteLine($"Injected {service.GetType().Name} into {viewModel.GetType().Name}.{property.Name}");
                         }

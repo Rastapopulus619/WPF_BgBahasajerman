@@ -24,32 +24,32 @@ namespace BgB_TeachingAssistant
 
             // Register descriptors as IEnumerable<PageDescriptor>
             services.AddSingleton<IEnumerable<PageDescriptor>>(new List<PageDescriptor>
-            {
-                new PageDescriptor
-                {
-                    Name = "Dashboard",
-                    ViewModelType = typeof(DashboardViewModel),
-                    Icon = "icon-dashboard"
-                },
-                new PageDescriptor
-                {
-                    Name = "Student",
-                    ViewModelType = typeof(StudentViewModel),
-                    Icon = "icon-student"
-                },
-                new PageDescriptor
-                {
-                    Name = "Packages",
-                    ViewModelType = typeof(PackageViewModel),
-                    Icon = "icon-packages"
-                },
-                new PageDescriptor
-                {
-                    Name = "Test1",
-                    ViewModelType = typeof(TestPage1ViewModel),
-                    Icon = "icon-test"
-                }
-            });
+    {
+        new PageDescriptor
+        {
+            Name = "Dashboard",
+            ViewModelType = typeof(DashboardViewModel),
+            Icon = "icon-dashboard"
+        },
+        new PageDescriptor
+        {
+            Name = "Student",
+            ViewModelType = typeof(StudentViewModel),
+            Icon = "icon-student"
+        },
+        new PageDescriptor
+        {
+            Name = "Packages",
+            ViewModelType = typeof(PackageViewModel),
+            Icon = "icon-packages"
+        },
+        new PageDescriptor
+        {
+            Name = "Test1",
+            ViewModelType = typeof(TestPage1ViewModel),
+            Icon = "icon-test"
+        }
+    });
 
             // Register the ApplicationViewModel itself
             services.AddTransient<ApplicationViewModel>();

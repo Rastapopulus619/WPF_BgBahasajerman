@@ -13,7 +13,7 @@ namespace BgB_TeachingAssistant.ViewModels
 {
     public class ApplicationViewModel : ViewModelBase
     {
-        private readonly IServiceProvider _serviceProvider; // Added for DI
+        public IServiceProvider _serviceProvider { get; set; } // Added for DI
         private readonly IEventAggregator _eventAggregator;
 
         private ICommand _changePageCommand;
@@ -27,7 +27,20 @@ namespace BgB_TeachingAssistant.ViewModels
         public ApplicationViewModel(IServiceFactory serviceFactory, IServiceProvider serviceProvider, IEnumerable<PageDescriptor> pageDescriptors, IEventAggregator eventAggregator)
             : base(serviceFactory, eventAggregator)
         {
-            _serviceProvider = serviceProvider; // Assign the injected service provider
+
+            serviceFactory.ConfigureServicesFor(this);
+
+
+            //if (serviceProvider is LoggingServiceProvider)
+            //{
+            //    Console.WriteLine("[DI] LoggingServiceProvider is active.");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("[DI] Default IServiceProvider detected (logging may not work).");
+            //}
+
+            //_serviceProvider = serviceProvider; // Assign the injected service provider
             _eventAggregator = eventAggregator;
 
             PageDescriptors = pageDescriptors.ToList();
@@ -66,7 +79,7 @@ namespace BgB_TeachingAssistant.ViewModels
 
         public IPageViewModel CurrentPageViewModel
         {
-            get { return _currentPageViewModel; }
+            get => _currentPageViewModel ??= GetPageViewModel(PageDescriptors.FirstOrDefault());
             set
             {
                 if (_currentPageViewModel != value)

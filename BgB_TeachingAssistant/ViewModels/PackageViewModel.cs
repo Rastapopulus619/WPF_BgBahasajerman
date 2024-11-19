@@ -102,15 +102,15 @@ namespace BgB_TeachingAssistant.ViewModels
                 
         }
 
-        public PackageViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator, PackageNavigationService packageNavigationService)
+        public PackageViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator)
             : base(serviceFactory, eventAggregator)  // Passing serviceFactory to the base class
         {
             serviceFactory.ConfigureServicesFor(this);
 
             _eventAggregator = eventAggregator;
-            _packageNavigationService = packageNavigationService;
+            //_packageNavigationService = packageNavigationService;
 
-            PackageCommands = new PackageCommands(this, packageNavigationService);
+            //PackageCommands = new PackageCommands(this, packageNavigationService);
 
             SubscribeToEvent<PopulateStudentPickerEvent>(OnStudentListReceived);
 
