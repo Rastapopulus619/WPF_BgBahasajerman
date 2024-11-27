@@ -8,7 +8,6 @@ using Bgb_DataAccessLibrary.Logger;
 using Bgb_DataAccessLibrary.QueryExecutor;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
-using Bgb_DataAccessLibrary.Services.Navigation;
 using BgB_TeachingAssistant.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

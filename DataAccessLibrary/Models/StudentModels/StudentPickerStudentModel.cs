@@ -1,4 +1,6 @@
-﻿namespace Bgb_DataAccessLibrary.Models.StudentModels
+﻿using Bgb_DataAccessLibrary.Contracts;
+
+namespace Bgb_DataAccessLibrary.Models.StudentModels
 {
     public class StudentPickerStudentModel : IStudentPickerStudentModel
     {

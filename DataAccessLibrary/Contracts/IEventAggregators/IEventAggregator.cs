@@ -1,6 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Models.Interfaces;
-
-namespace Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators
+﻿namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface IEventAggregator
     {

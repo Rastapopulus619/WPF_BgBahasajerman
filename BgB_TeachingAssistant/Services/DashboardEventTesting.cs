@@ -1,11 +1,10 @@
-﻿using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
-using Bgb_DataAccessLibrary.Data.DataServices;
-
+﻿using Bgb_DataAccessLibrary.Data.DataServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bgb_DataAccessLibrary.Contracts;
 
 namespace BgB_TeachingAssistant.Services
 {

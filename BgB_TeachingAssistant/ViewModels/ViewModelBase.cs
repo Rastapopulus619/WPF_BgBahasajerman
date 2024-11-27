@@ -1,8 +1,6 @@
-﻿using Bgb_DataAccessLibrary.Models.Interfaces;
-using Bgb_DataAccessLibrary.Factories;
-using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Bgb_DataAccessLibrary.Contracts;
 
 namespace BgB_TeachingAssistant.ViewModels
 {

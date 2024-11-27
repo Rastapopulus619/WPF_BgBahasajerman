@@ -1,5 +1,4 @@
 ﻿using BgB_TeachingAssistant.ViewModels;
-using Bgb_DataAccessLibrary.Models.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 

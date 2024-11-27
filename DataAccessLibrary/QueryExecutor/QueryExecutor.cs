@@ -2,7 +2,6 @@
 using System.Data;
 using System.Threading.Tasks;
 using Bgb_DataAccessLibrary.Contracts;
-using Bgb_DataAccessLibrary.QueryLoaders;
 
 namespace Bgb_DataAccessLibrary.QueryExecutor
 {

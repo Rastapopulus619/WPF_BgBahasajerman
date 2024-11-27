@@ -1,6 +1,5 @@
-﻿using Bgb_DataAccessLibrary.Data.DataServices;
-
-namespace Bgb_DataAccessLibrary.Factories
+﻿
+namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface IServiceFactory
     {

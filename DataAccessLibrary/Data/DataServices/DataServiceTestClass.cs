@@ -1,7 +1,4 @@
 ﻿using Bgb_DataAccessLibrary.Models.StudentModels;
-using Bgb_DataAccessLibrary.QueryExecutor;
-using Bgb_DataAccessLibrary.QueryLoaders;
-using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using Bgb_DataAccessLibrary.Events;
 using MySqlX.XDevAPI.Common;
 using System;

@@ -1,8 +1,6 @@
 ﻿using Bgb_DataAccessLibrary.Databases;
-using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_DataAccessLibrary.QueryLoaders;
-using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using BgB_TeachingAssistant.Commands;
 using System.Collections.ObjectModel;
 using System.Windows;

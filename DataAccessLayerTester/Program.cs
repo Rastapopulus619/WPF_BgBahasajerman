@@ -12,6 +12,10 @@ using System.Threading.Tasks;
 using DataAccessLayerTester;
 using Bgb_DataAccessLibrary.Logger;
 using Bgb_DataAccessLibrary.Contracts.IDatabases;
+using Bgb_DataAccessLibrary.Contracts.ILogger;
+using Bgb_DataAccessLibrary.Contracts.IQueryExecutor;
+using Bgb_DataAccessLibrary.Contracts.IQueryLoaders;
+using Bgb_DataAccessLibrary.Contracts.IMessages;
 
 namespace DataAccessLayerTester
 {

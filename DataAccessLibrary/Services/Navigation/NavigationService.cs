@@ -1,5 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Factories;
-using Bgb_DataAccessLibrary.Models.Interfaces;
+﻿using Bgb_DataAccessLibrary.Contracts;
 using System;
 
 namespace Bgb_DataAccessLibrary.Services.Navigation

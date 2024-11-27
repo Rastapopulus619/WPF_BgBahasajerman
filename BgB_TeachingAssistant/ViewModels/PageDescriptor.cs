@@ -1,6 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Models.Interfaces;
-
-namespace BgB_TeachingAssistant.ViewModels
+﻿namespace BgB_TeachingAssistant.ViewModels
 {
     public class PageDescriptor : IPageDescriptor
     {

@@ -1,4 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Models.Interfaces;
+﻿using Bgb_DataAccessLibrary.Contracts;
 using System;
 using static Bgb_DataAccessLibrary.Helpers.ExtensionMethods.StringExtensionMethods;
 

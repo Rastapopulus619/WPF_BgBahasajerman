@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Bgb_DataAccessLibrary.Data.DataServices;
-using Bgb_DataAccessLibrary.Models.Interfaces;
 using Bgb_DataAccessLibrary.Logger;
 using System;
 using System.Reflection;
 using Bgb_DataAccessLibrary.Helpers.ExtensionMethods;
+using Bgb_DataAccessLibrary.Contracts;
 
 namespace Bgb_DataAccessLibrary.Factories
 {

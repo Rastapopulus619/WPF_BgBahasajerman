@@ -1,5 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Factories; // Ensure this namespace is correct
-using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
+﻿using Bgb_DataAccessLibrary.Contracts;
 using BgB_TeachingAssistant.Commands;
 using System.Windows;
 using System.Windows.Input;

@@ -1,5 +1,4 @@
-﻿
-namespace Bgb_DataAccessLibrary.Models.Interfaces
+﻿namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface IPageDescriptor
     {

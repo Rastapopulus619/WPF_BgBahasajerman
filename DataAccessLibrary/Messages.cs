@@ -1,4 +1,6 @@
-﻿namespace Bgb_DataAccessLibrary
+﻿using Bgb_DataAccessLibrary.Contracts;
+
+namespace Bgb_DataAccessLibrary
 {
     public class Messages : IMessages
     {

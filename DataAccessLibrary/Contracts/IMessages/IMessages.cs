@@ -1,4 +1,4 @@
-﻿namespace Bgb_DataAccessLibrary
+﻿namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface IMessages
     {

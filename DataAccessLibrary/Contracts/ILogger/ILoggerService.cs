@@ -1,5 +1,4 @@
-﻿
-namespace Bgb_DataAccessLibrary.Logger
+﻿namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface ILoggerService
     {

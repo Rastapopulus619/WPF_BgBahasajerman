@@ -33,13 +33,12 @@
     <Folder Include="BgB_Queries\PricingQueries\" />
     <Folder Include="BgB_Queries\RoutineQueries\" />
     <Folder Include="BgB_Queries\TimeQueries\" />
-    <Folder Include="Contracts\IFactories\" />
     <Folder Include="Contracts\IHelpers\" />
-    <Folder Include="Contracts\ILogger\" />
+    <Folder Include="Contracts\IModels\IPackageModels\" />
     <Folder Include="Data\StudentProfileData\" />
     <Folder Include="Data\Testing\" />
     <Folder Include="Helpers\Validation\" />
-    <Folder Include="Globals\" />
+    <Folder Include="Models\Interfaces\" />
     <Folder Include="Services\StateManagementServices\" />
   </ItemGroup>
   <ItemGroup>

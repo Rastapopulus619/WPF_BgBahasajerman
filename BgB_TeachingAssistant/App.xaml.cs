@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using static Bgb_DataAccessLibrary.Helpers.ExtensionMethods.StringExtensionMethods;
-using Bgb_DataAccessLibrary.Models.Interfaces;
 using static Bgb_DataAccessLibrary.Logger.DependencyInjectionLogger;
-using Bgb_DataAccessLibrary.Logger;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
