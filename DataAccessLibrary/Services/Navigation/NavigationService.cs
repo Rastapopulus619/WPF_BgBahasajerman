@@ -34,6 +34,13 @@ namespace Bgb_DataAccessLibrary.Services.Navigation
         {
             if (descriptor == null) throw new ArgumentNullException(nameof(descriptor));
             var viewModel = GetPageViewModel(descriptor);
+
+            if(CurrentViewModel is IPageViewModel viewModelType)
+            {
+                viewModelType.UnsubscribeEvents();
+                //viewModelType.EventAggregator.LogSubscriptions();
+            }
+
             CurrentViewModel = viewModel;
         }
 

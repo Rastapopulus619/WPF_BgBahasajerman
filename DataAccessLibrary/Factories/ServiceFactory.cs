@@ -4,6 +4,7 @@ using Bgb_DataAccessLibrary.Models.Interfaces;
 using Bgb_DataAccessLibrary.Logger;
 using System;
 using System.Reflection;
+using Bgb_DataAccessLibrary.Helpers.ExtensionMethods;
 
 namespace Bgb_DataAccessLibrary.Factories
 {
@@ -34,6 +35,7 @@ namespace Bgb_DataAccessLibrary.Factories
             if (viewModel is IPageViewModel pageViewModel)
             {
                 var viewModelType = viewModel.GetType();
+                string viewModelHashCode = viewModel.GetHashCode().ToString();
 
                 // Iterate through the properties of the view model
                 foreach (var property in viewModelType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
@@ -53,20 +55,23 @@ namespace Bgb_DataAccessLibrary.Factories
                             property.SetValue(viewModel, service);
 
                             // Confirmation message to the console
-                            Console.WriteLine($"Injected {service.GetType().Name} into {viewModel.GetType().Name}.{property.Name}");
+                            $"[SF] Injected: ".ColorizeMulti(ConsoleColor.DarkMagenta).Append($"{ service.GetType().Name}",ConsoleColor.Yellow).Append($" -> ({viewModelHashCode}) {viewModel.GetType().Name}.",ConsoleColor.DarkGray).Append($"{property.Name}",ConsoleColor.Yellow).WriteLine();
                         }
                         else
                         {
-                            Console.WriteLine($"Service for {property.PropertyType.Name} not found.");
+                            $"Service for {property.PropertyType.Name} not found.".Colorize(ConsoleColor.Red);
                         }
                     }
                 }
             }
             else
             {
-                Console.WriteLine("viewModel is not a IPageViewModel");
+                "viewModel is not a IPageViewModel".Colorize(ConsoleColor.Red);
             }
         }
+
+        // Manual methods to create logic to fetch certain instances from the DI under specified conditions:
+
         //public GeneralDataService CreateGeneralDataService() =>
         //    _serviceProvider.GetRequiredService<GeneralDataService>();
 

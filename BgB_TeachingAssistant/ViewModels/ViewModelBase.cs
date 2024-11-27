@@ -6,24 +6,25 @@ using System.Collections.Generic;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
-    public class ViewModelBase : ObservableObject, IPageViewModel, IDisposable, IEventUnsubscriber
+    public class ViewModelBase : ObservableObject, IPageViewModel, IDisposable, IEventUnsubscriber, IViewModelBase
     {
         protected readonly IServiceFactory ServiceFactory;
-        private readonly List<Delegate> _eventHandlers = new List<Delegate>();
-        private readonly IEventAggregator _eventAggregator;
+        public List<Delegate> EventHandlers { get; set; } = new List<Delegate>();
+        public int EventHandlersCount => EventHandlers.Count;
+        public IEventAggregator EventAggregator { get; set; }
 
         // Constructor for injecting the factory and event aggregator
         public ViewModelBase(IServiceFactory serviceFactory, IEventAggregator eventAggregator)
         {
             LogViewModelCreation();
             ServiceFactory = serviceFactory;
-            _eventAggregator = eventAggregator;
+            EventAggregator = eventAggregator;
         }
         public void LogViewModelCreation()
         {
             $"+[{GetType().Name}] "
                 .ColorizeMulti(ConsoleColor.Blue)
-                .Append($"Created at {DateTime.Now}, Instance Hash: ", ConsoleColor.DarkGray)
+                .Append($"Created at {DateTime.Now.ToString("HH:mm:ss")}, HashCode: ", ConsoleColor.DarkGray)
                 .Append($"{this.GetHashCode()}", ConsoleColor.DarkYellow)
                 .WriteLine();
         }
@@ -34,25 +35,55 @@ namespace BgB_TeachingAssistant.ViewModels
         // Subscribe to an event and track it for automatic unsubscription
         protected void SubscribeToEvent<T>(Action<T> handler)
         {
-            _eventAggregator.Subscribe(handler);
-            _eventHandlers.Add(handler);
 
-            Console.WriteLine($"[{this.GetHashCode()}] Subscribed to event of type {typeof(T).Name} with handler {handler.Method.Name}. Total handlers in _eventHandlers: {_eventHandlers.Count}");
+            //$"{this.GetType().Name}"
+            //    .ColorizeMulti(ConsoleColor.DarkGreen)
+            //    .Append(" (")
+            //    .Append($"{this.GetHashCode()}", ConsoleColor.DarkYellow)
+            //    .Append(") ")
+            //    .Append("Subscribed", ConsoleColor.White,ConsoleColor.Green)
+            //    .Append(" to event of type ", ConsoleColor.DarkGray, ConsoleColor.Black)
+            //    .Append($"[{typeof(T).Name}]", ConsoleColor.DarkGreen)
+            //    .Append(" with handler ", ConsoleColor.DarkGray)
+            //    .Append($"{handler.Method.Name}()", ConsoleColor.DarkGreen)
+            //    .Append(". Total handlers in EventHandlers: ", ConsoleColor.DarkGray)
+            //    .Append($" {EventHandlers.Count} ", ConsoleColor.White, ConsoleColor.DarkGreen)
+            //    .WriteLine();
+
+            EventAggregator.Subscribe(handler, this);
+            //EventHandlers.Add(handler); // ******* this is done in the EventAggregator
+
         }
 
         public void UnsubscribeEvents()
         {
-            Console.WriteLine($"[{this.GetHashCode()}] Unsubscribing from all events... Handlers available for unsubscription: {_eventHandlers.Count}");
+            $"[{this.GetType().Name}]"
+                .ColorizeMulti(ConsoleColor.Red)
+                .Append(" (")
+                .Append($"{this.GetHashCode()}", ConsoleColor.DarkYellow)
+                .Append(") ")
+                .Append("Unsubscribing", ConsoleColor.Black, ConsoleColor.DarkRed)
+                .Append(" all... total amount: ", ConsoleColor.DarkGray)
+                .Append($" {EventHandlers.Count} ", ConsoleColor.Black, ConsoleColor.DarkRed)
+                .WriteLine();
 
-            if (_eventHandlers.Count == 0)
+            if (EventHandlers.Count == 0)
             {
-                Console.WriteLine("No handlers found in _eventHandlers. Unsubscription skipped.");
+                "No handlers".ColorizeMulti(ConsoleColor.Red).Append(" found in EventHandlers. Unsubscription skipped.", ConsoleColor.DarkGray).WriteLine();
                 return;
             }
 
-            _eventAggregator.LogSubscriptions();
+            //$"[{this.GetType().Name}]"
+            //    .ColorizeMulti(ConsoleColor.Red)
+            //    .Append(" (")
+            //    .Append($"{this.GetHashCode()}", ConsoleColor.DarkYellow)
+            //    .Append(") ")
+            //    .Append("Unsubscribing", ConsoleColor.Black, ConsoleColor.Red)
+            //    .Append(" all... total amount: ", ConsoleColor.DarkGray)
+            //    .Append($" {EventHandlers.Count} ", ConsoleColor.Black, ConsoleColor.DarkRed)
+            //    .WriteLine();
 
-            var handlersToUnsubscribe = new List<Delegate>(_eventHandlers);
+            var handlersToUnsubscribe = new List<Delegate>(EventHandlers);
             foreach (var handler in handlersToUnsubscribe)
             {
                 try
@@ -60,27 +91,32 @@ namespace BgB_TeachingAssistant.ViewModels
                     var handlerType = handler.GetType();
                     var eventType = handlerType.GetGenericArguments()[0];
 
-                    Console.WriteLine($"Attempting to unsubscribe handler '{handler.Method.Name}' for event type '{eventType.Name}'");
+                    Console.WriteLine($"Unsubscribing '{handler.Method.Name}' for event type '{eventType.Name}'");
 
                     var unsubscribeMethod = typeof(IEventAggregator)
-                        .GetMethod(nameof(_eventAggregator.Unsubscribe))
+                        .GetMethod(nameof(EventAggregator.Unsubscribe))
                         .MakeGenericMethod(eventType);
 
-                    unsubscribeMethod.Invoke(_eventAggregator, new object[] { handler });
+                    unsubscribeMethod.Invoke(EventAggregator, new object[] { handler });
+
 
                     Console.WriteLine($"Unsubscribed from event of type {eventType.Name} with handler {handler.Method.Name}");
+
+
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error unsubscribing from event: {ex.Message}");
+                    $"Error unsubscribing from event: {ex.Message}".ColorizeMulti(ConsoleColor.Red)
+                        .Append($"[{ex.Message}]", ConsoleColor.DarkGreen)
+                        .WriteLine(); ;
                 }
             }
 
             // Clear the list to avoid further references
-            _eventHandlers.Clear();
+            EventHandlers.Clear();
 
             // Log the subscriptions after clearing
-            _eventAggregator.LogSubscriptions();
+            EventAggregator.LogSubscriptions();
         }
 
         // IDisposable implementation for cleaning up subscriptions
@@ -89,14 +125,23 @@ namespace BgB_TeachingAssistant.ViewModels
             // Call to custom cleanup logic before unsubscribing events
             Cleanup();
 
-            // Dispose will automatically unsubscribe from all events
-            UnsubscribeEvents();
+            // **** Unsubscription from all events is now done in the Navigation Service // change this back if it sucks
+            // UnsubscribeEvents();
 
             // Suppress finalization
             GC.SuppressFinalize(this);
 
             // Log disposal
-            Console.WriteLine($"{this.GetType().Name} disposed and unsubscribed from all events.");
+            $"-[{GetType().Name}] "
+                .ColorizeMulti(ConsoleColor.Red)
+                .Append(" (")
+                .Append($"{this.GetHashCode()}", ConsoleColor.DarkYellow)
+                .Append(") ")
+                .Append($"Successfully Disposed and Unsubscribed at {DateTime.Now.ToString("HH:mm:ss")}", ConsoleColor.DarkGray)
+                .WriteLine();
+
+            // **** this seems unnecessary  // change this back if it is needed
+            //EventAggregator.LogSubscriptions();  
         }
         // Optional Cleanup method for derived classes
         protected virtual void Cleanup()

@@ -21,7 +21,7 @@ namespace BgB_TeachingAssistant.ViewModels
     public class PackageViewModel : ViewModelBase
     {
         public override string Name => "Packages";
-        private readonly IEventAggregator _eventAggregator;
+        public IEventAggregator _eventAggregator;
         public IGeneralDataService _generalDataService { get; set; }
         private readonly PackageNavigationService _packageNavigationService;
 
