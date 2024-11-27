@@ -1,4 +1,6 @@
-﻿namespace Bgb_DataAccessLibrary.Events
+﻿using Bgb_DataAccessLibrary.Contracts;
+
+namespace Bgb_DataAccessLibrary.Events
 {
     public class PopulateStudentPickerEvent : IPopulateStudentPickerEvent
     {

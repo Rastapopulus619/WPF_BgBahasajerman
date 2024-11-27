@@ -1,4 +1,4 @@
-﻿namespace Bgb_DataAccessLibrary.Events
+﻿namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface IStudentNameByIDEvent
     {

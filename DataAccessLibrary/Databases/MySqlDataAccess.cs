@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 using Bgb_DataAccessLibrary.Logger;
+using Bgb_DataAccessLibrary.Contracts;
 
 namespace Bgb_DataAccessLibrary.Databases
 {

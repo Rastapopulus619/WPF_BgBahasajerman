@@ -1,5 +1,4 @@
 ﻿using Bgb_DataAccessLibrary;
-using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using Bgb_DataAccessLibrary.Data.DataServices;
 using Google.Protobuf;
@@ -10,6 +9,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using Bgb_DataAccessLibrary.QueryExecutor;
+using Bgb_DataAccessLibrary.Contracts.IDatabases;
 
 namespace DataAccessLayerTester
 {

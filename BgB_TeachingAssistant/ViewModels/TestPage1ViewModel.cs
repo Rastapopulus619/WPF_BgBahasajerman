@@ -1,5 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Data.DataServices;
-using Bgb_DataAccessLibrary.Factories;
+﻿using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
 using BgB_TeachingAssistant.Commands;
 using Bgb_DataAccessLibrary.Events;

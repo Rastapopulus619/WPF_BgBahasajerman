@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Bgb_DataAccessLibrary.Databases
+namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface IDataAccess
     {

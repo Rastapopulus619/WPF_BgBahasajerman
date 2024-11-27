@@ -1,6 +1,6 @@
 ﻿using Bgb_DataAccessLibrary.Models.StudentModels;
 
-namespace Bgb_DataAccessLibrary.Data.DataServices
+namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface IGeneralDataService
     {

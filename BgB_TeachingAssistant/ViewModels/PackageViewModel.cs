@@ -1,5 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Data.DataServices;
-using Bgb_DataAccessLibrary.Databases;
+﻿using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.Events;
 using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Models.StudentModels;
@@ -15,6 +14,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Bgb_DataAccessLibrary.Contracts;
 
 namespace BgB_TeachingAssistant.ViewModels
 {

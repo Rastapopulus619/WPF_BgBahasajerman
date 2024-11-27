@@ -1,4 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Databases;
+﻿using Bgb_DataAccessLibrary.Contracts;
 using Bgb_DataAccessLibrary.QueryLoaders;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
