@@ -25,7 +25,7 @@ namespace BgB_TeachingAssistant.ViewModels
             }
         }
 
-        public DashboardViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator) : base(serviceFactory, eventAggregator)
+        public DashboardViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator) : base(serviceFactory)
         {
 
             Message = "default display-message";

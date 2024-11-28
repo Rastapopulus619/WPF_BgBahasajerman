@@ -6,17 +6,19 @@ namespace BgB_TeachingAssistant.ViewModels
 {
     public class ViewModelBase : ObservableObject, IPageViewModel, IDisposable, IEventUnsubscriber, IViewModelBase
     {
-        protected readonly IServiceFactory ServiceFactory;
+        public IServiceFactory ServiceFactory { get; set; }
         public List<Delegate> EventHandlers { get; set; } = new List<Delegate>();
         public int EventHandlersCount => EventHandlers.Count;
         public IEventAggregator EventAggregator { get; set; }
 
         // Constructor for injecting the factory and event aggregator
-        public ViewModelBase(IServiceFactory serviceFactory, IEventAggregator eventAggregator)
+        public ViewModelBase(IServiceFactory serviceFactory)
         {
+            serviceFactory.ConfigureServicesFor(this);
+
             LogViewModelCreation();
-            ServiceFactory = serviceFactory;
-            EventAggregator = eventAggregator;
+            //ServiceFactory = serviceFactory;
+            //EventAggregator = eventAggregator;
         }
         public void LogViewModelCreation()
         {

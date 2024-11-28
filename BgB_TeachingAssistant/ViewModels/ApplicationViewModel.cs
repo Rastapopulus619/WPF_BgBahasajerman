@@ -24,7 +24,7 @@ namespace BgB_TeachingAssistant.ViewModels
             INavigationService navigationService,
             IEnumerable<IPageDescriptor> pageDescriptors,
             IEventAggregator eventAggregator)
-            : base(serviceFactory, eventAggregator)
+            : base(serviceFactory)
         {
             _navigationService = navigationService;
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;

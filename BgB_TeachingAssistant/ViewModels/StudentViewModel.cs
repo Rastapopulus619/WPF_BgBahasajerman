@@ -31,7 +31,7 @@ namespace BgB_TeachingAssistant.ViewModels
             set => SetProperty(ref _studentNames, value, nameof(StudentNames));
         }
         public StudentViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator)
-            : base(serviceFactory, eventAggregator)
+            : base(serviceFactory)
         {
             serviceFactory.ConfigureServicesFor(this);
 

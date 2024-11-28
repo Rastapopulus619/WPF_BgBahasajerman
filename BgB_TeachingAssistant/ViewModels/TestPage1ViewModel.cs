@@ -59,18 +59,18 @@ namespace BgB_TeachingAssistant.ViewModels
                     }
             }
         }
-        public IEventAggregator _eventAggregator;
+        public IEventAggregator EventAggregator { get; set; }
         public IDataServiceTestClass DataService { get; set; }
         public IStudentNameByIDEvent StudentNameByIDEvent { get; set; }
         public ICommand LookupCommand { get; }
 
-        public TestPage1ViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator) : base(serviceFactory, eventAggregator)
+        public TestPage1ViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
 
             // Configure necessary services for this view model 🔻🔻🔻    ////******* USING REFLECTION!! WTF!!!! ******
             serviceFactory.ConfigureServicesFor(this);
 
-            _eventAggregator = eventAggregator;
+            //_eventAggregator = eventAggregator;
 
             // Subscribe to the event 🔻🔻🔻
             //**********SubscribeToEvents THROUGH ViewModelBase! not _eventAggregator

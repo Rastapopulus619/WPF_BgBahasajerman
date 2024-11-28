@@ -100,7 +100,7 @@ namespace BgB_TeachingAssistant.ViewModels
         }
 
         public PackageViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator)
-            : base(serviceFactory, eventAggregator)  // Passing serviceFactory to the base class
+            : base(serviceFactory)  // Passing serviceFactory to the base class
         {
             serviceFactory.ConfigureServicesFor(this);
 
