@@ -16,6 +16,11 @@ namespace BgB_TeachingAssistant.ViewModels
         {
             serviceFactory.ConfigureServicesFor(this);
 
+            if (EventAggregator == null)
+            {
+                throw new InvalidOperationException("EventAggregator is not initialized.");
+            }
+
             LogViewModelCreation();
             //ServiceFactory = serviceFactory;
             //EventAggregator = eventAggregator;

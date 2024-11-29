@@ -59,7 +59,7 @@ namespace BgB_TeachingAssistant.ViewModels
                     }
             }
         }
-        public IEventAggregator EventAggregator { get; set; }
+        //public IEventAggregator EventAggregator { get; set; }
         public IDataServiceTestClass DataService { get; set; }
         public IStudentNameByIDEvent StudentNameByIDEvent { get; set; }
         public ICommand LookupCommand { get; }

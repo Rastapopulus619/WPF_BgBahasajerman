@@ -8,7 +8,6 @@ namespace BgB_TeachingAssistant.ViewModels
     public class DashboardViewModel : ViewModelBase
     {
         public override string Name => "Dashboard"; // Implementing the Name property
-        private readonly IEventAggregator _eventAggregator;
 
         public ICommand TriggerDataProcessingCommand { get; }
 
@@ -25,11 +24,11 @@ namespace BgB_TeachingAssistant.ViewModels
             }
         }
 
-        public DashboardViewModel(IServiceFactory serviceFactory, IEventAggregator eventAggregator) : base(serviceFactory)
+        public DashboardViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
 
             Message = "default display-message";
-            _eventAggregator = eventAggregator;
+            //EventAggregator = eventAggregator;
             TriggerDataProcessingCommand = new RelayCommand(NewEventTester);
         }
 
