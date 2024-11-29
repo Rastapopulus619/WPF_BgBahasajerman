@@ -11,27 +11,27 @@ namespace BgB_TeachingAssistant.ViewModels
 {
     public class ApplicationViewModel : ViewModelBase
     {
-        public INavigationService _navigationService;
+        private IPageViewModel _currentPageViewModel;
+        public INavigationService _navigationService { get; set; }
 
-        public ICommand ChangeViewModelCommand { get; }
+        public ICommand ChangeViewModelCommand { get; set; }
 
-        public List<IPageDescriptor> PageDescriptors { get; }
+        public IEnumerable<IPageDescriptor> PageDescriptors { get; set; }
 
-        public IPageViewModel CurrentPageViewModel => _navigationService.CurrentViewModel;
-
-        public ApplicationViewModel(
-            IServiceFactory serviceFactory,
-            INavigationService navigationService,
-            IEnumerable<IPageDescriptor> pageDescriptors,
-            IEventAggregator eventAggregator)
-            : base(serviceFactory)
+        public IPageViewModel CurrentPageViewModel
         {
-            _navigationService = navigationService;
+            get => _navigationService.CurrentViewModel;
+            private set => SetProperty(ref _currentPageViewModel, value);
+        }
+
+        public ApplicationViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
+        {
+            // Configure necessary services for this view model
+            serviceFactory.ConfigureServicesFor(this);
+
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
 
-            PageDescriptors = pageDescriptors.ToList();
-
-            if (!PageDescriptors.Any())
+            if (PageDescriptors == null || !PageDescriptors.Any())
                 throw new InvalidOperationException("No page descriptors provided.");
 
             _navigationService.NavigateTo(PageDescriptors.First());
@@ -43,8 +43,8 @@ namespace BgB_TeachingAssistant.ViewModels
 
         private void OnCurrentViewModelChanged()
         {
-            OnPropertyChanged(nameof(CurrentPageViewModel));
+            //OnPropertyChanged(nameof(CurrentPageViewModel));
+            CurrentPageViewModel = _navigationService.CurrentViewModel;
         }
     }
-
 }
