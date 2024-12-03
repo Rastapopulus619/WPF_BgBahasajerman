@@ -14,7 +14,7 @@ namespace BgB_TeachingAssistant.ViewModels
         private IPageViewModel _currentPageViewModel;
         public INavigationService _navigationService { get; set; }
 
-        public ICommand ChangeViewModelCommand { get; set; }
+        public ICommand ChangeViewModelCommand { get; private set; }
 
         public IEnumerable<IPageDescriptor> PageDescriptors { get; set; }
 
@@ -45,6 +45,11 @@ namespace BgB_TeachingAssistant.ViewModels
         {
             //OnPropertyChanged(nameof(CurrentPageViewModel));
             CurrentPageViewModel = _navigationService.CurrentViewModel;
+        }
+        protected override void Cleanup()
+        {
+            _navigationService.CurrentViewModelChanged -= OnCurrentViewModelChanged;
+            base.Cleanup();
         }
     }
 }

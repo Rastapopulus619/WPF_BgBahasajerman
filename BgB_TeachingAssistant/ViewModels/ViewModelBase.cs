@@ -130,8 +130,12 @@ namespace BgB_TeachingAssistant.ViewModels
             // Call to custom cleanup logic before unsubscribing events
             Cleanup();
 
-            // **** Unsubscription from all events is now done in the Navigation Service // change this back if it sucks
-            // UnsubscribeEvents();
+            // Unsubscribe all events to avoid memory leaks
+            UnsubscribeEvents();
+
+            // Clear properties to free references
+            ServiceFactory = null;
+            EventAggregator = null;
 
             // Suppress finalization
             GC.SuppressFinalize(this);
@@ -152,6 +156,10 @@ namespace BgB_TeachingAssistant.ViewModels
         protected virtual void Cleanup()
         {
             // Derived classes can override this to perform additional cleanup tasks if needed.
+        }
+        ~ViewModelBase()
+        {
+            Console.WriteLine("ViewModelBase: Destructor called");
         }
     }
 }

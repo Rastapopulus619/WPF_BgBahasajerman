@@ -9,7 +9,7 @@ namespace BgB_TeachingAssistant.ViewModels
     {
         public override string Name => "Dashboard"; // Implementing the Name property
 
-        public ICommand TriggerDataProcessingCommand { get; }
+        public ICommand TriggerDataProcessingCommand { get; private set; }
 
         private string _message = "default display-message";
         public string Message
@@ -41,11 +41,34 @@ namespace BgB_TeachingAssistant.ViewModels
                 Console.WriteLine("PropertyChanged triggered for Message"); // Debug line
             });
         }
-        public void Dispose()
+        protected override void Cleanup()
         {
-            Console.WriteLine($"Message variable value at time of execution of the Dispose Method: {Message}");
-            Console.WriteLine("DashboardViewModel disposed.");
-            // Cleanup resources if needed
+            // Specific cleanup for DashboardViewModel
+
+            // Log that cleanup is called
+            Console.WriteLine("DashboardViewModel: Cleanup called");
+
+            // Dispose of the TriggerDataProcessingCommand if it's disposable
+            if (TriggerDataProcessingCommand is IDisposable disposableCommand)
+            {
+                disposableCommand.Dispose();
+            }
+            TriggerDataProcessingCommand = null;
+
+            // Nullify properties to release references
+            EventAggregator = null;
+            ServiceFactory = null;
+
+            // Additional Cleanup
+            Message = null; // If Message is being referenced elsewhere, clearing it might help
+
+            // Call base cleanup (if ViewModelBase has specific cleanup logic)
+            //base.Cleanup();
+        }
+
+        ~DashboardViewModel()
+        {
+            Console.WriteLine("DashboardViewModel: Destructor called");
         }
     }
 

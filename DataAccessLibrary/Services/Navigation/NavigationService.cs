@@ -32,13 +32,15 @@ namespace Bgb_DataAccessLibrary.Services.Navigation
         public void NavigateTo(IPageDescriptor descriptor)
         {
             if (descriptor == null) throw new ArgumentNullException(nameof(descriptor));
-            var viewModel = GetPageViewModel(descriptor);
 
-            if(CurrentViewModel is IPageViewModel viewModelType)
-            {
-                viewModelType.UnsubscribeEvents();
-                //viewModelType.EventAggregator.LogSubscriptions();
-            }
+            // Dispose and force GC before navigating to new ViewModel
+            DisposeCurrentViewModel();
+
+            // Force garbage collection to test destructor
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            var viewModel = GetPageViewModel(descriptor);
 
             CurrentViewModel = viewModel;
         }
@@ -56,6 +58,7 @@ namespace Bgb_DataAccessLibrary.Services.Navigation
             {
                 disposable.Dispose();
             }
+            _currentViewModel = null;
         }
     }
 }

@@ -15,10 +15,10 @@ namespace BgB_TeachingAssistant
             services.AddTransient<TestPage1ViewModel>();
 
             // Register them as IPageViewModel for collection injection
-            services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<DashboardViewModel>());
-            services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<StudentViewModel>());
-            services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<PackageViewModel>());
-            services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<TestPage1ViewModel>());
+            //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<DashboardViewModel>());
+            //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<StudentViewModel>());
+            //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<PackageViewModel>());
+            //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<TestPage1ViewModel>());
 
 
             // Register descriptors as IEnumerable<PageDescriptor>
