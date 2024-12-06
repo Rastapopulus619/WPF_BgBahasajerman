@@ -41,7 +41,9 @@ namespace Bgb_DataAccessLibrary.Factories
                 foreach (var property in viewModelType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 {
                     // Check if the property type is an interface and can be resolved by the service provider
-                    if (property.CanWrite && property.PropertyType.IsInterface)
+                    if (property.CanWrite && property.PropertyType.IsInterface &&
+                        property.PropertyType != typeof(IEventAggregator) &&
+                        property.PropertyType != typeof(IServiceFactory))
                     {
                         // Attempt to resolve the service from the service provider
                         var service = _serviceProvider.GetService(property.PropertyType);
@@ -59,7 +61,7 @@ namespace Bgb_DataAccessLibrary.Factories
                         }
                         else
                         {
-                            $"Service for {property.PropertyType.Name} not found.".Colorize(ConsoleColor.Red);
+                            $"Service for {property.PropertyType.Name} not found.".Colorize(ConsoleColor.DarkGray);
                         }
                     }
                 }
@@ -68,7 +70,39 @@ namespace Bgb_DataAccessLibrary.Factories
             {
                 "viewModel is not a IPageViewModel".Colorize(ConsoleColor.Red);
             }
+
         }
+        public void ConfigureViewModelBaseServices(IViewModelBase viewModel)
+        {
+                var viewModelType = viewModel.GetType();
+                string viewModelHashCode = viewModel.GetHashCode().ToString();
+
+                foreach (var property in viewModelType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    if (property.CanWrite && (property.PropertyType == typeof(IServiceFactory) || property.PropertyType == typeof(IEventAggregator)))
+                {
+                        var service = _serviceProvider.GetService(property.PropertyType);
+
+                        DependencyInjectionLogger.LogResolution(property.PropertyType, service);
+
+                        if (service != null)
+                        {
+                            property.SetValue(viewModel, service);
+
+                            $"[SF] Injected: ".ColorizeMulti(ConsoleColor.DarkMagenta)
+                                .Append($"{service.GetType().Name}", ConsoleColor.Yellow)
+                                .Append($" -> ({viewModelHashCode}) {viewModel.GetType().Name}.", ConsoleColor.DarkGray)
+                                .Append($"{property.Name}", ConsoleColor.Yellow)
+                                .WriteLine();
+                        }
+                        else
+                        {
+                            $"Service for {property.PropertyType.Name} not found.".Colorize(ConsoleColor.DarkGray);
+                        }
+                    }
+                }
+            }
+        
 
         // Manual methods to create logic to fetch certain instances from the DI under specified conditions:
 
@@ -80,7 +114,7 @@ namespace Bgb_DataAccessLibrary.Factories
 
         // Other methods...
     }
-}
 
+}
 
 

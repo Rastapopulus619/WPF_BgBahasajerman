@@ -41,6 +41,5 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
             _eventAggregator.Publish(new PopulateStudentPickerEvent(studentList));
 
         }
-
     }
 }

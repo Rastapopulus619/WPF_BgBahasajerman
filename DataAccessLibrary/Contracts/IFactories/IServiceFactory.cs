@@ -6,6 +6,7 @@ namespace Bgb_DataAccessLibrary.Contracts
         T GetService<T>();  // For generic retrieval by type
         object GetService(Type serviceType); // Add this line
         void ConfigureServicesFor(object viewModel); // Method to configure services for specific view models
+        void ConfigureViewModelBaseServices(IViewModelBase viewModel); // Method to configure services for specific view models
 
         //GeneralDataService CreateGeneralDataService();
         //StudentProfileDataService CreateStudentProfileDataService();

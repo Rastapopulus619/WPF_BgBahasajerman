@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using static Bgb_DataAccessLibrary.Helpers.ExtensionMethods.StringExtensionMethods;
+﻿using static Bgb_DataAccessLibrary.Helpers.ExtensionMethods.StringExtensionMethods;
 using static Bgb_DataAccessLibrary.Logger.DependencyInjectionLogger;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
@@ -35,8 +32,6 @@ namespace BgB_TeachingAssistant
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    // Register IConfiguration
-                    services.AddSingleton<IConfiguration>(context.Configuration);
 
                     // Register all services
                     ServiceRegistration.RegisterAllServices(services, context.Configuration);

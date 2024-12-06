@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTemplate x:Key="ButtonDefaultOverrideTemplate" TargetType="Button">
+        <Border
+            Name="Border"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            Padding="{TemplateBinding Padding}"
+            Margin="{TemplateBinding Margin}"
+            KeyboardNavigation.TabNavigation="Cycle"
+            SnapsToDevicePixels="True">
+            <!-- CornerRadius property should be set in styles for flexibility (e.g., for rounded edges). Define it in styles/templates, not here. -->
+
+            <ContentPresenter
+            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+            Margin="{TemplateBinding Margin}"
+            Opacity="{TemplateBinding Opacity}"
+            RecognizesAccessKey="True" />
+            
+        </Border>
+        <ControlTemplate.Triggers>
+            <!-- Common Triggers (e.g., IsMouseOver, IsPressed, IsEnabled, IsKeyboardFocused) -->
+            <!-- Trigger for IsPressed should be set in styles to allow flexibility. Consider adding other common triggers (e.g., IsMouseOver, IsEnabled) in styles, not here. -->
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+</ResourceDictionary>

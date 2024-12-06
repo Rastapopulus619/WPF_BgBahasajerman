@@ -4,43 +4,39 @@
         xmlns:local="clr-namespace:BgB_TeachingAssistant.Views"
         xmlns:viewModel="clr-namespace:BgB_TeachingAssistant.ViewModels"
         Title="ApplicationView" MinHeight="850" MinWidth="1000"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        Background="{StaticResource AppBackgroundColor}">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="DataTemplates.xaml" />
+                <ResourceDictionary Source="Styles/Buttons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
     <!-- Define the layout of the window -->
-    <DockPanel Background="Black">
+    <DockPanel>
 
         <!-- Sidebar: Contains navigation buttons -->
         <Border DockPanel.Dock="Left"
                 MinWidth="130"
                 BorderBrush="Black"
-                BorderThickness="0,0,1,0"
-                Background="Black">
+                BorderThickness="0,0,0,0">
             <ItemsControl ItemsSource="{Binding PageDescriptors}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Name}"
+                        <Button Style="{StaticResource NavigationSidebarButtonStyle}" Content="{Binding Name}"
                                 Command="{Binding DataContext.ChangeViewModelCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding .}"
-                                Margin="5"
-                                Background="LightGray"
-                                Foreground="Black"
-                                MinHeight="30"/>
+/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Border>
         
         <!-- Main content area: Displays the current view -->
-        <ContentControl Content="{Binding CurrentPageViewModel}" 
-                        Margin="10,0,0,0" 
-                        Background="White"/>
+        <ContentControl Content="{Binding CurrentPageViewModel}"/>
+        
     </DockPanel>
 </Window>

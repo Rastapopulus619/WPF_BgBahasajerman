@@ -13,7 +13,6 @@ namespace BgB_TeachingAssistant.ViewModels
     {
         private IPageViewModel _currentPageViewModel;
         public INavigationService _navigationService { get; set; }
-
         public ICommand ChangeViewModelCommand { get; private set; }
 
         public IEnumerable<IPageDescriptor> PageDescriptors { get; set; }

@@ -6,24 +6,23 @@ namespace BgB_TeachingAssistant.ViewModels
 {
     public class ViewModelBase : ObservableObject, IPageViewModel, IDisposable, IEventUnsubscriber, IViewModelBase
     {
+        // Implement the Name property from IPageViewModel
+        public virtual string Name { get; }
         public IServiceFactory ServiceFactory { get; set; }
+        public IEventAggregator EventAggregator { get; set; }
         public List<Delegate> EventHandlers { get; set; } = new List<Delegate>();
         public int EventHandlersCount => EventHandlers.Count;
-        public IEventAggregator EventAggregator { get; set; }
 
-        // Constructor for injecting the factory and event aggregator
         public ViewModelBase(IServiceFactory serviceFactory)
         {
-            serviceFactory.ConfigureServicesFor(this);
+            LogViewModelCreation();
+
+            serviceFactory.ConfigureViewModelBaseServices(this);
 
             if (EventAggregator == null)
             {
                 throw new InvalidOperationException("EventAggregator is not initialized.");
             }
-
-            LogViewModelCreation();
-            //ServiceFactory = serviceFactory;
-            //EventAggregator = eventAggregator;
         }
         public void LogViewModelCreation()
         {
@@ -34,13 +33,14 @@ namespace BgB_TeachingAssistant.ViewModels
                 .WriteLine();
         }
 
-        // Implement the Name property from IPageViewModel
-        public virtual string Name { get; }
 
         // Subscribe to an event and track it for automatic unsubscription
         protected void SubscribeToEvent<T>(Action<T> handler)
         {
+            EventAggregator.Subscribe(handler, this);
+            //EventHandlers.Add(handler); // ******* this is done in the EventAggregator
 
+            #region Old logging of an addition to the EventHandlers list
             //$"{this.GetType().Name}"
             //    .ColorizeMulti(ConsoleColor.DarkGreen)
             //    .Append(" (")
@@ -54,14 +54,12 @@ namespace BgB_TeachingAssistant.ViewModels
             //    .Append(". Total handlers in EventHandlers: ", ConsoleColor.DarkGray)
             //    .Append($" {EventHandlers.Count} ", ConsoleColor.White, ConsoleColor.DarkGreen)
             //    .WriteLine();
-
-            EventAggregator.Subscribe(handler, this);
-            //EventHandlers.Add(handler); // ******* this is done in the EventAggregator
-
+            #endregion
         }
 
         public void UnsubscribeEvents()
         {
+            #region Unsubscription logging of EventHandlers
             $"[{this.GetType().Name}]"
                 .ColorizeMulti(ConsoleColor.Red)
                 .Append(" (")
@@ -77,16 +75,7 @@ namespace BgB_TeachingAssistant.ViewModels
                 "No handlers".ColorizeMulti(ConsoleColor.Red).Append(" found in EventHandlers. Unsubscription skipped.", ConsoleColor.DarkGray).WriteLine();
                 return;
             }
-
-            //$"[{this.GetType().Name}]"
-            //    .ColorizeMulti(ConsoleColor.Red)
-            //    .Append(" (")
-            //    .Append($"{this.GetHashCode()}", ConsoleColor.DarkYellow)
-            //    .Append(") ")
-            //    .Append("Unsubscribing", ConsoleColor.Black, ConsoleColor.Red)
-            //    .Append(" all... total amount: ", ConsoleColor.DarkGray)
-            //    .Append($" {EventHandlers.Count} ", ConsoleColor.Black, ConsoleColor.DarkRed)
-            //    .WriteLine();
+            #endregion
 
             var handlersToUnsubscribe = new List<Delegate>(EventHandlers);
             foreach (var handler in handlersToUnsubscribe)
@@ -133,6 +122,9 @@ namespace BgB_TeachingAssistant.ViewModels
             // Unsubscribe all events to avoid memory leaks
             UnsubscribeEvents();
 
+            // **** this seems unnecessary  // change this back if it is needed
+            //EventAggregator.LogSubscriptions();  
+
             // Clear properties to free references
             ServiceFactory = null;
             EventAggregator = null;
@@ -148,11 +140,8 @@ namespace BgB_TeachingAssistant.ViewModels
                 .Append(") ")
                 .Append($"Successfully Disposed and Unsubscribed at {DateTime.Now.ToString("HH:mm:ss")}", ConsoleColor.DarkGray)
                 .WriteLine();
-
-            // **** this seems unnecessary  // change this back if it is needed
-            //EventAggregator.LogSubscriptions();  
         }
-        // Optional Cleanup method for derived classes
+        // implement this Cleanup method in derived classes
         protected virtual void Cleanup()
         {
             // Derived classes can override this to perform additional cleanup tasks if needed.

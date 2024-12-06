@@ -13,7 +13,9 @@ namespace BgB_TeachingAssistant
             services.AddTransient<StudentViewModel>();
             services.AddTransient<PackageViewModel>();
             services.AddTransient<TestPage1ViewModel>();
+            services.AddTransient<ApplicationViewModel>();
 
+            // probably from older navigation system: ******** delete if not needed ********
             // Register them as IPageViewModel for collection injection
             //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<DashboardViewModel>());
             //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<StudentViewModel>());
@@ -49,9 +51,6 @@ namespace BgB_TeachingAssistant
             Icon = "icon-test"
         }
     });
-
-            // Register the ApplicationViewModel itself
-            services.AddTransient<ApplicationViewModel>();
         }
     }
 }
