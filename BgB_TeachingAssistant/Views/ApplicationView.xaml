@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:BgB_TeachingAssistant.Views"
         xmlns:viewModel="clr-namespace:BgB_TeachingAssistant.ViewModels"
+        xmlns:helpers="clr-namespace:BgB_TeachingAssistant.Helpers"
         Title="ApplicationView" MinHeight="850" MinWidth="1000"
         Background="{StaticResource AppBackgroundColor}">
 
@@ -26,10 +27,14 @@
             <ItemsControl ItemsSource="{Binding PageDescriptors}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Style="{StaticResource NavigationSidebarButtonStyle}" Content="{Binding Name}"
+                        <Button Style="{StaticResource RoundedButtonStyle}" 
                                 Command="{Binding DataContext.ChangeViewModelCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                CommandParameter="{Binding .}"
-/>
+                                CommandParameter="{Binding .}">
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="{Binding DataContext.Icon, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Width="16" Height="16" Margin="0,0,10,0" />
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

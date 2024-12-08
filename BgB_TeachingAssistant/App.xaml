@@ -18,6 +18,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/UserControls/ButtonDefaultOverrideTemplate.xaml" />
+                <ResourceDictionary Source="Views/Styles/BaseButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="TextBlock">

@@ -8,6 +8,7 @@ namespace BgB_TeachingAssistant.ViewModels
     public class DashboardViewModel : ViewModelBase
     {
         public override string Name => "Dashboard"; // Implementing the Name property
+        public override string Icon => "C:\\Programmieren\\ProgrammingProjects\\PythonProject\\src\\GoogleAppsAutomation\\GoogleDriveNative\\Downloads\\projectFiles\\Paraf_whiteBackground - Copy.png"; // Implementing the Name property
 
         public ICommand TriggerDataProcessingCommand { get; private set; }
 

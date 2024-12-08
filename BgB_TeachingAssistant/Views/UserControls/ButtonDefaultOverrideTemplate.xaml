@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:helpers="clr-namespace:BgB_TeachingAssistant.Helpers">
     <ControlTemplate x:Key="ButtonDefaultOverrideTemplate" TargetType="Button">
         <Border
             Name="Border"
@@ -9,16 +10,19 @@
             Padding="{TemplateBinding Padding}"
             Margin="{TemplateBinding Margin}"
             KeyboardNavigation.TabNavigation="Cycle"
-            SnapsToDevicePixels="True">
+            SnapsToDevicePixels="True"
+            CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:CustomProperties.CornerRadius)}">
+            
+            <!-- Binding CornerRadius to Tag -->
             <!-- CornerRadius property should be set in styles for flexibility (e.g., for rounded edges). Define it in styles/templates, not here. -->
 
-            <ContentPresenter
-            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-            Margin="{TemplateBinding Margin}"
-            Opacity="{TemplateBinding Opacity}"
-            RecognizesAccessKey="True" />
-            
+                <ContentPresenter
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Margin="{TemplateBinding Margin}"
+                    Opacity="{TemplateBinding Opacity}"
+                    RecognizesAccessKey="True" />
+ 
         </Border>
         <ControlTemplate.Triggers>
             <!-- Common Triggers (e.g., IsMouseOver, IsPressed, IsEnabled, IsKeyboardFocused) -->

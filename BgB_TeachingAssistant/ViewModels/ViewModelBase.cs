@@ -8,6 +8,7 @@ namespace BgB_TeachingAssistant.ViewModels
     {
         // Implement the Name property from IPageViewModel
         public virtual string Name { get; }
+        public virtual string Icon { get; set; } = "C:\\Programmieren\\ProgrammingProjects\\PythonProject\\src\\GoogleAppsAutomation\\GoogleDriveNative\\Downloads\\projectFiles\\Paraf_whiteBackground.png"; // Implementing the Icon property
         public IServiceFactory ServiceFactory { get; set; }
         public IEventAggregator EventAggregator { get; set; }
         public List<Delegate> EventHandlers { get; set; } = new List<Delegate>();
