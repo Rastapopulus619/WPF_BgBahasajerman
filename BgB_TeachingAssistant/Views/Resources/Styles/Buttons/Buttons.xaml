@@ -13,13 +13,12 @@
     </Style>
     
     <Style TargetType="Button" x:Key="NavigationSidebarButtonStyle">
-        <Setter Property="Template" Value="{StaticResource ButtonDefaultOverrideTemplate}" />
-        <Setter Property="Background" Value="#18191A" />
+        <Setter Property="Template" Value="{StaticResource BaseButtonStyle}" />
+        <Setter Property="Background" Value="#353535" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Foreground" Value="LightYellow" />
-        <Setter Property="MinHeight" Value="80" />
         <Setter Property="MinWidth" Value="40" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -31,14 +30,31 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="RoundedButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="helpers:CustomProperties.CornerRadius" Value="10" />
+    <Style x:Key="NavigationBarButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Foreground" Value="#FEFFDA" />
+        <Setter Property="Background" Value="#18191A" />
+        <Setter Property="Background" Value="#353535" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="Black" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="GreenYellow" />
+                <Setter Property="Background" Value="#353535" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="RoundedButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="helpers:CustomProperties.CornerRadius" Value="10" />
+        <Setter Property="Foreground" Value="LightGray" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Black" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="Green" />
             </Trigger>
         </Style.Triggers>
     </Style>

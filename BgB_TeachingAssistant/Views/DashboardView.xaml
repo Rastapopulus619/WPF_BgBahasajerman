@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid Background="CadetBlue">
+    <Grid Background="#18191a">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
@@ -21,12 +21,36 @@
             <TextBlock Text="{Binding Message, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
+                       Foreground="White"
                        FontSize="20" />
             <Button Content="Trigger Data Processing"
                     Command="{Binding TriggerDataProcessingCommand}"
                     HorizontalAlignment="Center"
                     Margin="10" />
         </StackPanel>
-        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <DataGrid Grid.Row="1" Grid.ColumnSpan="1" d:ItemsSource="{d:SampleData ItemCount=5}" Background="#353535">
+    <DataGrid.Resources>
+        <!-- DataGrid Cell Style -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="Background" Value="#18191A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+        </Style>
+
+        <!-- DataGrid Column Header Style -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#353535"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+        </Style>
+
+        <!-- DataGrid Grid Lines (Horizontal and Vertical) -->
+        <Style TargetType="DataGrid">
+            <Setter Property="HorizontalGridLinesBrush" Value="White"/>
+            <Setter Property="VerticalGridLinesBrush" Value="White"/>
+        </Style>
+    </DataGrid.Resources>
+</DataGrid>
+
     </Grid>
 </UserControl>

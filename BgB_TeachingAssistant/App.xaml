@@ -17,18 +17,18 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Views/UserControls/ButtonDefaultOverrideTemplate.xaml" />
-                <ResourceDictionary Source="Views/Styles/BaseButtonStyle.xaml" />
+                <ResourceDictionary Source="Views/Resources/CustomControls/ButtonDefaultOverrideTemplate.xaml" />
+                <ResourceDictionary Source="Views/Resources/Styles/Buttons/BaseButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="TextBlock">
-                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontSize" Value="14"/>
             </Style>
             <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                 <Setter Property="Template" Value="{StaticResource ButtonDefaultOverrideTemplate}" />
             </Style>
 
-            <SolidColorBrush x:Key="AppBackgroundColor" Color="#18191A" />
+            <SolidColorBrush x:Key="AppBackgroundColor" Color="#353535" />
         <!-- Add more styles for other control types as needed -->
         </ResourceDictionary>
     </Application.Resources>

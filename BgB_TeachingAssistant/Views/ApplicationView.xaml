@@ -11,7 +11,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="DataTemplates.xaml" />
-                <ResourceDictionary Source="Styles/Buttons.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Buttons/Buttons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -21,18 +21,18 @@
 
         <!-- Sidebar: Contains navigation buttons -->
         <Border DockPanel.Dock="Left"
-                MinWidth="130"
-                BorderBrush="Black"
+                Width="75"
+                BorderBrush="#353535"
                 BorderThickness="0,0,0,0">
             <ItemsControl ItemsSource="{Binding PageDescriptors}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Style="{StaticResource RoundedButtonStyle}" 
+                        <Button Style="{StaticResource NavigationBarButtonStyle}" 
                                 Command="{Binding DataContext.ChangeViewModelCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding .}">
-                            <StackPanel Orientation="Vertical">
-                                <Image Source="{Binding DataContext.Icon, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Width="16" Height="16" Margin="0,0,10,0" />
-                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                <Image Source="{Binding Icon}" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}" Margin="0,0,0,0" />
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </DataTemplate>

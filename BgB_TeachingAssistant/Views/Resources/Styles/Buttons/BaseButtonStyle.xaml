@@ -3,7 +3,7 @@
     
     <Style x:Key="BaseButtonStyle" TargetType="Button">
         <Setter Property="Template" Value="{StaticResource ButtonDefaultOverrideTemplate}" />
-        <Setter Property="Background" Value="#18191A" />
+
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="10" />
     </Style>

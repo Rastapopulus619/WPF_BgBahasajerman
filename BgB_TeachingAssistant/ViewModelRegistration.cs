@@ -30,25 +30,25 @@ namespace BgB_TeachingAssistant
         {
             Name = "Dashboard",
             ViewModelType = typeof(DashboardViewModel),
-            Icon = "icon-dashboard"
+            Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Views\\Resources\\Icons\\DashboardIconv2.png"
         },
         new PageDescriptor
         {
             Name = "Student",
             ViewModelType = typeof(StudentViewModel),
-            Icon = "icon-student"
+            Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Views\\Resources\\Icons\\StudentManagerIconv2.png"
         },
         new PageDescriptor
         {
             Name = "Packages",
             ViewModelType = typeof(PackageViewModel),
-            Icon = "icon-packages"
+            Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Resources\\Icons\\DashboardIconv2.png"
         },
         new PageDescriptor
         {
             Name = "Test1",
             ViewModelType = typeof(TestPage1ViewModel),
-            Icon = "icon-test"
+            Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Resources\\Icons\\StudentManagerIconv2.png"
         }
     });
         }
