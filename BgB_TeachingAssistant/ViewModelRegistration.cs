@@ -42,13 +42,13 @@ namespace BgB_TeachingAssistant
         {
             Name = "Packages",
             ViewModelType = typeof(PackageViewModel),
-            Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Resources\\Icons\\DashboardIconv2.png"
+            Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Views\\Resources\\Icons\\DashboardIconv2.png"
         },
         new PageDescriptor
         {
             Name = "Test1",
             ViewModelType = typeof(TestPage1ViewModel),
-            Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Resources\\Icons\\StudentManagerIconv2.png"
+            Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Views\\Resources\\Icons\\StudentManagerIconv2.png"
         }
     });
         }

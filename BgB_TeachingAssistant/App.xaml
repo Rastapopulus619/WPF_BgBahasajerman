@@ -17,7 +17,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Views/Resources/CustomControls/ButtonDefaultOverrideTemplate.xaml" />
+                <ResourceDictionary Source="Views/Resources/UserControls/ButtonDefaultOverrideTemplate.xaml" />
                 <ResourceDictionary Source="Views/Resources/Styles/Buttons/BaseButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
