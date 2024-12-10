@@ -17,13 +17,13 @@
             <Button Content="Hello Click Me!" 
                     Command="{Binding DanCukCommand}" 
                     Width="150" 
-                    Height="30" 
+
                     Margin="0,0,0,5"/>
             <Button Content="Load Students" 
                     Command="{Binding LoadStudentsCommand}" 
                     Width="150" 
-                    Height="30" 
-                    Margin="0,0,0,10"/>
+
+                    Margin="0,0,0,5"/>
             <ComboBox Name="StudentComboBox" ItemsSource="{Binding StudentNames}" Width="200"/>
         </StackPanel>
 

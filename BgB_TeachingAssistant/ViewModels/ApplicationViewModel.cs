@@ -14,7 +14,6 @@ namespace BgB_TeachingAssistant.ViewModels
         private IPageViewModel _currentPageViewModel;
         public INavigationService _navigationService { get; set; }
         public ICommand ChangeViewModelCommand { get; private set; }
-
         public IEnumerable<IPageDescriptor> PageDescriptors { get; set; }
 
         public IPageViewModel CurrentPageViewModel
@@ -26,14 +25,14 @@ namespace BgB_TeachingAssistant.ViewModels
         public ApplicationViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
             // Configure necessary services for this view model
-            serviceFactory.ConfigureServicesFor(this);
+            ServiceFactory.ConfigureServicesFor(this);
 
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
 
             if (PageDescriptors == null || !PageDescriptors.Any())
                 throw new InvalidOperationException("No page descriptors provided.");
 
-            _navigationService.NavigateTo(PageDescriptors.First());
+            _navigationService.NavigateTo(PageDescriptors.First(descriptor => descriptor.ViewModelType == typeof(DashboardViewModel)));
 
             ChangeViewModelCommand = new RelayCommand(
                 parameter => _navigationService.NavigateTo((IPageDescriptor)parameter),

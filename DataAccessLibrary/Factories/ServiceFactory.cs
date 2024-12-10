@@ -57,7 +57,8 @@ namespace Bgb_DataAccessLibrary.Factories
                             property.SetValue(viewModel, service);
 
                             // Confirmation message to the console
-                            $"[SF] Injected: ".ColorizeMulti(ConsoleColor.DarkMagenta).Append($"{ service.GetType().Name}",ConsoleColor.Yellow).Append($" -> ({viewModelHashCode}) {viewModel.GetType().Name}.",ConsoleColor.DarkGray).Append($"{property.Name}",ConsoleColor.Yellow).WriteLine();
+                            $"[SF] Injected: ".ColorizeMulti(ConsoleColor.DarkMagenta)
+                                .Append($"{ service.GetType().Name}",ConsoleColor.Yellow).Append($" -> ({viewModelHashCode}) {viewModel.GetType().Name}.",ConsoleColor.DarkGray).Append($"{property.Name}",ConsoleColor.Yellow).WriteLine();
                         }
                         else
                         {

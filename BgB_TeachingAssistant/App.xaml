@@ -24,10 +24,8 @@
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="14"/>
             </Style>
-            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="Template" Value="{StaticResource ButtonDefaultOverrideTemplate}" />
-            </Style>
-
+            <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}" />
+            
             <SolidColorBrush x:Key="AppBackgroundColor" Color="#353535" />
         <!-- Add more styles for other control types as needed -->
         </ResourceDictionary>

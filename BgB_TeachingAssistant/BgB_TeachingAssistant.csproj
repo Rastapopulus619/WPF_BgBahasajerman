@@ -53,10 +53,10 @@
     <Folder Include="Logs\" />
     <Folder Include="Views\Resources\HtmlTemplates\" />
     <Folder Include="Views\Resources\Templates\" />
+    <Folder Include="Views\Resources\Icons\" />
+    <Folder Include="Views\Resources\ResourceDictionaries\" />
     <Folder Include="Views\Resources\Images\" />
     <Folder Include="Services\Infrastructure\" />
-    <Folder Include="Views\Styles\" />
-    <Folder Include="Views\UserControls\" />
   </ItemGroup>
 
 </Project>
