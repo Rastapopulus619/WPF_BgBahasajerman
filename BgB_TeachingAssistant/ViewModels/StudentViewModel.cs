@@ -32,7 +32,7 @@ namespace BgB_TeachingAssistant.ViewModels
         public StudentViewModel(IServiceFactory serviceFactory)
             : base(serviceFactory)
         {
-            serviceFactory.ConfigureServicesFor(this);
+            ServiceFactory.ConfigureServicesFor(this);
 
             LoadStudentsCommand = new RelayCommand(async () => await LoadStudentsAsync());
             DanCukCommand = new RelayCommand(DanCukMethod);

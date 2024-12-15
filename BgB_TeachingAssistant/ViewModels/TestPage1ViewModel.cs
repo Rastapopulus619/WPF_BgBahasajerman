@@ -42,6 +42,15 @@ namespace BgB_TeachingAssistant.ViewModels
                     #endregion
 
                     Console.WriteLine($"Message changed to: {_studentID}");
+                    // Validate the input to check if it's a positive integer
+                    if (int.TryParse(value, out int result) && result > 0)
+                    {
+                        IsLookupButtonEnabled = true; // Enable the button
+                    }
+                    else
+                    {
+                        IsLookupButtonEnabled = false; // Disable the button
+                    }
                     //GetStudentNameByID();
                     //***for instant change  uncomment this and add ``UpdateSourceTrigger=PropertyChanged`` into the XAML code
                 }
@@ -59,30 +68,36 @@ namespace BgB_TeachingAssistant.ViewModels
                     }
             }
         }
-        //public IEventAggregator EventAggregator { get; set; }
+        private bool _isLookupButtonEnabled;
+        public bool IsLookupButtonEnabled
+        {
+            get => _isLookupButtonEnabled;
+            set
+            {
+                if (SetProperty(ref _isLookupButtonEnabled, value)) // Notify changes to the property
+                {
+                    // Optional: Log or take other actions when the button state changes
+                }
+            }
+        }
+
+
         public IDataServiceTestClass DataService { get; set; }
         public IStudentNameByIDEvent StudentNameByIDEvent { get; set; }
         public ICommand LookupCommand { get; }
 
         public TestPage1ViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
+            IsLookupButtonEnabled = false; // Disable the button initially
 
             // Configure necessary services for this view model 🔻🔻🔻    ////******* USING REFLECTION!! WTF!!!! ******
             serviceFactory.ConfigureServicesFor(this);
-
-            //_eventAggregator = eventAggregator;
 
             // Subscribe to the event 🔻🔻🔻
             //**********SubscribeToEvents THROUGH ViewModelBase! not _eventAggregator
             SubscribeToEvent<StudentNameByIDEvent>(OnStudentNameReceived);
 
             LookupCommand = new AsyncRelayCommand(GetStudentNameByID);   ///in XAML:  <Button Content="Lookup" Command="{Binding LookupCommand}" Margin="0,5" />////
-        }
-
-        // Eventhandling method 🔻🔻🔻
-        private void OnStudentNameReceived(StudentNameByIDEvent studentEvent)
-        {
-            StudentName = studentEvent.StudentName;
         }
 
         private async Task GetStudentNameByID()
@@ -98,6 +113,23 @@ namespace BgB_TeachingAssistant.ViewModels
             {
                 StudentName = "Invalid ID";
             }
+        }
+        // Eventhandling method 🔻🔻🔻
+        private void OnStudentNameReceived(StudentNameByIDEvent studentEvent)
+        {
+            StudentName = studentEvent.StudentName;
+        }
+        protected override void Cleanup()
+        {
+            // Unsubscribe from events
+            UnsubscribeEvents();
+
+            // Nullify properties to free up memory
+            DataService = null;
+            StudentNameByIDEvent = null;
+
+            // Call base class cleanup
+            base.Cleanup();
         }
     }
 }

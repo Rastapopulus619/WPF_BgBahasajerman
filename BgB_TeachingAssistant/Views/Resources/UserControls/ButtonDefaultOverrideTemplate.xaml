@@ -25,6 +25,11 @@
  
         </Border>
         <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="Gray" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="DarkGray" />
+                <Setter TargetName="Border" Property="Opacity" Value="0.5" />
+            </Trigger>
             <!-- Common Triggers (e.g., IsMouseOver, IsPressed, IsEnabled, IsKeyboardFocused) -->
             <!-- Trigger for IsPressed should be set in styles to allow flexibility. Consider adding other common triggers (e.g., IsMouseOver, IsEnabled) in styles, not here. -->
         </ControlTemplate.Triggers>
