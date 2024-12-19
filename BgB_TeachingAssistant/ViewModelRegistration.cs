@@ -13,7 +13,7 @@ namespace BgB_TeachingAssistant
             services.AddTransient<StudentViewModel>();
             services.AddTransient<PackageViewModel>();
             services.AddTransient<TestPage1ViewModel>();
-            services.AddTransient<StudentManagerViewModel>();
+            services.AddTransient<BookedSlotsViewModel>();
             services.AddTransient<ApplicationViewModel>();
 
             // probably from older navigation system: ******** delete if not needed ********
@@ -53,8 +53,8 @@ namespace BgB_TeachingAssistant
         },
         new PageDescriptor
         {
-            Name = "StudentManager",
-            ViewModelType = typeof(StudentManagerViewModel),
+            Name = "BookedSlots",
+            ViewModelType = typeof(BookedSlotsViewModel),
             Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Views\\Resources\\Icons\\StudentManagerIconv2.png"
         }
     });

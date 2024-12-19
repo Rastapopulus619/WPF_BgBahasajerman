@@ -19,8 +19,8 @@
         <local:TestPage1View />
     </DataTemplate>
     
-    <DataTemplate DataType="{x:Type viewModel:StudentManagerViewModel}">
-        <local:StudentManagerView />
+    <DataTemplate DataType="{x:Type viewModel:BookedSlotsViewModel}">
+        <local:BookedSlotsView />
     </DataTemplate>
 
 </ResourceDictionary>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Bgb_DataAccessLibrary.Contracts;
+﻿using MVVM_UtilitiesLibrary.BaseClasses;
 
 namespace BgB_TeachingAssistant.ViewModels
 {

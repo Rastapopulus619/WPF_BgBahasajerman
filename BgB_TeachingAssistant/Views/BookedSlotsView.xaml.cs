@@ -3,11 +3,11 @@
 namespace BgB_TeachingAssistant.Views
 {
     /// <summary>
-    /// Interaction logic for StudentManagerView.xaml
+    /// Interaction logic for BookedSlotsView.xaml
     /// </summary>
-    public partial class StudentManagerView : UserControl
+    public partial class BookedSlotsView : UserControl
     {
-        public StudentManagerView()
+        public BookedSlotsView()
         {
             InitializeComponent();
         }

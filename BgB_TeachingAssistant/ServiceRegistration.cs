@@ -60,6 +60,7 @@ namespace BgB_TeachingAssistant
             services.AddTransient<IGeneralDataService, GeneralDataService>();
             services.AddTransient<StudentProfileDataService>();
             services.AddTransient<IDataServiceTestClass, DataServiceTestClass>();
+            services.AddTransient<IBookedSlotsDataService, BookedSlotsDataService>();
 
         }
 

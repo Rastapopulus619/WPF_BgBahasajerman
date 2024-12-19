@@ -21,6 +21,7 @@
     <Compile Remove="PackageView.xaml.cs" />
     <Compile Remove="StudentView.xaml.cs" />
     <Compile Remove="ViewModels\IPageViewModel.cs" />
+    <Compile Remove="ViewModels\ObservableObject.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bgb_SharedLibrary\Bgb_SharedLibrary.csproj" />
     <ProjectReference Include="..\DataAccessLibrary\Bgb_DataAccessLibrary.csproj" />
+    <ProjectReference Include="..\MVVM_UtilitiesLibrary\MVVM_UtilitiesLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +53,7 @@
     <Folder Include="HtmlContent\TestFiles\" />
     <Folder Include="HtmlContent\TemporaryFiles\" />
     <Folder Include="Logs\" />
+    <Folder Include="Models\BookedSlotsModels\" />
     <Folder Include="Views\Resources\HtmlTemplates\" />
     <Folder Include="Views\Resources\Templates\" />
     <Folder Include="Views\Resources\Icons\" />

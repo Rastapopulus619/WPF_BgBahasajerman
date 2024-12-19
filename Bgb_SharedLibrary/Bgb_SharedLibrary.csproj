@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="SharedModels\" />
     <Folder Include="SharedInterfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MVVM_UtilitiesLibrary\MVVM_UtilitiesLibrary.csproj" />
   </ItemGroup>
 
 </Project>
