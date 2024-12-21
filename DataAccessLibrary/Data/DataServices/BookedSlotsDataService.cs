@@ -55,7 +55,7 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
         {
             var row = dt.AsEnumerable().FirstOrDefault(r => r.Field<int>("SlotID") == slotNumber);
 
-            if (row == null) return new SlotEntry { Name = "DanCuk" }; // Default if no data
+            if (row == null) return new SlotEntry { Name = "-" }; // Default if no data
 
             return new SlotEntry
             {

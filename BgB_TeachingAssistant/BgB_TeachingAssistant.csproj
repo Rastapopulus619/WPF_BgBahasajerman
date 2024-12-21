@@ -54,6 +54,8 @@
     <Folder Include="HtmlContent\TemporaryFiles\" />
     <Folder Include="Logs\" />
     <Folder Include="Models\BookedSlotsModels\" />
+    <Folder Include="Helpers\Converters\" />
+    <Folder Include="Helpers\UIinteraction\" />
     <Folder Include="Views\Resources\HtmlTemplates\" />
     <Folder Include="Views\Resources\Templates\" />
     <Folder Include="Views\Resources\Icons\" />
