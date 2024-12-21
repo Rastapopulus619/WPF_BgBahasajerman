@@ -23,6 +23,13 @@ namespace BgB_TeachingAssistant.ViewModels
         public IDataServiceTestClass DataService { get; set; }
         public IBookedSlotsDataService BookedSlotsDataService { get; set; }
         public DataTable Dt { get; set; }
+
+        private string _testValue = "Initial Value";
+        public string TestValue
+        {
+            get => _testValue;
+            set => SetProperty(ref _testValue, value, nameof(TestValue));
+        }
         public BookedSlotsViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
             serviceFactory.ConfigureServicesFor(this);

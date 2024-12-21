@@ -27,7 +27,17 @@ namespace MVVM_UtilitiesLibrary.BaseClasses
             }
             return false;
         }
-
+        protected bool SetPropertyWithLogging<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, value))
+            {
+                Console.WriteLine($"Property '{propertyName}' changed from '{field}' to '{value}'");
+                field = value;
+                OnPropertyChanged(propertyName);
+                return true;
+            }
+            return false;
+        }
         /*HOW TO USE SET PROPERTY!
          * 
          * public string Name

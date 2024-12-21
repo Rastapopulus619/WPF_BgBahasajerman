@@ -28,7 +28,7 @@ namespace Bgb_SharedLibrary.DTOs.TimeTableDTOs
         public string Name
         {
             get => _name;
-            set => SetProperty(ref _name, value);
+            set => SetPropertyWithLogging(ref _name, value);
         }
 
         public int SlotID

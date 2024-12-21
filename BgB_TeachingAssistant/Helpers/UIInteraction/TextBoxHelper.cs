@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace BgB_TeachingAssistant.Helpers.UIInteraction
+namespace BgB_TeachingAssistant.Helpers.Converters
 {
     public static class TextBoxHelper
     {
