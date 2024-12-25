@@ -1,0 +1,99 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModel="clr-namespace:BgB_TeachingAssistant.ViewModels"
+                    xmlns:local="clr-namespace:BgB_TeachingAssistant.Views">
+
+    <DataTemplate DataType="{x:Type viewModel:DashboardViewModel}">
+        <local:DashboardView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:StudentViewModel}">
+        <local:StudentView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:PackageViewModel}">
+        <local:PackageView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:TestPage1ViewModel}">
+        <local:TestPage1View />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type viewModel:BookedSlotsViewModel}">
+        <local:BookedSlotsView />
+    </DataTemplate>
+
+</ResourceDictionary>
+
+------------------------------------------------------------------------------------------------------------------------------
+
+<UserControl x:Class="BgB_TeachingAssistant.Views.TestPage1View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BgB_TeachingAssistant.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <StackPanel>
+            <Label Content="Enter Student ID:" HorizontalAlignment="Center"/>
+            <TextBox x:Name="StudentIDTextBox" Width="200" Margin="0,5" 
+                     Text="{Binding StudentID, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="Lookup" Command="{Binding LookupCommand}" IsEnabled="{Binding IsLookupButtonEnabled}" HorizontalAlignment="Center" Margin="0,5" Padding="50,0,50,0" />
+            <Label Content="Student Name" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding StudentName, UpdateSourceTrigger=PropertyChanged}" Margin="0,5" HorizontalAlignment="Center"/>
+        </StackPanel>
+        </Grid>
+</UserControl>
+
+------------------------------------------------------------------------------------------------------------------------------
+
+<Window x:Class="BgB_TeachingAssistant.Views.ApplicationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:BgB_TeachingAssistant.Views"
+        xmlns:viewModel="clr-namespace:BgB_TeachingAssistant.ViewModels"
+        xmlns:helpers="clr-namespace:BgB_TeachingAssistant.Helpers"
+        Title="ApplicationView" MinHeight="850" MinWidth="1000"
+        Background="{StaticResource AppBackgroundColor}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DataTemplates.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Buttons/Buttons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!-- Define the layout of the window -->
+    <DockPanel>
+
+        <!-- Sidebar: Contains navigation buttons -->
+        <Border DockPanel.Dock="Left"
+                Width="75"
+                BorderBrush="#353535"
+                BorderThickness="0,0,0,0">
+            <ItemsControl ItemsSource="{Binding PageDescriptors}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource NavigationBarButtonStyle}" 
+                                Command="{Binding DataContext.ChangeViewModelCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                CommandParameter="{Binding .}">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                <Image Source="{Binding Icon}" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}" Margin="0,0,0,0" />
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+        
+        <!-- Main content area: Displays the current view -->
+        <ContentControl Content="{Binding CurrentPageViewModel}"/>
+        
+    </DockPanel>
+</Window>

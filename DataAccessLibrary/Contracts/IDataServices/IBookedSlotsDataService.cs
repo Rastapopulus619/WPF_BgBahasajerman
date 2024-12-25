@@ -12,5 +12,6 @@ namespace Bgb_DataAccessLibrary.Contracts
     public interface IBookedSlotsDataService
     {
         Task<ObservableCollection<TimeTableRow>> GetBookedSlotsAsync();
+        Task SaveBookedSlotsAsync(List<SlotEntry> updatedSlots);
     }
 }

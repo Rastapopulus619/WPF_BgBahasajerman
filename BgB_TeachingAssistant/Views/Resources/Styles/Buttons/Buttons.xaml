@@ -58,5 +58,27 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <Style x:Key="SaveButton" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Background" Value="#5B5B5B" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="#2A2B2C" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="10,0,10,0" />
+        <!-- Adds space inside the button -->
+        <Setter Property="Foreground" Value="White" />
+        
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <!-- Allows content-based resizing -->
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <!-- Allows content-based resizing -->
+        <Setter Property="helpers:CustomProperties.CornerRadius" Value="10" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#18191a" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

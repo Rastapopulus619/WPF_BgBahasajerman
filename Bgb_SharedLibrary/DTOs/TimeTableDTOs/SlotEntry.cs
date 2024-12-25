@@ -9,15 +9,15 @@ namespace Bgb_SharedLibrary.DTOs.TimeTableDTOs
         private int _slotID;
         private int _dayNumber;
         private string _weekdayName;
-        private string _level;
-        private string _currency;
-        private decimal _preis;
-        private decimal? _discountAmount;
+        private string? _level; // Nullable
+        private string? _currency; // Nullable
+        private decimal? _preis; // Nullable
+        private decimal? _discountAmount; // Nullable
 
         private string _content;
         private bool _isEditable = true;
         private bool _isValid = true;
-        private string _comments;
+        private string? _comments;
 
         public int StudentID
         {
@@ -29,6 +29,7 @@ namespace Bgb_SharedLibrary.DTOs.TimeTableDTOs
         {
             get => _name;
             set => SetPropertyWithLogging(ref _name, value);
+            //set => SetProperty(ref _name, value);
         }
 
         public int SlotID
@@ -49,19 +50,19 @@ namespace Bgb_SharedLibrary.DTOs.TimeTableDTOs
             set => SetProperty(ref _weekdayName, value);
         }
 
-        public string Level
+        public string? Level
         {
             get => _level;
             set => SetProperty(ref _level, value);
         }
 
-        public string Currency
+        public string? Currency
         {
             get => _currency;
             set => SetProperty(ref _currency, value);
         }
 
-        public decimal Preis
+        public decimal? Preis
         {
             get => _preis;
             set => SetProperty(ref _preis, value);
@@ -91,10 +92,29 @@ namespace Bgb_SharedLibrary.DTOs.TimeTableDTOs
             set => SetProperty(ref _isValid, value);
         }
 
-        public string Comments
+        public string? Comments
         {
             get => _comments;
             set => SetProperty(ref _comments, value);
         }
+        public override bool Equals(object obj)
+        {
+            if (obj is not SlotEntry other) return false;
+
+            return StudentID == other.StudentID &&
+                   Name == other.Name &&
+                   SlotID == other.SlotID &&
+                   DayNumber == other.DayNumber &&
+                   WeekdayName == other.WeekdayName &&
+                   Level == other.Level &&
+                   Currency == other.Currency &&
+                   Preis == other.Preis &&
+                   DiscountAmount == other.DiscountAmount &&
+                   Content == other.Content &&
+                   IsEditable == other.IsEditable &&
+                   IsValid == other.IsValid &&
+                   Comments == other.Comments;
+        }
+
     }
 }

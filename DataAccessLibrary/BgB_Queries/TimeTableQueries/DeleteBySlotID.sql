@@ -1,0 +1,1 @@
+﻿DELETE FROM bookedslots WHERE SlotID = @SlotID;

@@ -60,6 +60,12 @@
     <None Update="BgB_Queries\StudentQueries\GetStudentList.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="BgB_Queries\TimeTableQueries\InsertNewSlotBooking.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="BgB_Queries\TimeTableQueries\DeleteBySlotID.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Update="BgB_Queries\TimeTableQueries\GetAllBookedSlots.sql">
