@@ -455,7 +455,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Button Grid.Row="0" Content="Save Changes" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding SaveChangesCommand}" Style="{StaticResource SaveButton}" IsEnabled="{Binding CanSave}"/>
-                        <Button Grid.Row="1" Content="Cancel Changes" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding CancelChangesCommand}" Style="{StaticResource SaveButton}"  IsEnabled="{Binding CanCancel}"/>
+                    <Button Grid.Row="1" Content="Cancel Changes" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding RevertChangesCommand}" Style="{StaticResource SaveButton}"  IsEnabled="{Binding CanCancel}"/>
                 </Grid>
 
                 <!-- Middle Section with Centered TextBlock -->

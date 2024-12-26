@@ -73,6 +73,7 @@ namespace BgB_TeachingAssistant
 
         private static void RegisterOtherServices(IServiceCollection services)
         {
+            services.AddSingleton<IPromptService, PromptService>();
             // Register testing service
             services.AddTransient<IMessages, Messages>();
 

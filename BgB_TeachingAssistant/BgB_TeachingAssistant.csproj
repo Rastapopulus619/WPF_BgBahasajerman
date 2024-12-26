@@ -55,7 +55,12 @@
     <Folder Include="Logs\" />
     <Folder Include="Models\BookedSlotsModels\" />
     <Folder Include="Helpers\Converters\" />
-    <Folder Include="Helpers\UIinteraction\" />
+    <Folder Include="Services\Navigation\" />
+    <Folder Include="Services\Data\" />
+    <Folder Include="Services\Communication\" />
+    <Folder Include="Services\Logging\" />
+    <Folder Include="Services\Configuration\" />
+    <Folder Include="Services\Utilities\" />
     <Folder Include="Views\Resources\HtmlTemplates\" />
     <Folder Include="Views\Resources\Templates\" />
     <Folder Include="Views\Resources\Icons\" />

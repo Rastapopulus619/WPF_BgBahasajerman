@@ -26,14 +26,17 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
         {
             DataTable dt = await _queryExecutor.ExecuteQueryAsDataTableAsync("GetAllBookedSlots");
 
+            var timeSlots = await _queryExecutor.ExecuteQueryAsync<string>("GetAllLessonTimeSpanStrings");
+
+            //var timeSlots = await _queryExecutor.ExecuteQueryAsync("GetAllLessonTimeSpanStrings");
             // Example: Time slots for rows
-            var timeSlots = new[] { "07:00-08:30", "08:30-10:00", "10:00-11:30", "13:00-14:30", "14:30-16:00", "16:00-17:30", "17:30-19:00", "19:00-20:30" };
+            //var timeSlots = new[] { "07:00-08:30", "08:30-10:00", "10:00-11:30", "13:00-14:30", "14:30-16:00", "16:00-17:30", "17:30-19:00", "19:00-20:30" };
 
             List<TimeTableRow> timetableRows = new List<TimeTableRow>();
 
                 //int additionValue = 7;
                 
-            for ( int i = 0; i < timeSlots.Length; i++)
+            for ( int i = 0; i < timeSlots.Count; i++)
             {
                 TimeTableRow row = new TimeTableRow
                 {
@@ -108,6 +111,5 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
             var query = _queryLoader.GetQuery("GetStudentList");
             return (await _dataAccess.QueryAsync<StudentModel>(query)).ToList();
         }
-
     }
 }

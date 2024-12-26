@@ -1,0 +1,1 @@
+﻿SELECT DISTINCT Time FROM timeslots ORDER BY (SELECT MIN(SlotID) FROM timeslots t2 WHERE t2.Time = timeslots.Time);

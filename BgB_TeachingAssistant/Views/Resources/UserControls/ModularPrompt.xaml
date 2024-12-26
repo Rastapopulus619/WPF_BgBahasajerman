@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="BgB_TeachingAssistant.Views.Resources.UserControls.ModularPrompt"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+    <Border CornerRadius="10" Background="#18191a" Padding="20" BorderBrush="Gray" BorderThickness="1">
+        <StackPanel>
+            <TextBlock Text="{Binding Title}" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,10" TextAlignment="Center"/>
+            <ContentPresenter Content="{Binding Content}" Margin="0,0,0,10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="OK" Foreground="White" Background="#424242" Command="{Binding OkCommand}" Margin="5"/>
+                <Button Content="Cancel" Foreground="White" Background="#424242" Command="{Binding CancelCommand}" Margin="5"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

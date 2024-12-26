@@ -1,15 +1,13 @@
-﻿using Bgb_DataAccessLibrary;
+﻿using Bgb_DataAccessLibrary.Models.StudentModels;
 using Bgb_SharedLibrary.DTOs.TimeTableDTOs;
 using BgB_TeachingAssistant.Commands;
+using BgB_TeachingAssistant.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
-using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using static Mysqlx.Notice.Warning.Types;
-using System.Xml.Linq;
-using Bgb_DataAccessLibrary.Models.StudentModels;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
@@ -17,7 +15,6 @@ namespace BgB_TeachingAssistant.ViewModels
     {
         public override string Name => "BookedSlots";
         private bool _isDisposed = false;
-
         private bool _canSave;
         public bool CanSave
         {
@@ -30,20 +27,12 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _canCancel;
             set => SetProperty(ref _canCancel, value, nameof(CanCancel));
         }
-
         private ObservableCollection<StudentModel> _students;
         public ObservableCollection<StudentModel> Students
         {
             get => _students;
             set => SetProperty(ref _students, value, nameof(Students));  // Provide the property name
         }
-        private ObservableCollection<string> _validStudentNames;
-        public ObservableCollection<string> ValidStudentNames
-        {
-            get => _validStudentNames;
-            set => SetProperty(ref _validStudentNames, value, nameof(ValidStudentNames));
-        }
-
         private ObservableCollection<TimeTableRow> _timetableDataBackup;
 
         private ObservableCollection<TimeTableRow> _timetableData;
@@ -62,13 +51,13 @@ namespace BgB_TeachingAssistant.ViewModels
                 }
             }
         }
-        public IGeneralDataService GeneralDataService { get; set; }
-        public IDataServiceTestClass DataService { get; set; }
         public IBookedSlotsDataService BookedSlotsDataService { get; set; }
+        public IPromptService PromptService { get; set; }
         public ICommand SaveChangesCommand { get; }
-        public ICommand CancelChangesCommand { get; }
-        public DataTable Dt { get; set; }
-
+        public ICommand RevertChangesCommand { get; }
+        public ICommand ConfirmSaveChangesCommand { get; }
+        public ICommand ConfirmRevertChangesCommand { get; }
+        public ICommand CancelSaveOrRevertCommand { get; }
         private string _testValue = "Initial Value";
         public string TestValue
         {
@@ -79,14 +68,38 @@ namespace BgB_TeachingAssistant.ViewModels
         {
             serviceFactory.ConfigureServicesFor(this);
 
-            SaveChangesCommand = new AsyncRelayCommand(InsertUpdatedSlots);
-            CancelChangesCommand = new AsyncRelayCommand(CancelUpdatedSlots);
+            SaveChangesCommand = new AsyncRelayCommand(ShowSavePrompt);
+            RevertChangesCommand = new AsyncRelayCommand(ShowRevertPrompt);
+            ConfirmSaveChangesCommand = new AsyncRelayCommand(InsertUpdatedSlots);
+            ConfirmRevertChangesCommand = new AsyncRelayCommand(CancelUpdatedSlots);
+            CancelSaveOrRevertCommand = new AsyncRelayCommand(CancelSaveOrRevert);
 
             FetchTimeTableData();
             FetchStudentList();
-
         }
+        private async Task CancelSaveOrRevert()
+        {
+            return;
+        }
+        private async Task ShowSavePrompt()
+        {
+            PromptService.ShowPrompt(
+                "Confirm Save",
+                new TextBlock { Text = "Are you sure you want to save?" },
+                ConfirmSaveChangesCommand,
+                CancelSaveOrRevertCommand
 
+            );
+        }
+        private async Task ShowRevertPrompt()
+        {
+            PromptService.ShowPrompt(
+                "Confirm Revert",
+                new TextBlock { Text = "Are you sure you want to revert?" },
+                ConfirmRevertChangesCommand,
+                CancelSaveOrRevertCommand
+            );
+        }
         private async Task InsertUpdatedSlots()
         {
             var differences = GetDifferences();
@@ -94,32 +107,56 @@ namespace BgB_TeachingAssistant.ViewModels
             // Check if differences is null or empty
             if (differences == null || !differences.Any())
             {
-                Console.WriteLine("No changes detected. No action required.");
+                MessageBox.Show("No changes detected. No action required.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+
                 return;
             }
 
             // Log the differences
-            foreach (var diff in differences)
-            {
-                Console.WriteLine($"Changed SlotEntry: {diff.SlotID} Name: {diff.Name} in {diff.WeekdayName}");
-            }
+            var changeDetails = GenerateChangeDetails(differences);
 
-            Console.WriteLine();
-            for (int i = 0; i < 15; i++)
+            bool userConfirmed = ConfirmAction(
+                "Confirm Save",
+                $"The following changes will be saved:\n\n{changeDetails}\n\nWould you like to proceed?"
+            );
+
+            if (!userConfirmed)
             {
-                Console.Write("<Lol> ");
+                MessageBox.Show("Save operation canceled.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
             }
-            Console.WriteLine();
 
             // Perform save operation
             await BookedSlotsDataService.SaveBookedSlotsAsync(differences);
 
             // Refresh timetable data
             FetchTimeTableData();
+            MessageBox.Show("Changes saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private async Task CancelUpdatedSlots()
         {
+            if (_timetableDataBackup == null)
+            {
+                MessageBox.Show("No previous state to revert to.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var differences = GetDifferences();
+            var changeDetails = GenerateChangeDetails(differences, isReverting: true);
+
+            bool userConfirmed = ConfirmAction(
+                "Confirm Revert",
+                $"The following changes will be reverted:\n\n{changeDetails}\n\nWould you like to proceed?"
+            );
+
+            if (!userConfirmed)
+            {
+                MessageBox.Show("Revert operation canceled.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
             RevertToSavedState();
+            MessageBox.Show("Changes reverted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private async void FetchTimeTableData()
         {
@@ -135,39 +172,28 @@ namespace BgB_TeachingAssistant.ViewModels
                 Console.WriteLine($"Error fetching booked slots: {ex.Message}");
             }
         }
-
-
-        //Console.WriteLine($"Sunday last Slot Content is: {TimetableData[7].Sonntag.Content}");
-
         private async void FetchStudentList()
         {
             try
             {
                 await LoadStudentsAsync();
-                // Retrieve and set student names
-                var studentNames = await GeneralDataService.GetStudentNamesAsync();
-                Console.WriteLine($"first value in student list: {studentNames[0]}");
-                //MessageBox.Show($"first value in student list: {studentNames[0]}");
-                ValidStudentNames = new ObservableCollection<string>(studentNames);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error retrieving student list: {ex.Message}");
+                MessageBox.Show($"Error retrieving Student Objects: {ex.Message}");
             }
         }
         private async Task LoadStudentsAsync()
         {
             // Retrieve students using the data service
-            var students = await GeneralDataService.GetStudentsAsync();
+            var students = await BookedSlotsDataService.GetStudentsAsync();
             Students = new ObservableCollection<StudentModel>(students);
         }
-
         public void SaveState()
         {
             _timetableDataBackup = CloneTimetableData(TimetableData);
             UpdateCanSaveAndCancel();
         }
-
         public void RevertToSavedState()
         {
             if (_timetableDataBackup != null)
@@ -249,8 +275,6 @@ namespace BgB_TeachingAssistant.ViewModels
                    current.IsValid == backup.IsValid &&
                    current.Comments == backup.Comments;
         }
-
-
         private ObservableCollection<TimeTableRow> CloneTimetableData(ObservableCollection<TimeTableRow> original)
         {
             if (original == null) return null;
@@ -275,7 +299,6 @@ namespace BgB_TeachingAssistant.ViewModels
 
             return clone;
         }
-
         private SlotEntry CloneSlotEntry(SlotEntry original)
         {
             if (original == null) return null;
@@ -323,7 +346,6 @@ namespace BgB_TeachingAssistant.ViewModels
 
             return differences;
         }
-
         private void CompareSlotEntries(List<SlotEntry> differences, SlotEntry current, SlotEntry backup)
         {
             if (current == null || backup == null) return;
@@ -334,28 +356,6 @@ namespace BgB_TeachingAssistant.ViewModels
                 differences.Add(current);
             }
         }
-
-        //private void SlotEntryPropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    if (e.PropertyName == nameof(SlotEntry.Name) && sender is SlotEntry slotEntry)
-        //    {
-        //        // Check if Name is empty or null
-        //        if (string.IsNullOrWhiteSpace(slotEntry.Name))
-        //        {
-        //            // Automatically set Name to "-"
-        //            slotEntry.Name = "-";
-        //        }
-
-        //        // Validate Name (allow "-" or valid student names)
-        //        //slotEntry.IsValid = slotEntry.Name == "-" || ValidStudentNames?.Contains(slotEntry.Name) == true;
-        //        slotEntry.IsValid = slotEntry.Name == "-" || Students?.Any(student => student.Name == slotEntry.Name) == true;
-
-
-        //        // Optional: Add logging or additional actions
-        //        Console.WriteLine($"SlotEntry.Name changed: {slotEntry.Name}, IsValid: {slotEntry.IsValid}");
-        //    }
-        //}
-
         private void SlotEntryPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             CanCancel = true;
@@ -403,7 +403,6 @@ namespace BgB_TeachingAssistant.ViewModels
                 }
             }
         }
-
         private bool NoInvalidValueExists()
         {
             if (TimetableData == null)
@@ -423,14 +422,10 @@ namespace BgB_TeachingAssistant.ViewModels
 
             return true; // All SlotEntries are valid
         }
-
-        // Helper method to check a single SlotEntry
         private bool IsSlotEntryValid(SlotEntry slotEntry)
         {
             return slotEntry == null || slotEntry.IsValid; // Null entries are considered valid
         }
-
-
         private void SubscribeToSlotEntryChanges()
         {
             if (TimetableData == null)
@@ -443,7 +438,6 @@ namespace BgB_TeachingAssistant.ViewModels
                 SubscribeToRow(row);
             }
         }
-
         private void SubscribeToRow(TimeTableRow row)
         {
             row.Montag.PropertyChanged += SlotEntryPropertyChanged;
@@ -454,7 +448,6 @@ namespace BgB_TeachingAssistant.ViewModels
             row.Samstag.PropertyChanged += SlotEntryPropertyChanged;
             row.Sonntag.PropertyChanged += SlotEntryPropertyChanged;
         }
-
         private void UnsubscribeFromSlotEntryChanges()
         {
             if (_timetableData == null) return;
@@ -464,7 +457,6 @@ namespace BgB_TeachingAssistant.ViewModels
                 UnsubscribeFromRow(row);
             }
         }
-
         private void UnsubscribeFromRow(TimeTableRow row)
         {
             row.Montag.PropertyChanged -= SlotEntryPropertyChanged;
@@ -475,7 +467,6 @@ namespace BgB_TeachingAssistant.ViewModels
             row.Samstag.PropertyChanged -= SlotEntryPropertyChanged;
             row.Sonntag.PropertyChanged -= SlotEntryPropertyChanged;
         }
-
         protected override void Cleanup()
         {
             // Unsubscribe from events
@@ -493,5 +484,32 @@ namespace BgB_TeachingAssistant.ViewModels
             // Call base class cleanup
             base.Cleanup();
         }
+        private string GenerateChangeDetails(List<SlotEntry> changes, bool isReverting = false)
+        {
+            var details = new StringBuilder();
+
+            foreach (var slot in changes)
+            {
+                var originalSlot = _timetableDataBackup
+                    .SelectMany(row => new[] { row.Montag, row.Dienstag, row.Mittwoch, row.Donnerstag, row.Freitag, row.Samstag, row.Sonntag })
+                    .FirstOrDefault(s => s?.SlotID == slot.SlotID);
+
+                if (originalSlot != null)
+                {
+                    details.AppendLine(
+                        $"{(isReverting ? "Reverting" : "Changing")} SlotID: {slot.SlotID}, " +
+                        $"Day: {slot.WeekdayName}, Time: {slot.DayNumber}, " +
+                        $"Name: {originalSlot.Name} -> {slot.Name}");
+                }
+            }
+
+            return details.ToString();
+        }
+        private bool ConfirmAction(string title, string message)
+        {
+            var result = MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            return result == MessageBoxResult.Yes;
+        }
+
     }
 }
