@@ -10,7 +10,8 @@
              xmlns:viewmodels="clr-namespace:BgB_TeachingAssistant.ViewModels" 
              d:DataContext="{d:DesignInstance Type=viewmodels:BookedSlotsViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="#18191a">
+             d:DesignHeight="450" d:DesignWidth="800" Background="#18191a"
+             Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -30,6 +31,13 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
+    <UserControl.InputBindings>
+        <!-- Ctrl+S for Save -->
+        <KeyBinding Command="{Binding SaveChangesCommand}" Key="S" Modifiers="Control" />
+        <!-- Ctrl+C for Cancel -->
+        <KeyBinding Command="{Binding RevertChangesCommand}" Key="R" Modifiers="Control" />
+    </UserControl.InputBindings>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
@@ -51,9 +59,7 @@
                           CellStyle="{StaticResource DayCellStyle}"
                           ItemsSource="{Binding TimetableData}" 
                           ColumnHeaderStyle="{StaticResource TimeTableColumnHeaderStyle}"
-                          
                           CurrentCellChanged="StreamlineEditOnSelect"
-                          
                           SelectionMode="Single"
                           CanUserResizeRows="False"
                           CanUserResizeColumns="False"
@@ -67,7 +73,6 @@
                           SelectionUnit="Cell" 
                           HorizontalGridLinesBrush="White" 
                           VerticalGridLinesBrush="White">
-
 
                     <!-- Apply Row Header Style with Content Binding -->
                     <DataGrid.RowHeaderStyle>

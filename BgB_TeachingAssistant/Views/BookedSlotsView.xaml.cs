@@ -13,6 +13,18 @@ namespace BgB_TeachingAssistant.Views
         {
             InitializeComponent();
         }
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            TimetableDataGrid.Focus();
+
+        }
+
+        // if the above doesn't work, try this:
+        //private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    Dispatcher.InvokeAsync(() => TimetableDataGrid.Focus(), System.Windows.Threading.DispatcherPriority.ContextIdle);
+        //}
+
         private void StreamlineEditOnSelect(object sender, EventArgs e)
         {
             if (sender is not DataGrid dataGrid)
@@ -48,7 +60,10 @@ namespace BgB_TeachingAssistant.Views
                         editingElement.CaretIndex = editingElement.Text.Length;
 
                         // Optional: Auto-select all content
-                        // editingElement.SelectAll();
+                        if(editingElement.Text == "-")
+                        {
+                            editingElement.SelectAll();
+                        }
                     }
                 }
             }

@@ -7,6 +7,7 @@ namespace Bgb_SharedLibrary.DTOs.TimeTableDTOs
         private int _studentID;
         private string _name;
         private int _slotID;
+        private string _time;
         private int _dayNumber;
         private string _weekdayName;
         private string? _level; // Nullable
@@ -29,13 +30,18 @@ namespace Bgb_SharedLibrary.DTOs.TimeTableDTOs
         {
             get => _name;
             set => SetPropertyWithLogging(ref _name, value);
-            //set => SetProperty(ref _name, value);
         }
 
         public int SlotID
         {
             get => _slotID;
             set => SetProperty(ref _slotID, value);
+        }
+
+        public string Time
+        {
+            get => _time;
+            set => SetProperty(ref _time, value);
         }
 
         public int DayNumber
@@ -104,6 +110,7 @@ namespace Bgb_SharedLibrary.DTOs.TimeTableDTOs
             return StudentID == other.StudentID &&
                    Name == other.Name &&
                    SlotID == other.SlotID &&
+                   Time == other.Time &&
                    DayNumber == other.DayNumber &&
                    WeekdayName == other.WeekdayName &&
                    Level == other.Level &&

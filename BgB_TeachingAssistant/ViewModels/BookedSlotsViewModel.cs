@@ -27,6 +27,18 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _canCancel;
             set => SetProperty(ref _canCancel, value, nameof(CanCancel));
         }
+        private string _testValue = "Initial Value";
+        public string TestValue
+        {
+            get => _testValue;
+            set => SetProperty(ref _testValue, value, nameof(TestValue));
+        }
+        private bool _isContentVisible = true;
+        public bool IsContentVisible
+        {
+            get => _isContentVisible;
+            set => SetProperty(ref _isContentVisible, value, nameof(IsContentVisible));
+        }
         private ObservableCollection<StudentModel> _students;
         public ObservableCollection<StudentModel> Students
         {
@@ -58,105 +70,58 @@ namespace BgB_TeachingAssistant.ViewModels
         public ICommand ConfirmSaveChangesCommand { get; }
         public ICommand ConfirmRevertChangesCommand { get; }
         public ICommand CancelSaveOrRevertCommand { get; }
-        private string _testValue = "Initial Value";
-        public string TestValue
-        {
-            get => _testValue;
-            set => SetProperty(ref _testValue, value, nameof(TestValue));
-        }
+        public ICommand ToggleContentVisibilityCommand { get; }
         public BookedSlotsViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
             serviceFactory.ConfigureServicesFor(this);
 
             SaveChangesCommand = new AsyncRelayCommand(ShowSavePrompt);
             RevertChangesCommand = new AsyncRelayCommand(ShowRevertPrompt);
-            ConfirmSaveChangesCommand = new AsyncRelayCommand(InsertUpdatedSlots);
-            ConfirmRevertChangesCommand = new AsyncRelayCommand(CancelUpdatedSlots);
-            CancelSaveOrRevertCommand = new AsyncRelayCommand(CancelSaveOrRevert);
+            ToggleContentVisibilityCommand = new RelayCommand(_ => IsContentVisible = !IsContentVisible);
 
             FetchTimeTableData();
             FetchStudentList();
         }
-        private async Task CancelSaveOrRevert()
-        {
-            return;
-        }
         private async Task ShowSavePrompt()
         {
-            PromptService.ShowPrompt(
-                "Confirm Save",
-                new TextBlock { Text = "Are you sure you want to save?" },
-                ConfirmSaveChangesCommand,
-                CancelSaveOrRevertCommand
+            var differences = GetDifferences();
+            var changeDetails = GenerateChangeDetails(differences);
 
-            );
+            bool userChoice = PromptService.ShowOkCancelPrompt(
+                "Confirm Save",
+                $"Are you sure you want to save these Changes?\n\n{changeDetails}");
+
+            if (userChoice == true)
+            {
+                // Perform save operation
+                await BookedSlotsDataService.SaveBookedSlotsAsync(differences);
+
+                FetchTimeTableData();
+                PromptService.ShowInformationPrompt("Success", $"These Changes:\n\n{changeDetails}\nhave been saved.");
+            }
+            else
+            {
+                return;
+            }
         }
         private async Task ShowRevertPrompt()
         {
-            PromptService.ShowPrompt(
+            bool userChoice = PromptService.ShowOkCancelPrompt(
                 "Confirm Revert",
-                new TextBlock { Text = "Are you sure you want to revert?" },
-                ConfirmRevertChangesCommand,
-                CancelSaveOrRevertCommand
-            );
-        }
-        private async Task InsertUpdatedSlots()
-        {
-            var differences = GetDifferences();
+                "Are you sure you want to revert Changes?");
 
-            // Check if differences is null or empty
-            if (differences == null || !differences.Any())
+            if (userChoice == true)
             {
-                MessageBox.Show("No changes detected. No action required.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                var differences = GetDifferences();
+                var changeDetails = GenerateChangeDetails(differences);
 
+                RevertToSavedState();
+                PromptService.ShowInformationPrompt("Success", $"These Changes have been reverted.:\n\n{changeDetails}");
+            }
+            else
+            {
                 return;
             }
-
-            // Log the differences
-            var changeDetails = GenerateChangeDetails(differences);
-
-            bool userConfirmed = ConfirmAction(
-                "Confirm Save",
-                $"The following changes will be saved:\n\n{changeDetails}\n\nWould you like to proceed?"
-            );
-
-            if (!userConfirmed)
-            {
-                MessageBox.Show("Save operation canceled.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            // Perform save operation
-            await BookedSlotsDataService.SaveBookedSlotsAsync(differences);
-
-            // Refresh timetable data
-            FetchTimeTableData();
-            MessageBox.Show("Changes saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        private async Task CancelUpdatedSlots()
-        {
-            if (_timetableDataBackup == null)
-            {
-                MessageBox.Show("No previous state to revert to.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            var differences = GetDifferences();
-            var changeDetails = GenerateChangeDetails(differences, isReverting: true);
-
-            bool userConfirmed = ConfirmAction(
-                "Confirm Revert",
-                $"The following changes will be reverted:\n\n{changeDetails}\n\nWould you like to proceed?"
-            );
-
-            if (!userConfirmed)
-            {
-                MessageBox.Show("Revert operation canceled.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            RevertToSavedState();
-            MessageBox.Show("Changes reverted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private async void FetchTimeTableData()
         {
@@ -264,6 +229,7 @@ namespace BgB_TeachingAssistant.ViewModels
             return current.StudentID == backup.StudentID &&
                    current.Name == backup.Name &&
                    current.SlotID == backup.SlotID &&
+                   current.Time == backup.Time &&
                    current.DayNumber == backup.DayNumber &&
                    current.WeekdayName == backup.WeekdayName &&
                    current.Level == backup.Level &&
@@ -308,6 +274,7 @@ namespace BgB_TeachingAssistant.ViewModels
                 StudentID = original.StudentID,
                 Name = original.Name,
                 SlotID = original.SlotID,
+                Time = original.Time,
                 DayNumber = original.DayNumber,
                 WeekdayName = original.WeekdayName,
                 Level = original.Level,
@@ -356,52 +323,23 @@ namespace BgB_TeachingAssistant.ViewModels
                 differences.Add(current);
             }
         }
-        private void SlotEntryPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private string GenerateChangeDetails(List<SlotEntry> changes, bool isReverting = false)
         {
-            CanCancel = true;
+            var details = new StringBuilder();
 
-            if (e.PropertyName == nameof(SlotEntry.Name) && sender is SlotEntry slotEntry)
+            foreach (var slot in changes)
             {
-                // Check if Name is empty or null
-                if (string.IsNullOrWhiteSpace(slotEntry.Name))
-                {
-                    // Automatically set Name to "-"
-                    slotEntry.Name = "-";
-                }
+                var originalSlot = _timetableDataBackup
+                    .SelectMany(row => new[] { row.Montag, row.Dienstag, row.Mittwoch, row.Donnerstag, row.Freitag, row.Samstag, row.Sonntag })
+                    .FirstOrDefault(s => s?.SlotID == slot.SlotID);
 
-                // Find the matching student in the Students collection
-                var matchingStudent = Students?.FirstOrDefault(student => student.Name == slotEntry.Name);
-
-                if (slotEntry.Name == "-")
+                if (originalSlot != null)
                 {
-                    // If Name is "-", allow it and set IsValid to true
-                    slotEntry.IsValid = true;
-                }
-                else if (matchingStudent != null)
-                {
-                    // Match found in the Students collection
-                    slotEntry.IsValid = true;
-                    slotEntry.StudentID = matchingStudent.StudentID;
-                }
-                else
-                {
-                    // No match found
-                    slotEntry.IsValid = false;
-
-                }
-
-                // Optional: Add logging or additional actions
-                Console.WriteLine($"SlotEntry.Name changed: {slotEntry.Name}, IsValid: {slotEntry.IsValid}, StudentID: {slotEntry.StudentID}");
-
-                if(slotEntry.IsValid == false)
-                {
-                    CanSave = false;
-                }
-                else
-                {
-                    CanSave = NoInvalidValueExists();
+                    details.AppendLine(
+                        $"{slot.WeekdayName}, {slot.Time}:\t[{originalSlot.Name}]    ->    [{slot.Name}]");
                 }
             }
+            return details.ToString();
         }
         private bool NoInvalidValueExists()
         {
@@ -421,6 +359,69 @@ namespace BgB_TeachingAssistant.ViewModels
             }
 
             return true; // All SlotEntries are valid
+        }
+        // Logic to subscribe so that input is handled in real time
+        private void SlotEntryPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SlotEntry.Name) && sender is SlotEntry slotEntry)
+            {
+                // Check if Name is empty or null
+                if (string.IsNullOrWhiteSpace(slotEntry.Name))
+                {
+                    // Automatically set Name to "-"
+                    slotEntry.Name = "-";
+                }
+
+                // Find the matching student in the Students collection
+                var matchingStudent = Students?.FirstOrDefault(student => student.Name == slotEntry.Name);
+
+                if (slotEntry.Name == "-")
+                {
+                    // If Name is "-", allow it and set IsValid to true
+                    slotEntry.IsValid = true;
+                    slotEntry.StudentID = 0;
+                }
+                else if (matchingStudent != null)
+                {
+                    // Match found in the Students collection
+                    slotEntry.IsValid = true;
+                    slotEntry.StudentID = matchingStudent.StudentID;
+                }
+                else
+                {
+                    // No match found
+                    slotEntry.IsValid = false;
+                }
+
+                // Optional: Add logging or additional actions
+                Console.WriteLine($"SlotEntry.Name changed: {slotEntry.Name}, IsValid: {slotEntry.IsValid}, StudentID: {slotEntry.StudentID}");
+
+                bool timeTablesEqual = AreTimetableDataEqual();
+
+                if (timeTablesEqual == false)
+                {
+                    if (slotEntry.IsValid == false)
+                    {
+                        //Console.WriteLine("Slot Entry Invalid! CanSave = false - CanCancel = true");
+                        CanSave = false;
+                        CanCancel = true;
+                    }
+                    else if (slotEntry.IsValid == true)
+                    {
+                        CanCancel = true;
+                        CanSave = NoInvalidValueExists();
+                        //if (CanSave == true)
+                        //{
+                        //    Console.WriteLine("No Invalid Value detected! CanCancel = true - CanSave = true"); ;
+                        //}
+                    }
+                }
+                else
+                {
+                    CanCancel = false;
+                    CanSave = false;
+                }
+            }
         }
         private bool IsSlotEntryValid(SlotEntry slotEntry)
         {
@@ -448,6 +449,7 @@ namespace BgB_TeachingAssistant.ViewModels
             row.Samstag.PropertyChanged += SlotEntryPropertyChanged;
             row.Sonntag.PropertyChanged += SlotEntryPropertyChanged;
         }
+        // Unsubscribe and Cleanup
         private void UnsubscribeFromSlotEntryChanges()
         {
             if (_timetableData == null) return;
@@ -484,32 +486,5 @@ namespace BgB_TeachingAssistant.ViewModels
             // Call base class cleanup
             base.Cleanup();
         }
-        private string GenerateChangeDetails(List<SlotEntry> changes, bool isReverting = false)
-        {
-            var details = new StringBuilder();
-
-            foreach (var slot in changes)
-            {
-                var originalSlot = _timetableDataBackup
-                    .SelectMany(row => new[] { row.Montag, row.Dienstag, row.Mittwoch, row.Donnerstag, row.Freitag, row.Samstag, row.Sonntag })
-                    .FirstOrDefault(s => s?.SlotID == slot.SlotID);
-
-                if (originalSlot != null)
-                {
-                    details.AppendLine(
-                        $"{(isReverting ? "Reverting" : "Changing")} SlotID: {slot.SlotID}, " +
-                        $"Day: {slot.WeekdayName}, Time: {slot.DayNumber}, " +
-                        $"Name: {originalSlot.Name} -> {slot.Name}");
-                }
-            }
-
-            return details.ToString();
-        }
-        private bool ConfirmAction(string title, string message)
-        {
-            var result = MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
-            return result == MessageBoxResult.Yes;
-        }
-
     }
 }

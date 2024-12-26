@@ -59,22 +59,34 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
         {
             var row = dt.AsEnumerable().FirstOrDefault(r => r.Field<int>("SlotID") == slotNumber);
 
-            if (row == null) return new SlotEntry { Name = "-", SlotID = slotNumber}; // Default if no data
+            if (row == null)
+            {
+                // Default if no data is found
+                return new SlotEntry
+                {
+                    Name = "-",
+                    SlotID = slotNumber,
+                    WeekdayName = "-",
+                    Time = "-"
+                };
+            }
 
             return new SlotEntry
             {
-                StudentID = row.Field<int>("StudentID"),
-                Name = row.Field<string>("Name"),
+                StudentID = row.IsNull("StudentID") ? 0 : row.Field<int>("StudentID"),
+                Name = row.IsNull("StudentName") ? "-" : row.Field<string>("StudentName"),
                 SlotID = row.Field<int>("SlotID"),
+                Time = row.IsNull("Time") ? "-" : row.Field<string>("Time"),
                 DayNumber = row.Field<int>("DayNumber"),
-                WeekdayName = row.Field<string>("WeekdayName"),
+                WeekdayName = row.IsNull("WeekdayName") ? "-" : row.Field<string>("WeekdayName"),
                 Level = row.IsNull("Level") ? null : row.Field<string>("Level"),
                 Currency = row.IsNull("Currency") ? null : row.Field<string>("Currency"),
                 Preis = row.IsNull("Preis") ? null : (decimal?)row.Field<decimal>("Preis"),
-                DiscountAmount = row.IsNull("DiscountAmount") ? null : (decimal?)row.Field<int>("DiscountAmount"),
-                Content = row.Field<string>("Name")
+                DiscountAmount = row.IsNull("DiscountAmount") ? null : (decimal?)row.Field<decimal>("DiscountAmount"),
+                Content = row.IsNull("StudentName") ? "-" : row.Field<string>("StudentName")
             };
         }
+
         public async Task SaveBookedSlotsAsync(List<SlotEntry> updatedSlots)
         {
             if (updatedSlots == null || !updatedSlots.Any())

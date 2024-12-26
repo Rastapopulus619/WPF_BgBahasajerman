@@ -19,6 +19,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/Resources/UserControls/ButtonDefaultOverrideTemplate.xaml" />
                 <ResourceDictionary Source="Views/Resources/Styles/Buttons/BaseButtonStyle.xaml" />
+                <ResourceDictionary Source="Views/Resources/Styles/Prompts/PromptStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="TextBlock">
