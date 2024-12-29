@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
@@ -33,20 +32,21 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _testValue;
             set => SetProperty(ref _testValue, value, nameof(TestValue));
         }
+
         private bool _isContentVisible = true;
         public bool IsContentVisible
         {
             get => _isContentVisible;
             set => SetProperty(ref _isContentVisible, value, nameof(IsContentVisible));
         }
+
         private ObservableCollection<StudentModel> _students;
         public ObservableCollection<StudentModel> Students
         {
             get => _students;
-            set => SetProperty(ref _students, value, nameof(Students));  // Provide the property name
+            set => SetProperty(ref _students, value, nameof(Students));
         }
         private ObservableCollection<TimeTableRow> _timetableDataBackup;
-
         private ObservableCollection<TimeTableRow> _timetableData;
         public ObservableCollection<TimeTableRow> TimetableData
         {
@@ -62,26 +62,66 @@ namespace BgB_TeachingAssistant.ViewModels
                     }
                 }
             }
+
         }
         public IBookedSlotsDataService BookedSlotsDataService { get; set; }
         public IPromptService PromptService { get; set; }
         public ICommand SaveChangesCommand { get; }
         public ICommand RevertChangesCommand { get; }
-        public ICommand ConfirmSaveChangesCommand { get; }
-        public ICommand ConfirmRevertChangesCommand { get; }
-        public ICommand CancelSaveOrRevertCommand { get; }
         public ICommand ToggleContentVisibilityCommand { get; }
         public BookedSlotsViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
             serviceFactory.ConfigureServicesFor(this);
 
             SaveChangesCommand = new AsyncRelayCommand(ShowSavePrompt);
-            RevertChangesCommand = new AsyncRelayCommand(ShowRevertPrompt);
+            RevertChangesCommand = new RelayCommand(ShowRevertPrompt); // no async operations, so use RelayCommand
             ToggleContentVisibilityCommand = new RelayCommand(_ => IsContentVisible = !IsContentVisible);
 
-            FetchTimeTableData();
-            FetchStudentList();
+            InitializeAsync();
         }
+        private async void InitializeAsync()
+        {
+            try
+            {
+                // Run both async tasks in parallel
+                var fetchTimeTableTask = FetchTimeTableDataAsync();
+                var fetchStudentListTask = FetchStudentListAsync();
+
+                await Task.WhenAll(fetchTimeTableTask, fetchStudentListTask);
+
+                // Optionally log or handle post-initialization logic here
+                Console.WriteLine("Initialization complete.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during initialization: {ex.Message}");
+            }
+        }
+        private async Task FetchTimeTableDataAsync()
+        {
+            try
+            {
+                TimetableData = await BookedSlotsDataService.GetBookedSlotsAsync();
+                SaveState();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching booked slots: {ex.Message}");
+            }
+        }
+        private async Task FetchStudentListAsync()
+        {
+            try
+            {
+                Students = new ObservableCollection<StudentModel>(await BookedSlotsDataService.GetStudentsAsync());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving Student Objects: {ex.Message}");
+            }
+        }
+
+        #region Prompt Logic
         private async Task ShowSavePrompt()
         {
             var differences = GetDifferences();
@@ -96,7 +136,7 @@ namespace BgB_TeachingAssistant.ViewModels
                 // Perform save operation
                 await BookedSlotsDataService.SaveBookedSlotsAsync(differences);
 
-                FetchTimeTableData();
+                await FetchTimeTableDataAsync();
                 PromptService.ShowInformationPrompt("Success", $"These Changes:\n\n{changeDetails}\nhave been saved.");
             }
             else
@@ -104,7 +144,7 @@ namespace BgB_TeachingAssistant.ViewModels
                 return;
             }
         }
-        private async Task ShowRevertPrompt()
+        private void ShowRevertPrompt()
         {
             bool userChoice = PromptService.ShowOkCancelPrompt(
                 "Confirm Revert",
@@ -123,37 +163,7 @@ namespace BgB_TeachingAssistant.ViewModels
                 return;
             }
         }
-        private async void FetchTimeTableData()
-        {
-            try
-            {
-                TimetableData = await BookedSlotsDataService.GetBookedSlotsAsync();
-
-                // Save the state after successfully fetching the data
-                SaveState();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error fetching booked slots: {ex.Message}");
-            }
-        }
-        private async void FetchStudentList()
-        {
-            try
-            {
-                await LoadStudentsAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error retrieving Student Objects: {ex.Message}");
-            }
-        }
-        private async Task LoadStudentsAsync()
-        {
-            // Retrieve students using the data service
-            var students = await BookedSlotsDataService.GetStudentsAsync();
-            Students = new ObservableCollection<StudentModel>(students);
-        }
+        #endregion
         public void SaveState()
         {
             _timetableDataBackup = CloneTimetableData(TimetableData);
