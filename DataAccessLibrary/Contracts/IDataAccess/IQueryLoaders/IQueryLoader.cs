@@ -1,4 +1,4 @@
-﻿namespace Bgb_DataAccessLibrary.Contracts
+﻿namespace Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders
 {
     public interface IQueryLoader
     {

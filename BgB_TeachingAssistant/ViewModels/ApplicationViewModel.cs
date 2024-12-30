@@ -1,11 +1,6 @@
-﻿using Bgb_DataAccessLibrary.Databases;
-using BgB_TeachingAssistant.Commands;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BgB_TeachingAssistant.Commands;
 using System.Windows.Input;
-using Bgb_DataAccessLibrary.Contracts;
+using Bgb_DataAccessLibrary.Contracts.IServices.INavigation;
 
 namespace BgB_TeachingAssistant.ViewModels
 {

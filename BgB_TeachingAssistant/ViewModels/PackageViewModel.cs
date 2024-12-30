@@ -1,17 +1,13 @@
-﻿using Bgb_DataAccessLibrary.Databases;
-using Bgb_DataAccessLibrary.Events;
-using Bgb_DataAccessLibrary.QueryLoaders;
+﻿using Bgb_DataAccessLibrary.Events;
 using BgB_TeachingAssistant.Commands;
-using BgB_TeachingAssistant.Helpers;
 using BgB_TeachingAssistant.Services;
 using System.Collections.ObjectModel;
-using System;
-using System.ComponentModel;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 
 namespace BgB_TeachingAssistant.ViewModels
 {

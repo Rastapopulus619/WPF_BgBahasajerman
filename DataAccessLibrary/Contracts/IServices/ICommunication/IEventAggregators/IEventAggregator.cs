@@ -1,4 +1,4 @@
-﻿namespace Bgb_DataAccessLibrary.Contracts
+﻿namespace Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators
 {
     public interface IEventAggregator
     {

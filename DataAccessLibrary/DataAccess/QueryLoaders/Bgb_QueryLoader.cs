@@ -1,11 +1,6 @@
-﻿using Bgb_DataAccessLibrary.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
 
-namespace Bgb_DataAccessLibrary.QueryLoaders
+namespace Bgb_DataAccessLibrary.DataAccess.QueryLoaders
 {
     public class Bgb_QueryLoader : IQueryLoader
     {

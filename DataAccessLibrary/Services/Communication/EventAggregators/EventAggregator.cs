@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bgb_DataAccessLibrary.Contracts;
+﻿using Bgb_DataAccessLibrary.Contracts;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
 using Bgb_DataAccessLibrary.Helpers.ExtensionMethods;
 
-namespace Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators
+namespace Bgb_DataAccessLibrary.Services.Communication.EventAggregators
 {
     public class EventAggregator : IEventAggregator
     {

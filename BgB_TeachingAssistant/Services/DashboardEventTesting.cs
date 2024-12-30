@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bgb_DataAccessLibrary.Contracts;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
 
 namespace BgB_TeachingAssistant.Services
 {

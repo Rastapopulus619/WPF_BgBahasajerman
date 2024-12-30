@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using Bgb_DataAccessLibrary.Helpers.ExtensionMethods;
 using Bgb_DataAccessLibrary.Contracts;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
 
 namespace Bgb_DataAccessLibrary.Factories
 {

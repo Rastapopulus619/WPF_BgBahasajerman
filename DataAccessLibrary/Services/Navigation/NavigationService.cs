@@ -1,4 +1,5 @@
 ﻿using Bgb_DataAccessLibrary.Contracts;
+using Bgb_DataAccessLibrary.Contracts.IServices.INavigation;
 using System;
 
 namespace Bgb_DataAccessLibrary.Services.Navigation

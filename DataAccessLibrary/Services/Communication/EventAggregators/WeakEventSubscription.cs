@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
-namespace Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators
+namespace Bgb_DataAccessLibrary.Services.Communication.EventAggregators
 {
     public class WeakEventSubscription<TEventArgs>
     {

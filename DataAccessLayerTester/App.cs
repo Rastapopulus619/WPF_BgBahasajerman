@@ -7,9 +7,10 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using Bgb_DataAccessLibrary.Contracts.IDatabases;
-using Bgb_DataAccessLibrary.Contracts.IQueryExecutor;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IDataAccess.IQueryExecutor.IQueryExecutor;
 using Bgb_DataAccessLibrary.Contracts.IQueryLoaders;
 using Bgb_DataAccessLibrary.Contracts.IMessages;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess;
 
 namespace DataAccessLayerTester
 {

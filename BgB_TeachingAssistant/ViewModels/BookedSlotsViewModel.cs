@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers;
 using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
+using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 
 namespace BgB_TeachingAssistant.ViewModels
 {

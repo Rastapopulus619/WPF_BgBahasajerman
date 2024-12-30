@@ -3,12 +3,11 @@ using Bgb_DataAccessLibrary.Contracts.IServices;
 using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
 using Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs;
 
-namespace Bgb_DataAccessLibrary.Services
+namespace Bgb_DataAccessLibrary.Services.Dialog
 {
     public class BookedSlotsPromptHandler : IBookedSlotsPromptHandler
     {
         private readonly IPromptService _promptService;
-        //Continue here: first tab in Browser, add the IPromptService interface
         public BookedSlotsPromptHandler(IPromptService promptService)
         {
             _promptService = promptService;

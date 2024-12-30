@@ -5,8 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bgb_DataAccessLibrary.Contracts;
 using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+using Bgb_DataAccessLibrary.Contracts.IServices.IData;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {

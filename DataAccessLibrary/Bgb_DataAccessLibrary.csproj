@@ -30,19 +30,16 @@
     <PackageReference Include="MySql.Data" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BgB_Queries\ErrorCheckingQueries\" />
-    <Folder Include="BgB_Queries\GeneralQueries\" />
-    <Folder Include="BgB_Queries\LoggingQueries\" />
-    <Folder Include="BgB_Queries\OngoingLessonQueries\" />
-    <Folder Include="BgB_Queries\PackageQueries\" />
-    <Folder Include="BgB_Queries\PricingQueries\" />
-    <Folder Include="BgB_Queries\RoutineQueries\" />
-    <Folder Include="BgB_Queries\TimeQueries\" />
+    <Folder Include="DataAccess\BgB_Queries\ErrorCheckingQueries\" />
+    <Folder Include="DataAccess\BgB_Queries\GeneralQueries\" />
+    <Folder Include="DataAccess\BgB_Queries\LoggingQueries\" />
+    <Folder Include="DataAccess\BgB_Queries\OngoingLessonQueries\" />
+    <Folder Include="DataAccess\BgB_Queries\PackageQueries\" />
+    <Folder Include="DataAccess\BgB_Queries\PricingQueries\" />
+    <Folder Include="DataAccess\BgB_Queries\RoutineQueries\" />
+    <Folder Include="DataAccess\BgB_Queries\TimeQueries\" />
     <Folder Include="Contracts\IModels\IPackageModels\" />
-    <Folder Include="Contracts\IServices\ICommunication\" />
     <Folder Include="Contracts\IServices\IConfiguration\" />
-    <Folder Include="Contracts\IServices\IData\" />
-    <Folder Include="Contracts\IServices\INavigation\" />
     <Folder Include="Contracts\IServices\IUtilities\" />
     <Folder Include="Data\StudentProfileData\" />
     <Folder Include="Data\Testing\" />
@@ -54,36 +51,36 @@
     <ProjectReference Include="..\Bgb_SharedLibrary\Bgb_SharedLibrary.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="BgB_Queries\StudentQueries\BlankForCopy.sql">
+    <None Update="DataAccess\BgB_Queries\StudentQueries\BlankForCopy.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BgB_Queries\StudentQueries\Get_AllStudents_IDsAndNames.sql">
+    <None Update="DataAccess\BgB_Queries\StudentQueries\Get_AllStudents_IDsAndNames.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BgB_Queries\StudentQueries\GetStudentNameByStudentID.sql">
+    <None Update="DataAccess\BgB_Queries\StudentQueries\GetStudentNameByStudentID.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BgB_Queries\StudentQueries\GetStudentNames.sql">
+    <None Update="DataAccess\BgB_Queries\StudentQueries\GetStudentNames.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BgB_Queries\StudentQueries\GetStudentList.sql">
+    <None Update="DataAccess\BgB_Queries\StudentQueries\GetStudentList.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BgB_Queries\TimeTableQueries\GetAllBookedSlots - Backup.sql">
+    <None Update="DataAccess\BgB_Queries\TimeTableQueries\GetAllBookedSlots - Backup.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BgB_Queries\TimeTableQueries\GetAllLessonTimeSpanStrings.sql">
+    <None Update="DataAccess\BgB_Queries\TimeTableQueries\GetAllLessonTimeSpanStrings.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BgB_Queries\TimeTableQueries\InsertNewSlotBooking.sql">
+    <None Update="DataAccess\BgB_Queries\TimeTableQueries\InsertNewSlotBooking.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BgB_Queries\TimeTableQueries\DeleteBySlotID.sql">
+    <None Update="DataAccess\BgB_Queries\TimeTableQueries\DeleteBySlotID.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Update="BgB_Queries\TimeTableQueries\GetAllBookedSlots.sql">
+    <None Update="DataAccess\BgB_Queries\TimeTableQueries\GetAllBookedSlots.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

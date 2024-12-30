@@ -1,4 +1,6 @@
-﻿namespace Bgb_DataAccessLibrary.Contracts
+﻿using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+
+namespace Bgb_DataAccessLibrary.Contracts
 {
     public interface IViewModelBase
     {

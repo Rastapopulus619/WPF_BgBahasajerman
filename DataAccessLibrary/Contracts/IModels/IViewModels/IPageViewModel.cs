@@ -1,4 +1,5 @@
 ﻿using Bgb_DataAccessLibrary;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
 using Bgb_DataAccessLibrary.Data.DataServices;
 using System;
 

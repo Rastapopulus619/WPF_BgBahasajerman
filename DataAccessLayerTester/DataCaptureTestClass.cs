@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bgb_DataAccessLibrary.Contracts.ILogger;
-using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.DataAccess.Databases;
 
 namespace DataAccessLayerTester
 {

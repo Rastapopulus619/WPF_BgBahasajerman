@@ -1,7 +1,7 @@
-﻿using Bgb_DataAccessLibrary.Contracts;
+﻿using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
 using Bgb_DataAccessLibrary.Data.DataServices;
 
-namespace Bgb_DataAccessLibrary.Contracts
+namespace Bgb_DataAccessLibrary.Contracts.IServices.IData
 {
     public interface IDataServiceTestClass
     {

@@ -5,10 +5,10 @@ using System.Data;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
-using Bgb_DataAccessLibrary.Contracts;
 using Bgb_DataAccessLibrary.Contracts.IServices.ILogging;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess;
 
-namespace Bgb_DataAccessLibrary.Databases
+namespace Bgb_DataAccessLibrary.DataAccess.Databases
 {
     public class MySqlDataAccess : IDataAccess
     {

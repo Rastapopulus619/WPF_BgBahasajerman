@@ -1,4 +1,5 @@
-﻿using Bgb_DataAccessLibrary.Contracts;
+﻿using Bgb_DataAccessLibrary.Contracts.IDataAccess;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {

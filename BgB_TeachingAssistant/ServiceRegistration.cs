@@ -1,17 +1,24 @@
 ﻿using Bgb_DataAccessLibrary;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
 using Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
 using Bgb_DataAccessLibrary.Contracts.IServices.ILogging;
+using Bgb_DataAccessLibrary.Contracts.IServices.INavigation;
 using Bgb_DataAccessLibrary.Data.DataServices;
-using Bgb_DataAccessLibrary.Databases;
+using Bgb_DataAccessLibrary.DataAccess.Databases;
+using Bgb_DataAccessLibrary.DataAccess.QueryExecutor;
+using Bgb_DataAccessLibrary.DataAccess.QueryLoaders;
 using Bgb_DataAccessLibrary.Events;
 using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Helpers.TimeTableHelpers;
 using Bgb_DataAccessLibrary.Logger;
-using Bgb_DataAccessLibrary.QueryExecutor;
-using Bgb_DataAccessLibrary.QueryLoaders;
-using Bgb_DataAccessLibrary.Services.CommunicationServices.EventAggregators;
+using Bgb_DataAccessLibrary.Services.Communication.EventAggregators;
 using BgB_TeachingAssistant.Services;
+using BgB_TeachingAssistant.Services.Dialog;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -51,7 +58,7 @@ namespace BgB_TeachingAssistant
                 new MySqlDataAccess(configuration.GetConnectionString("MySQL"), sp.GetRequiredService<ILoggerService>()));
 
             services.AddSingleton<IQueryLoader, Bgb_QueryLoader>(sp =>
-                new Bgb_QueryLoader(@"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\DataAccessLibrary\BgB_Queries"));
+                new Bgb_QueryLoader(@"C:\Programmieren\ProgrammingProjects\WPF\WPF_BgBahasajerman\DataAccessLibrary\DataAccess\BgB_Queries\"));
 
             services.AddTransient<IQueryExecutor, QueryExecutor>();
 

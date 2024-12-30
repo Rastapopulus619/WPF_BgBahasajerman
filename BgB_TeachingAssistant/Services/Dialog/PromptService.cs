@@ -1,13 +1,13 @@
-﻿using BgB_TeachingAssistant.ViewModels;
-using BgB_TeachingAssistant.Helpers.UIInteraction; // For FindVisualChild
-using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using BgB_TeachingAssistant.Commands;
 using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
+using BgB_TeachingAssistant.Commands;
+using BgB_TeachingAssistant.Helpers.UIInteraction;
+using BgB_TeachingAssistant.ViewModels;
+// For FindVisualChild
 
-namespace BgB_TeachingAssistant.Services
+namespace BgB_TeachingAssistant.Services.Dialog
 {
     public class PromptService : IPromptService
     {

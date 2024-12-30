@@ -1,4 +1,5 @@
-﻿using MVVM_UtilitiesLibrary.BaseClasses;
+﻿using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+using MVVM_UtilitiesLibrary.BaseClasses;
 
 namespace BgB_TeachingAssistant.ViewModels
 {

@@ -3,9 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Bgb_DataAccessLibrary;
-using Bgb_DataAccessLibrary.Databases;
-using Bgb_DataAccessLibrary.QueryLoaders;
-using Bgb_DataAccessLibrary.QueryExecutor;
 using Org.BouncyCastle.Asn1;
 using System;
 using System.Threading.Tasks;
@@ -13,9 +10,13 @@ using DataAccessLayerTester;
 using Bgb_DataAccessLibrary.Logger;
 using Bgb_DataAccessLibrary.Contracts.IDatabases;
 using Bgb_DataAccessLibrary.Contracts.ILogger;
-using Bgb_DataAccessLibrary.Contracts.IQueryExecutor;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IDataAccess.IQueryExecutor.IQueryExecutor;
 using Bgb_DataAccessLibrary.Contracts.IQueryLoaders;
 using Bgb_DataAccessLibrary.Contracts.IMessages;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess;
+using Bgb_DataAccessLibrary.DataAccess.QueryLoaders;
+using Bgb_DataAccessLibrary.DataAccess.QueryExecutor;
+using Bgb_DataAccessLibrary.DataAccess.Databases;
 
 namespace DataAccessLayerTester
 {

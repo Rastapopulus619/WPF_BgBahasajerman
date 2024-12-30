@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bgb_DataAccessLibrary.Contracts
+namespace Bgb_DataAccessLibrary.Contracts.IServices.IData
 {
     public interface IBookedSlotsDataService
     {

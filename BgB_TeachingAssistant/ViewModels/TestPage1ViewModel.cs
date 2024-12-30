@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 
 namespace BgB_TeachingAssistant.ViewModels
 {

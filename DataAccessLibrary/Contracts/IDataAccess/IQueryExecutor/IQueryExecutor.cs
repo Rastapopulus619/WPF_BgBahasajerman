@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Bgb_DataAccessLibrary.Contracts
+namespace Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor
 {
     public interface IQueryExecutor
     {

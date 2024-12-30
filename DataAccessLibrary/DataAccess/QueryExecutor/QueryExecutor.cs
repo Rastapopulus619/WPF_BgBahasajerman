@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using Bgb_DataAccessLibrary.Contracts;
+﻿using System.Data;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
 
-namespace Bgb_DataAccessLibrary.QueryExecutor
+namespace Bgb_DataAccessLibrary.DataAccess.QueryExecutor
 {
     public class QueryExecutor : IQueryExecutor
     {

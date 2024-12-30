@@ -1,8 +1,12 @@
-﻿using Bgb_DataAccessLibrary.Contracts;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
 using Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs;
 using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+using Bgb_DataAccessLibrary.Contracts.IServices.IData;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor;
+using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {
