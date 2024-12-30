@@ -3,6 +3,8 @@ using Bgb_DataAccessLibrary.Contracts.IDataAccess;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
 using Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers;
+using Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;
+using Bgb_DataAccessLibrary.Contracts.IServices.IBookedSlotsViewModel;
 using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
 using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
@@ -16,8 +18,10 @@ using Bgb_DataAccessLibrary.Events;
 using Bgb_DataAccessLibrary.Factories;
 using Bgb_DataAccessLibrary.Helpers.TimeTableHelpers;
 using Bgb_DataAccessLibrary.Logger;
+using Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs;
 using Bgb_DataAccessLibrary.Services.Communication.EventAggregators;
 using BgB_TeachingAssistant.Services;
+using BgB_TeachingAssistant.Services.BookedSlotsViewModel;
 using BgB_TeachingAssistant.Services.Dialog;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -84,8 +88,22 @@ namespace BgB_TeachingAssistant
 
         private static void RegisterOtherServices(IServiceCollection services)
         {
+
+            //TimeTableServices
             services.AddTransient<ITimeTableDataHelper, TimeTableDataHelper>();
+            services.AddTransient<ISlotEntrySubscriptionManager, SlotEntrySubscriptionManager>();
+            services.AddTransient<ISlotEntryValidator, SlotEntryValidator>();
+            services.AddTransient<ITimeTableSaveStateUpdater, TimeTableSaveStateUpdater>();
+
+
+            //PromptServices
             services.AddSingleton<IPromptService, PromptService>();
+
+            //BookedSlotsViewModelServices
+            services.AddTransient<IBookedSlotsPromptHandler, BookedSlotsPromptHandler>();
+            services.AddTransient<IBookedSlotsInitializer, BookedSlotsInitializer>();
+
+
             // Register testing service
             services.AddTransient<IMessages, Messages>();
 

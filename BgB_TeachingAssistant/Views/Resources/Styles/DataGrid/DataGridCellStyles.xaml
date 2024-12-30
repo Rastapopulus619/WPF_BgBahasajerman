@@ -17,6 +17,21 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="AlternateDayCellStyle" TargetType="DataGridCell">
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="LightGray" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="DarkGray" />
+                <Setter Property="Foreground" Value="Black" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
     <!-- Style for Day Columns -->
     <Style x:Key="TimeColumnCellStyle" TargetType="DataGridCell">
         <Setter Property="Background" Value="#2E2E2E" />

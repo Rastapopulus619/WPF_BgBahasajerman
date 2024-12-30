@@ -1,6 +1,8 @@
-﻿namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
+﻿using Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;
+
+namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
 {
-    public class TimeTableRow
+    public class TimeTableRow : ITimeTableRow
     {
         public string Zeiten { get; set; }    // Time column
 

@@ -1,8 +1,9 @@
-﻿using MVVM_UtilitiesLibrary.BaseClasses;
+﻿using Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;
+using MVVM_UtilitiesLibrary.BaseClasses;
 
 namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
 {
-    public class SlotEntry : ObservableObject
+    public class SlotEntry : ObservableObject, ISlotEntry
     {
         private int _studentID;
         private string _name;

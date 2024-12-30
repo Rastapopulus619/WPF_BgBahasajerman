@@ -44,6 +44,7 @@
     <Folder Include="Data\StudentProfileData\" />
     <Folder Include="Data\Testing\" />
     <Folder Include="Helpers\Validation\" />
+    <Folder Include="Services\Dialog\" />
     <Folder Include="Services\TimeTableServices\" />
     <Folder Include="Services\StateManagementServices\" />
   </ItemGroup>

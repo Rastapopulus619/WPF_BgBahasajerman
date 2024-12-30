@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using BgB_TeachingAssistant.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -13,11 +14,31 @@ namespace BgB_TeachingAssistant.Views
         {
             InitializeComponent();
         }
+        private Style LoadStyle(string styleKey)
+        {
+            var resourceDictionary = new ResourceDictionary
+            {
+                Source = new Uri("Views/Resources/Styles/DataGrid/DataGridCellStyles.xaml", UriKind.Relative)
+            };
+            return (Style)resourceDictionary[styleKey];
+        }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            TimetableDataGrid.Focus();
+            if (DataContext is BookedSlotsViewModel viewModel)
+            {
+                // Load styles from the local ResourceDictionary
+                var defaultStyle = LoadStyle("DayCellStyle");
+                var alternateStyle = LoadStyle("AlternateDayCellStyle");
 
+                // Pass styles to ViewModel
+                viewModel.DefaultCellStyle = defaultStyle;
+                viewModel.AlternateCellStyle = alternateStyle;
+
+                // Initialize the current style
+                viewModel.CurrentCellStyle = defaultStyle;
+            }
         }
+
 
         // if the above doesn't work, try this:
         //private void UserControl_Loaded(object sender, RoutedEventArgs e)
