@@ -1,5 +1,5 @@
-﻿using Bgb_DataAccessLibrary.Models.StudentModels;
-using Bgb_SharedLibrary.DTOs.TimeTableDTOs;
+﻿using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
+using Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs;
 using BgB_TeachingAssistant.Commands;
 using BgB_TeachingAssistant.Services;
 using System.Collections.ObjectModel;
@@ -7,6 +7,8 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers;
+using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
@@ -66,6 +68,7 @@ namespace BgB_TeachingAssistant.ViewModels
         }
         public IBookedSlotsDataService BookedSlotsDataService { get; set; }
         public IPromptService PromptService { get; set; }
+        public ITimeTableDataHelper TimeTableDataHelper { get; set; }
         public ICommand SaveChangesCommand { get; }
         public ICommand RevertChangesCommand { get; }
         public ICommand ToggleContentVisibilityCommand { get; }
@@ -124,7 +127,7 @@ namespace BgB_TeachingAssistant.ViewModels
         #region Prompt Logic
         private async Task ShowSavePrompt()
         {
-            var differences = GetDifferences();
+            var differences = TimeTableDataHelper.GetDifferences(_timetableDataBackup, TimetableData);
             var changeDetails = GenerateChangeDetails(differences);
 
             bool userChoice = PromptService.ShowOkCancelPrompt(
@@ -152,7 +155,7 @@ namespace BgB_TeachingAssistant.ViewModels
 
             if (userChoice == true)
             {
-                var differences = GetDifferences();
+                var differences = TimeTableDataHelper.GetDifferences(_timetableDataBackup, TimetableData);
                 var changeDetails = GenerateChangeDetails(differences);
 
                 RevertToSavedState();
@@ -166,23 +169,23 @@ namespace BgB_TeachingAssistant.ViewModels
         #endregion
         public void SaveState()
         {
-            _timetableDataBackup = CloneTimetableData(TimetableData);
+            _timetableDataBackup = TimeTableDataHelper.CloneTimetableData(TimetableData);
             UpdateCanSaveAndCancel();
         }
         public void RevertToSavedState()
         {
             if (_timetableDataBackup != null)
             {
-                TimetableData = CloneTimetableData(_timetableDataBackup);
+                TimetableData = TimeTableDataHelper.CloneTimetableData(_timetableDataBackup);
                 UpdateCanSaveAndCancel();
             }
         }
         public void UpdateCanSaveAndCancel()
         {
 
-            CanCancel = !AreTimetableDataEqual();
+            CanCancel = !TimeTableDataHelper.AreTimetableDataEqual(_timetableDataBackup, TimetableData);
 
-            if(CanCancel == false)
+            if (CanCancel == false)
             {
                 CanSave = false;
                 return;
@@ -190,147 +193,6 @@ namespace BgB_TeachingAssistant.ViewModels
             else
             {
                 CanSave = NoInvalidValueExists();
-            }
-        }
-        public bool AreTimetableDataEqual()
-        {
-            // Null checks for both collections
-            if (_timetableDataBackup == null || TimetableData == null)
-                return false;
-
-            // Check if counts are different
-            if (_timetableDataBackup.Count != TimetableData.Count)
-                return false;
-
-            // Compare each row and its SlotEntries
-            for (int i = 0; i < TimetableData.Count; i++)
-            {
-                var currentRow = TimetableData[i];
-                var backupRow = _timetableDataBackup[i];
-
-                if (!AreTimeTableRowsEqual(currentRow, backupRow))
-                {
-                    return false;
-                }
-            }
-
-            return true; // All rows and their child objects are equal
-        }
-        private bool AreTimeTableRowsEqual(TimeTableRow currentRow, TimeTableRow backupRow)
-        {
-            if (currentRow == null || backupRow == null)
-                return false;
-
-            // Compare each day's SlotEntry
-            return AreSlotEntriesEqual(currentRow.Montag, backupRow.Montag) &&
-                   AreSlotEntriesEqual(currentRow.Dienstag, backupRow.Dienstag) &&
-                   AreSlotEntriesEqual(currentRow.Mittwoch, backupRow.Mittwoch) &&
-                   AreSlotEntriesEqual(currentRow.Donnerstag, backupRow.Donnerstag) &&
-                   AreSlotEntriesEqual(currentRow.Freitag, backupRow.Freitag) &&
-                   AreSlotEntriesEqual(currentRow.Samstag, backupRow.Samstag) &&
-                   AreSlotEntriesEqual(currentRow.Sonntag, backupRow.Sonntag);
-        }
-        private bool AreSlotEntriesEqual(SlotEntry current, SlotEntry backup)
-        {
-            if (current == null || backup == null)
-                return false;
-
-            // Compare properties of SlotEntry
-            return current.StudentID == backup.StudentID &&
-                   current.Name == backup.Name &&
-                   current.SlotID == backup.SlotID &&
-                   current.Time == backup.Time &&
-                   current.DayNumber == backup.DayNumber &&
-                   current.WeekdayName == backup.WeekdayName &&
-                   current.Level == backup.Level &&
-                   current.Currency == backup.Currency &&
-                   current.Preis == backup.Preis &&
-                   current.DiscountAmount == backup.DiscountAmount &&
-                   current.Content == backup.Content &&
-                   current.IsEditable == backup.IsEditable &&
-                   current.IsValid == backup.IsValid &&
-                   current.Comments == backup.Comments;
-        }
-        private ObservableCollection<TimeTableRow> CloneTimetableData(ObservableCollection<TimeTableRow> original)
-        {
-            if (original == null) return null;
-
-            var clone = new ObservableCollection<TimeTableRow>();
-            foreach (var row in original)
-            {
-                var clonedRow = new TimeTableRow
-                {
-                    Zeiten = row.Zeiten,
-                    Montag = CloneSlotEntry(row.Montag),
-                    Dienstag = CloneSlotEntry(row.Dienstag),
-                    Mittwoch = CloneSlotEntry(row.Mittwoch),
-                    Donnerstag = CloneSlotEntry(row.Donnerstag),
-                    Freitag = CloneSlotEntry(row.Freitag),
-                    Samstag = CloneSlotEntry(row.Samstag),
-                    Sonntag = CloneSlotEntry(row.Sonntag),
-                };
-
-                clone.Add(clonedRow);
-            }
-
-            return clone;
-        }
-        private SlotEntry CloneSlotEntry(SlotEntry original)
-        {
-            if (original == null) return null;
-
-            return new SlotEntry
-            {
-                StudentID = original.StudentID,
-                Name = original.Name,
-                SlotID = original.SlotID,
-                Time = original.Time,
-                DayNumber = original.DayNumber,
-                WeekdayName = original.WeekdayName,
-                Level = original.Level,
-                Currency = original.Currency,
-                Preis = original.Preis,
-                DiscountAmount = original.DiscountAmount,
-                Content = original.Content,
-                IsEditable = original.IsEditable,
-                IsValid = original.IsValid,
-                Comments = original.Comments
-            };
-        }
-        public List<SlotEntry> GetDifferences()
-        {
-            var differences = new List<SlotEntry>();
-
-            if (TimetableData == null || _timetableDataBackup == null)
-            {
-                throw new InvalidOperationException("TimetableData or backup data is null.");
-            }
-
-            for (int i = 0; i < TimetableData.Count; i++)
-            {
-                var currentRow = TimetableData[i];
-                var backupRow = _timetableDataBackup[i];
-
-                // Compare each day's SlotEntry in the row
-                CompareSlotEntries(differences, currentRow.Montag, backupRow.Montag);
-                CompareSlotEntries(differences, currentRow.Dienstag, backupRow.Dienstag);
-                CompareSlotEntries(differences, currentRow.Mittwoch, backupRow.Mittwoch);
-                CompareSlotEntries(differences, currentRow.Donnerstag, backupRow.Donnerstag);
-                CompareSlotEntries(differences, currentRow.Freitag, backupRow.Freitag);
-                CompareSlotEntries(differences, currentRow.Samstag, backupRow.Samstag);
-                CompareSlotEntries(differences, currentRow.Sonntag, backupRow.Sonntag);
-            }
-
-            return differences;
-        }
-        private void CompareSlotEntries(List<SlotEntry> differences, SlotEntry current, SlotEntry backup)
-        {
-            if (current == null || backup == null) return;
-
-            // Compare properties and add to differences if any mismatch is found
-            if (!current.Equals(backup))
-            {
-                differences.Add(current);
             }
         }
         private string GenerateChangeDetails(List<SlotEntry> changes, bool isReverting = false)
@@ -406,7 +268,7 @@ namespace BgB_TeachingAssistant.ViewModels
                 // Optional: Add logging or additional actions
                 Console.WriteLine($"SlotEntry.Name changed: {slotEntry.Name}, IsValid: {slotEntry.IsValid}, StudentID: {slotEntry.StudentID}");
 
-                bool timeTablesEqual = AreTimetableDataEqual();
+                bool timeTablesEqual = TimeTableDataHelper.AreTimetableDataEqual(_timetableDataBackup, TimetableData);
 
                 if (timeTablesEqual == false)
                 {

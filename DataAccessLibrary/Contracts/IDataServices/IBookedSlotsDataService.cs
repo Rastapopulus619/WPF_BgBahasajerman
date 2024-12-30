@@ -1,5 +1,5 @@
-﻿using Bgb_DataAccessLibrary.Models.StudentModels;
-using Bgb_SharedLibrary.DTOs.TimeTableDTOs;
+﻿using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
+using Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

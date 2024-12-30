@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace BgB_TeachingAssistant.Services
+namespace Bgb_DataAccessLibrary.Contracts.IServices.IDialog
 {
     public interface IPromptService
     {

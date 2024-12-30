@@ -1,8 +1,8 @@
-﻿using Bgb_DataAccessLibrary.Models.StudentModels;
-using System.Data;
+﻿using System.Data;
 using Bgb_DataAccessLibrary.Helpers.Conversion;
 using Bgb_DataAccessLibrary.Events;
 using Bgb_DataAccessLibrary.Contracts;
+using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {

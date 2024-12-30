@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using BgB_TeachingAssistant.Commands;
-using System.Windows.Media;
+using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
 
 namespace BgB_TeachingAssistant.Services
 {

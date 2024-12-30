@@ -1,5 +1,5 @@
 ﻿using Bgb_DataAccessLibrary.Databases;
-using Bgb_DataAccessLibrary.Models.StudentModels;
+using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
 using Bgb_DataAccessLibrary.QueryLoaders;
 using BgB_TeachingAssistant.Commands;
 using System.Collections.ObjectModel;

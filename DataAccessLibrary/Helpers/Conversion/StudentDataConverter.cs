@@ -1,6 +1,6 @@
 ﻿using Bgb_DataAccessLibrary.Contracts;
-using Bgb_DataAccessLibrary.Models.StudentModels;
 using System.Data;
+using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
 
 namespace Bgb_DataAccessLibrary.Helpers.Conversion
 {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bgb_DataAccessLibrary.Models.PackageModels;
+using Bgb_DataAccessLibrary.Models.Domain.PackageModels;
 
 namespace BgB_TeachingAssistant.Helpers
 {

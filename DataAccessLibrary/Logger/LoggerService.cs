@@ -1,5 +1,5 @@
 ﻿
-using Bgb_DataAccessLibrary.Contracts;
+using Bgb_DataAccessLibrary.Contracts.IServices.ILogging;
 
 namespace Bgb_DataAccessLibrary.Logger
 {

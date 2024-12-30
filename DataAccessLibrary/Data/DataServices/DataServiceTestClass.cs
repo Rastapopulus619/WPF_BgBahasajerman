@@ -1,5 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Models.StudentModels;
-using Bgb_DataAccessLibrary.Events;
+﻿using Bgb_DataAccessLibrary.Events;
 using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bgb_DataAccessLibrary.Contracts;
+using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {

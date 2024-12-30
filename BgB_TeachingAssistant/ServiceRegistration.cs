@@ -1,8 +1,12 @@
 ﻿using Bgb_DataAccessLibrary;
+using Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers;
+using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
+using Bgb_DataAccessLibrary.Contracts.IServices.ILogging;
 using Bgb_DataAccessLibrary.Data.DataServices;
 using Bgb_DataAccessLibrary.Databases;
 using Bgb_DataAccessLibrary.Events;
 using Bgb_DataAccessLibrary.Factories;
+using Bgb_DataAccessLibrary.Helpers.TimeTableHelpers;
 using Bgb_DataAccessLibrary.Logger;
 using Bgb_DataAccessLibrary.QueryExecutor;
 using Bgb_DataAccessLibrary.QueryLoaders;
@@ -73,6 +77,7 @@ namespace BgB_TeachingAssistant
 
         private static void RegisterOtherServices(IServiceCollection services)
         {
+            services.AddTransient<ITimeTableDataHelper, TimeTableDataHelper>();
             services.AddSingleton<IPromptService, PromptService>();
             // Register testing service
             services.AddTransient<IMessages, Messages>();

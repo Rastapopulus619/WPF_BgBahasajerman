@@ -1,8 +1,8 @@
 ﻿using Bgb_DataAccessLibrary.Contracts;
 using System.Collections.ObjectModel;
 using System.Data;
-using Bgb_SharedLibrary.DTOs.TimeTableDTOs;
-using Bgb_DataAccessLibrary.Models.StudentModels;
+using Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs;
+using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {

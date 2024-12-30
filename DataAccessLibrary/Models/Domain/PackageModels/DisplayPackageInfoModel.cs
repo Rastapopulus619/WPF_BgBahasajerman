@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bgb_DataAccessLibrary.Models.PackageModels
+namespace Bgb_DataAccessLibrary.Models.Domain.PackageModels
 {
     public class DisplayPackageInfoModel
     {

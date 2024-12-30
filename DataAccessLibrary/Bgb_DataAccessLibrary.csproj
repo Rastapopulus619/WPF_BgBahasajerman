@@ -14,6 +14,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Models\Interfaces\**" />
+    <EmbeddedResource Remove="Models\Interfaces\**" />
+    <None Remove="Models\Interfaces\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="SqlDataAccess.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -33,12 +38,16 @@
     <Folder Include="BgB_Queries\PricingQueries\" />
     <Folder Include="BgB_Queries\RoutineQueries\" />
     <Folder Include="BgB_Queries\TimeQueries\" />
-    <Folder Include="Contracts\IHelpers\" />
     <Folder Include="Contracts\IModels\IPackageModels\" />
+    <Folder Include="Contracts\IServices\ICommunication\" />
+    <Folder Include="Contracts\IServices\IConfiguration\" />
+    <Folder Include="Contracts\IServices\IData\" />
+    <Folder Include="Contracts\IServices\INavigation\" />
+    <Folder Include="Contracts\IServices\IUtilities\" />
     <Folder Include="Data\StudentProfileData\" />
     <Folder Include="Data\Testing\" />
     <Folder Include="Helpers\Validation\" />
-    <Folder Include="Models\Interfaces\" />
+    <Folder Include="Services\TimeTableServices\" />
     <Folder Include="Services\StateManagementServices\" />
   </ItemGroup>
   <ItemGroup>
