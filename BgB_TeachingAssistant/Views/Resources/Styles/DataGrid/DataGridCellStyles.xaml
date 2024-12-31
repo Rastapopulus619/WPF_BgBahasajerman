@@ -31,7 +31,6 @@
         </Style.Triggers>
     </Style>
 
-
     <!-- Style for Day Columns -->
     <Style x:Key="TimeColumnCellStyle" TargetType="DataGridCell">
         <Setter Property="Background" Value="#2E2E2E" />

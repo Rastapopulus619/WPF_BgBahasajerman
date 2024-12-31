@@ -194,50 +194,50 @@
                         <DataGridTemplateColumn Header="Mittwoch" Width="*">
                             <!-- Read-Only Template -->
                             <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Mittwoch.Name, UpdateSourceTrigger=PropertyChanged}">
-                                        <TextBlock.Style>
-                                            <Style BasedOn="{StaticResource DataGridTextBlockStyle}" TargetType="TextBlock">
-                                                <Style.Triggers>
-                                                    <!-- Dynamic Foreground Color Based on Validation -->
-                                                    <DataTrigger Binding="{Binding Mittwoch.IsValid}" Value="False">
-                                                        <Setter Property="Foreground" Value="Red" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Mittwoch.IsValid}" Value="True">
-                                                        <Setter Property="Foreground" Value="White" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Mittwoch.Name, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBlock.Style>
+                                        <Style BasedOn="{StaticResource DataGridTextBlockStyle}" TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <!-- Dynamic Foreground Color Based on Validation -->
+                                                <DataTrigger Binding="{Binding Mittwoch.IsValid}" Value="False">
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Mittwoch.IsValid}" Value="True">
+                                                    <Setter Property="Foreground" Value="White" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
 
-                            <!-- Editable Template -->
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding Mittwoch.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                                        <TextBox.Style>
-                                            <Style BasedOn="{StaticResource DataGridEditableTextBoxStyle}" TargetType="TextBox">
-                                                <Style.Triggers>
-                                                    <!-- Trigger for Focused State -->
-                                                    <Trigger Property="IsFocused" Value="True">
-                                                    </Trigger>
-                                                    <!-- Validation Triggers -->
-                                                    <DataTrigger Binding="{Binding Mittwoch.IsValid}" Value="False">
-                                                        <Setter Property="Foreground" Value="Red" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Mittwoch.IsValid}" Value="True">
-                                                        <Setter Property="Foreground" Value="Green" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBox.Style>
-                                    </TextBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
+                        <!-- Editable Template -->
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Mittwoch.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                    <TextBox.Style>
+                                        <Style BasedOn="{StaticResource DataGridEditableTextBoxStyle}" TargetType="TextBox">
+                                            <Style.Triggers>
+                                                <!-- Trigger for Focused State -->
+                                                <Trigger Property="IsFocused" Value="True" />
+                                                <!-- Validation Triggers -->
+                                                <DataTrigger Binding="{Binding Mittwoch.IsValid}" Value="False">
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Mittwoch.IsValid}" Value="True">
+                                                    <Setter Property="Foreground" Value="Green" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+
+
                         </DataGridTemplateColumn>
-
                         <!-- Donnerstag Column -->
                         <DataGridTemplateColumn Header="Donnerstag" Width="*">
                             <!-- Read-Only Template -->
@@ -431,6 +431,8 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
 
+                    <!-- Value="{Binding ShowLevelsEnabled, RelativeSource={RelativeSource AncestorType=UserControl}}" /> -->
+
                     <DataGrid.Resources>
                         <Style TargetType="Button" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}">
                             <Setter Property="Opacity" Value="0" />
@@ -466,8 +468,18 @@
 
                 <!-- Middle Section with Centered TextBlock -->
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Grid.Column="1" 
-                        Content="Toggle Cell Style" 
+                <!-- <Button Grid.Column="1"  -->
+                <!--         Content="Show/Hide Levels"  -->
+                <!--         Command="{Binding ToggleShowLevels}"  -->
+                <!--         HorizontalAlignment="Center"  -->
+                <!--         VerticalAlignment="Bottom"  -->
+                <!--         Margin="0,0,0,0" /> -->
+                <Button Content="Show/Hide Levels"
+                        Click="ToggleShowLevelsButton_Click"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom" />
+                    <Button Grid.Column="1" 
+                        Content="Switch CellStyle" 
                         Command="{Binding ToggleCellStyleCommand}" 
                         HorizontalAlignment="Center" 
                         VerticalAlignment="Bottom" 
@@ -498,7 +510,7 @@
                                FontSize="16"
                                Foreground="White" 
                                HorizontalAlignment="Center" />
-
+                    <TextBlock Text="{Binding ShowLevelsEnabled}" Foreground="White" />
                 </StackPanel>
             </Grid>
         </Border>

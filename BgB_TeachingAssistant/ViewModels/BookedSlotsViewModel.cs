@@ -34,7 +34,7 @@ namespace BgB_TeachingAssistant.ViewModels
         #endregion
 
         //continue here: how to use extended xaml techniques here
-        private bool _isContentVisible = true;
+        private bool _isContentVisible;
         public bool IsContentVisible
         {
             get => _isContentVisible;
@@ -49,6 +49,19 @@ namespace BgB_TeachingAssistant.ViewModels
 
         public Style DefaultCellStyle { get; set; }
         public Style AlternateCellStyle { get; set; }
+
+        private bool _showLevelsEnabled = true; // Initialize with a default value
+        public bool ShowLevelsEnabled
+        {
+            get => _showLevelsEnabled;
+            set
+            {
+                if (SetProperty(ref _showLevelsEnabled, value))
+                {
+                    Console.WriteLine($"ShowLevelsEnabled set to: {value}");
+                }
+            }
+        }
 
 
         private string _testValue = "Initial Value";
@@ -102,6 +115,7 @@ namespace BgB_TeachingAssistant.ViewModels
         public ICommand RevertChangesCommand { get; }
         public ICommand ToggleContentVisibilityCommand { get; }
         public ICommand ToggleCellStyleCommand { get; }
+        public ICommand ToggleShowLevels { get; }
         #endregion
         #endregion
         public BookedSlotsViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
@@ -113,6 +127,11 @@ namespace BgB_TeachingAssistant.ViewModels
             SaveChangesCommand = new AsyncRelayCommand(ShowSavePrompt);
             RevertChangesCommand = new RelayCommand(ShowRevertPrompt); // no async operations, so use RelayCommand
             ToggleContentVisibilityCommand = new RelayCommand(_ => IsContentVisible = !IsContentVisible);
+
+            ToggleShowLevels = new RelayCommand(_ =>
+            {
+                ShowLevelsEnabled = !ShowLevelsEnabled;
+            });
 
             // Initialize toggle style command (without LoadStyle logic here)
             ToggleCellStyleCommand = new RelayCommand(_ =>
