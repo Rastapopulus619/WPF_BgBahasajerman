@@ -14,6 +14,7 @@ namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
         private string? _level; // Nullable
         private string? _currency; // Nullable
         private decimal? _preis; // Nullable
+        private string _preisDisplayValue; // Nullable
         private decimal? _discountAmount; // Nullable
 
         private string _content;
@@ -63,7 +64,7 @@ namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
             set => SetProperty(ref _level, value);
         }
 
-        public string? Currency
+        public string? Currency // has to be set before the Preis property
         {
             get => _currency;
             set => SetProperty(ref _currency, value);
@@ -73,6 +74,11 @@ namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
         {
             get => _preis;
             set => SetProperty(ref _preis, value);
+        }
+        public string PreisDisplayValue
+        {
+            get => _preisDisplayValue;
+            set => SetProperty(ref _preisDisplayValue, value);
         }
 
         public decimal? DiscountAmount

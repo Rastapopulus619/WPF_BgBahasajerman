@@ -5,11 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BgB_TeachingAssistant.Views;
+using Bgb_DataAccessLibrary.Contracts.IServices.IResources;
 
 namespace BgB_TeachingAssistant
 {
     public partial class App : Application
     {
+        public static ResourceDictionary GlobalResources { get; private set; }
         public IConfiguration Configuration { get; private set; }
         private IHost _host;
 
@@ -48,6 +50,7 @@ namespace BgB_TeachingAssistant
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+
             // Start the host
             await _host.StartAsync();
 

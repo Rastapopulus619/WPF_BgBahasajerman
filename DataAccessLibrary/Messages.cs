@@ -1,4 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Contracts;
+﻿using Bgb_DataAccessLibrary.Contracts.IMessages;
 
 namespace Bgb_DataAccessLibrary
 {

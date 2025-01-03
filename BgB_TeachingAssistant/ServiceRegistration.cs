@@ -3,6 +3,7 @@ using Bgb_DataAccessLibrary.Contracts.IDataAccess;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
 using Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers;
+using Bgb_DataAccessLibrary.Contracts.IMessages;
 using Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;
 using Bgb_DataAccessLibrary.Contracts.IServices.IBookedSlotsViewModel;
 using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
@@ -10,6 +11,7 @@ using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
 using Bgb_DataAccessLibrary.Contracts.IServices.ILogging;
 using Bgb_DataAccessLibrary.Contracts.IServices.INavigation;
+using Bgb_DataAccessLibrary.Contracts.IServices.IResources;
 using Bgb_DataAccessLibrary.Data.DataServices;
 using Bgb_DataAccessLibrary.DataAccess.Databases;
 using Bgb_DataAccessLibrary.DataAccess.QueryExecutor;
@@ -23,6 +25,7 @@ using Bgb_DataAccessLibrary.Services.Communication.EventAggregators;
 using BgB_TeachingAssistant.Services;
 using BgB_TeachingAssistant.Services.BookedSlotsViewModel;
 using BgB_TeachingAssistant.Services.Dialog;
+using BgB_TeachingAssistant.Services.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -104,7 +107,12 @@ namespace BgB_TeachingAssistant
             services.AddTransient<IBookedSlotsInitializer, BookedSlotsInitializer>();
 
 
-            // Register testing service
+            // Register ResourceDictionaryLoader as a singleton
+            services.AddSingleton<IResourceDictionaryLoader>(sp =>
+            {
+                var resourcesPath = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Views\\Resources";
+                return new ResourceDictionaryLoader(resourcesPath);
+            });            // Register testing service
             services.AddTransient<IMessages, Messages>();
 
             // Optionally, add other dependencies here as needed

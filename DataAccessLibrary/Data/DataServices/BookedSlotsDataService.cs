@@ -7,6 +7,7 @@ using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
+using System.Globalization;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {
@@ -31,10 +32,6 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
             DataTable dt = await _queryExecutor.ExecuteQueryAsDataTableAsync("GetAllBookedSlots");
 
             var timeSlots = await _queryExecutor.ExecuteQueryAsync<string>("GetAllLessonTimeSpanStrings");
-
-            //var timeSlots = await _queryExecutor.ExecuteQueryAsync("GetAllLessonTimeSpanStrings");
-            // Example: Time slots for rows
-            //var timeSlots = new[] { "07:00-08:30", "08:30-10:00", "10:00-11:30", "13:00-14:30", "14:30-16:00", "16:00-17:30", "17:30-19:00", "19:00-20:30" };
 
             List<TimeTableRow> timetableRows = new List<TimeTableRow>();
 
@@ -86,9 +83,30 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
                 Level = row.IsNull("Level") ? null : row.Field<string>("Level"),
                 Currency = row.IsNull("Currency") ? null : row.Field<string>("Currency"),
                 Preis = row.IsNull("Preis") ? null : (decimal?)row.Field<decimal>("Preis"),
+                PreisDisplayValue = GeneratePreisDisplayValue(
+                    row.IsNull("Currency") ? null : row.Field<string>("Currency"),
+                    row.IsNull("Preis") ? null : (decimal?)row.Field<decimal>("Preis"),
+                    row.IsNull("DiscountAmount") ? null : (decimal?)row.Field<decimal>("DiscountAmount")),
                 DiscountAmount = row.IsNull("DiscountAmount") ? null : (decimal?)row.Field<decimal>("DiscountAmount"),
                 Content = row.IsNull("StudentName") ? "-" : row.Field<string>("StudentName")
             };
+        }
+        private string GeneratePreisDisplayValue(string? currency, decimal? preis, decimal? discountAmount)
+        {
+            if (currency == null || preis == null)
+                return string.Empty;
+
+            decimal calculatedPrice = preis.Value - (discountAmount ?? 0);
+
+            // Create a custom NumberFormatInfo for grouping with dots and commas for decimals
+            var customFormat = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+            customFormat.NumberGroupSeparator = ".";  // Dot for thousands separator
+            customFormat.NumberDecimalSeparator = ","; // Comma for decimals
+
+            // Format the calculated price with grouping and decimals
+            string priceString = calculatedPrice.ToString("#,0.##", customFormat);
+
+            return $"{currency} {priceString}";
         }
 
         public async Task SaveBookedSlotsAsync(List<SlotEntry> updatedSlots)

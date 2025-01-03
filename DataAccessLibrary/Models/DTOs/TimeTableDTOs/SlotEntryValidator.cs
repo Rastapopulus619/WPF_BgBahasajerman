@@ -8,7 +8,7 @@ namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
     {
         public void ValidateSlotEntry(ISlotEntry slotEntry, ObservableCollection<IStudentModel> students)
         {
-            if (string.IsNullOrWhiteSpace(slotEntry.Name))
+            if (string.IsNullOrWhiteSpace(slotEntry.Name) || slotEntry.Name == "-")
             {
                 slotEntry.Name = "-";
                 slotEntry.IsValid = true;

@@ -33,12 +33,44 @@ namespace BgB_TeachingAssistant.ViewModels
         }
         #endregion
 
+        private Style _mittwochEditingStyle;
+        public Style MittwochEditingStyle
+        {
+            get => _mittwochEditingStyle;
+            set => SetProperty(ref _mittwochEditingStyle, value);
+        }
+        private Style _mittwochTextBlockStyle;
+        public Style MittwochTextBlockStyle
+        {
+            get => _mittwochTextBlockStyle;
+            set => SetProperty(ref _mittwochTextBlockStyle, value);
+        }
+
+
         //continue here: how to use extended xaml techniques here
         private bool _isContentVisible;
         public bool IsContentVisible
         {
             get => _isContentVisible;
             set => SetProperty(ref _isContentVisible, value, nameof(IsContentVisible));
+        }
+        private bool _arePricesVisible;
+        public bool ArePricesVisible
+        {
+            get => _arePricesVisible;
+            set => SetProperty(ref _arePricesVisible, value, nameof(ArePricesVisible));
+        }
+        private bool _areLevelsVisible;
+        public bool AreLevelsVisible
+        {
+            get => _areLevelsVisible;
+            set => SetProperty(ref _areLevelsVisible, value, nameof(AreLevelsVisible));
+        }
+        private string _pricesButtonContent = "Show Prices";
+        public string PricesButtonContent
+        {
+            get => _pricesButtonContent;
+            set => SetProperty(ref _pricesButtonContent, value, nameof(PricesButtonContent));
         }
         private Style _currentCellStyle;
         public Style CurrentCellStyle
@@ -49,8 +81,10 @@ namespace BgB_TeachingAssistant.ViewModels
 
         public Style DefaultCellStyle { get; set; }
         public Style AlternateCellStyle { get; set; }
+        public Style DefaultTextBlockStyle { get; set; }
+        public Style ShowLevelCellStyle { get; set; }
 
-        private bool _showLevelsEnabled = true; // Initialize with a default value
+        private bool _showLevelsEnabled; // Initialize with a default value
         public bool ShowLevelsEnabled
         {
             get => _showLevelsEnabled;
@@ -70,6 +104,65 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _testValue;
             set => SetProperty(ref _testValue, value, nameof(TestValue));
         }
+        private List<ResourceDictionary> _resourceDictionaries;
+        public List<ResourceDictionary> ResourceDictionaries
+        {
+            get => _resourceDictionaries;
+            set
+            {
+                _resourceDictionaries = value;
+                _resourceDictionaries?.ForEach(dictionary =>
+                    dictionary.Keys.OfType<object>().ToList().ForEach(key =>
+                    {
+                        var value = dictionary[key];
+                        if (value is Style style)
+                        {
+                            Console.WriteLine($"Key: {key}");
+                            Console.WriteLine($"  TargetType: {style.TargetType}");
+                            // Console.WriteLine($"  BasedOn: {(style.BasedOn != null ? style.BasedOn.ToString() : "None")}");
+                            // Console.WriteLine($"  Setters: {style.Setters.Count}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Key: {key}, Value: {value}");
+                        }
+                    }));
+            }
+        }
+
+        public Style GetStyleByKey(string key)
+        {
+            if (ResourceDictionaries == null) return null;
+
+            foreach (var dictionary in ResourceDictionaries)
+            {
+                if (dictionary.Contains(key))
+                {
+                    return dictionary[key] as Style;
+                }
+            }
+
+            Console.WriteLine($"Style with key '{key}' not found.");
+            return null;
+        }
+        public void SetCurrentCellStyle(string styleKey)
+        {
+            var style = GetStyleByKey(styleKey);
+            if (style != null)
+            {
+                CurrentCellStyle = style;
+                Console.WriteLine($"CurrentCellStyle set to style with key: {styleKey}");
+            }
+            else
+            {
+                Console.WriteLine($"Failed to set CurrentCellStyle. Style '{styleKey}' not found.");
+            }
+        }
+
+
+
+
+
         #region ViewDataProperties
         private ObservableCollection<IStudentModel> _students;
         public ObservableCollection<IStudentModel> Students
@@ -114,6 +207,7 @@ namespace BgB_TeachingAssistant.ViewModels
         public ICommand SaveChangesCommand { get; }
         public ICommand RevertChangesCommand { get; }
         public ICommand ToggleContentVisibilityCommand { get; }
+        public ICommand TogglePricesVisibilityCommand { get; }
         public ICommand ToggleCellStyleCommand { get; }
         public ICommand ToggleShowLevels { get; }
         #endregion
@@ -127,11 +221,28 @@ namespace BgB_TeachingAssistant.ViewModels
             SaveChangesCommand = new AsyncRelayCommand(ShowSavePrompt);
             RevertChangesCommand = new RelayCommand(ShowRevertPrompt); // no async operations, so use RelayCommand
             ToggleContentVisibilityCommand = new RelayCommand(_ => IsContentVisible = !IsContentVisible);
+            TogglePricesVisibilityCommand = new RelayCommand(_ => ExecuteTogglePricesVisibility());
+
+            DefaultCellStyle = _styles["DayCellStyle"];
+            DefaultTextBlockStyle = _styles["ValidationDependentCellStyle"];
+            AlternateCellStyle = _styles["AlternateDayCellStyle"];
+            CurrentCellStyle = _styles["DayCellStyle"];
+            MittwochTextBlockStyle = _styles["ValidationDependentCellStyle"];
+            MittwochEditingStyle = _styles["DataGridEditableTextBoxStyle"];
+            ShowLevelCellStyle = _styles["LevelDependentCellStyle"];
 
             ToggleShowLevels = new RelayCommand(_ =>
             {
-                ShowLevelsEnabled = !ShowLevelsEnabled;
+                // CurrentCellStyle = CurrentCellStyle == DefaultCellStyle
+                //     ? ShowLevelCellStyle
+                //     : DefaultCellStyle;
+
+                AreLevelsVisible = !AreLevelsVisible;
             });
+            // {
+            //     ShowLevelsEnabled = !ShowLevelsEnabled;
+            // });
+
 
             // Initialize toggle style command (without LoadStyle logic here)
             ToggleCellStyleCommand = new RelayCommand(_ =>
@@ -221,17 +332,23 @@ namespace BgB_TeachingAssistant.ViewModels
         }
         #endregion
 
-        #region DataGridManipulation
-
-        private void ToggleCellStyle()
+        private void ExecuteTogglePricesVisibility()
         {
-            var defaultStyle = (Style)Application.Current.FindResource("DayCellStyle");
-            var alternateStyle = (Style)Application.Current.FindResource("AlternateDayCellStyle");
+            // Existing functionality: toggle the visibility
+            ArePricesVisible = !ArePricesVisible;
+            if (PricesButtonContent == "Show Prices")
+            {
+                PricesButtonContent = "Hide Prices";
+            }
+            else
+            {
+                PricesButtonContent = "Show Prices";
+            }
 
-            CurrentCellStyle = CurrentCellStyle == defaultStyle ? alternateStyle : defaultStyle;
+            // Additional logic can be added here
         }
 
-        #endregion
+
         #region TableContentChangeEventHandling
         private void SlotEntryPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

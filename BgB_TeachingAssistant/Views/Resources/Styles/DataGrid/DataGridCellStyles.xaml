@@ -1,14 +1,19 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:iTimeTableDtOs="clr-namespace:Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;assembly=Bgb_DataAccessLibrary"
+                    xmlns:microsoft.Xaml.Behaviors.Interactivity="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:helpers="clr-namespace:BgB_TeachingAssistant.Helpers.UIInteraction"
+                    >
 
-    <!-- Style for Time Column Cells -->
     <Style x:Key="DayCellStyle" TargetType="DataGridCell">
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        
         <Setter Property="Background" Value="Transparent" />
+
+
+
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="Black" />
@@ -16,6 +21,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
 
     <Style x:Key="AlternateDayCellStyle" TargetType="DataGridCell">
         <Setter Property="Foreground" Value="Black" />
@@ -41,5 +47,23 @@
         <Setter Property="BorderBrush" Value="White" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
+
+    <Style x:Key="LevelDependentCellStyle" TargetType="DataGridCell">
+        <!-- Default styling -->
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="LightCoral" />
+        <Setter Property="ToolTip" Value="{Binding Path=Content.Level, RelativeSource={RelativeSource Self}}" />
+
+        <!-- Triggers for level-based styling -->
+        <Style.Triggers>
+            <!-- Bind to the DataContext of the DataGridCell -->
+            <DataTrigger Binding="{Binding Path=Content.Level, RelativeSource={RelativeSource Self}}" Value="A1">
+                <Setter Property="Background" Value="#0f3" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
 
 </ResourceDictionary>

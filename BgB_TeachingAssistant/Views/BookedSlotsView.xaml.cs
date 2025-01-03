@@ -17,6 +17,13 @@ namespace BgB_TeachingAssistant.Views
         public BookedSlotsView()
         {
             InitializeComponent();
+
+            if (DataContext is BookedSlotsViewModel viewModel)
+            {
+                // Pass resource dictionary to the ViewModel
+                var mergedResources = Resources.MergedDictionaries;
+                viewModel.ResourceDictionaries = new List<ResourceDictionary>(mergedResources);
+            }
         }
         private Style LoadStyle(string styleKey)
         {
@@ -28,27 +35,7 @@ namespace BgB_TeachingAssistant.Views
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is BookedSlotsViewModel viewModel)
-            {
-                // Load styles from the local ResourceDictionary
-                var defaultStyle = LoadStyle("DayCellStyle");
-                var alternateStyle = LoadStyle("AlternateDayCellStyle");
-
-                // Pass styles to ViewModel
-                viewModel.DefaultCellStyle = defaultStyle;
-                viewModel.AlternateCellStyle = alternateStyle;
-
-                // Initialize the current style
-                viewModel.CurrentCellStyle = defaultStyle;
-            }
         }
-
-
-        // if the above doesn't work, try this:
-        //private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    Dispatcher.InvokeAsync(() => TimetableDataGrid.Focus(), System.Windows.Threading.DispatcherPriority.ContextIdle);
-        //}
 
         private void StreamlineEditOnSelect(object sender, EventArgs e)
         {
@@ -143,7 +130,7 @@ namespace BgB_TeachingAssistant.Views
                 viewModel.ShowLevelsEnabled = !viewModel.ShowLevelsEnabled;
 
                 // Force layout updates
-                TimetableDataGrid.UpdateLayout();
+                // TimetableDataGrid.UpdateLayout();
 
                 foreach (var item in TimetableDataGrid.Items)
                 {
@@ -190,76 +177,80 @@ namespace BgB_TeachingAssistant.Views
                     _ => null
                 };
 
-                // Store the original XAML-defined style
-                var originalStyle = LoadStyle("DayCellStyle");
+                Style originalStyle = new Style();
+                if (DataContext is BookedSlotsViewModel viewModel)
+                {
+                    // Store the original XAML-defined style
+                    originalStyle = viewModel.DefaultCellStyle;
+                }
 
                 if (showLevelsEnabled && slotEntry != null)
                 {
                     // Clone the original style
                     var updatedStyle = new Style(typeof(DataGridCell), originalStyle);
 
-                    // Apply styles dynamically based on the Level property
+                    // Apply styles dynamically based on the Level property #359635
                     switch (slotEntry.Level)
                     {
                         case "A1":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightCoral));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Maroon));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7B3535")))); // red on gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "A2":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightGreen));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.DarkGreen));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#359635")))); // green on gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "B1":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightBlue));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.DarkBlue));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#927A07")))); // yellow on gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "B2":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightYellow));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Orange));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(95, 95, 85)))); // Slightly yellowish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "C1":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightPink));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.DarkRed));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(95, 85, 85)))); // Slightly pinkish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "C2":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.Plum));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Purple));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(105, 95, 105)))); // Slightly purplish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "Gespräch":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightGray));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Gray));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#273DD0")))); // blue on grey
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "Prüfungstraining A1":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightCoral));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Maroon));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(95, 95, 95)))); // Slightly reddish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "Prüfungstraining A2":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightGreen));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.DarkGreen));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(85, 95, 85)))); // Slightly greenish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "Prüfungstraining B1":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightBlue));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.DarkBlue));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(85, 85, 95)))); // Slightly bluish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "Prüfungstraining B2":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightYellow));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Orange));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(95, 95, 85)))); // Slightly yellowish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "Prüfungstraining C1":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightPink));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.DarkRed));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(95, 85, 85)))); // Slightly pinkish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "Prüfungstraining C2":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.Plum));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Purple));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(105, 95, 105)))); // Slightly purplish gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         case "Prüfungstraining DaF":
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.LightGray));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Black));
+                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(95, 95, 95)))); // Neutral gray
+                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                         default:
-                            updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.Transparent));
-                            updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.Black));
+                            // updatedStyle.Setters.Add(new Setter(Control.BackgroundProperty, new SolidColorBrush(Color.FromRgb(53, 53, 53)))); // Default dark gray
+                            // updatedStyle.Setters.Add(new Setter(TextElement.ForegroundProperty, Brushes.White));
                             break;
                     }
 
@@ -274,13 +265,6 @@ namespace BgB_TeachingAssistant.Views
                 }
             }
         }
-
-
-
-
-
-
-
 
         // Get DataGridCell for a Row and Column
         private DataGridCell GetCell(DataGridRow row, DataGridColumn column)
@@ -316,6 +300,122 @@ namespace BgB_TeachingAssistant.Views
             }
             return null;
         }
+
+        private bool isUsingDefaultStyle = true; // Track current style
+
+        private void ToggleMittwochStylesButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Load styles for TextBlock
+            var defaultTextBlockStyle = LoadControlStyle("ValidationDependentCellStyle");
+            var alternateTextBlockStyle = LoadControlStyle("AlternateTextBlockStyle");
+
+            // Load styles for TextBox
+            var defaultTextBoxStyle = LoadControlStyle("DataGridEditableTextBoxStyle");
+            var alternateTextBoxStyle = LoadControlStyle("AlternateTextBoxStyle");
+
+            if (defaultTextBlockStyle == null || alternateTextBlockStyle == null ||
+                defaultTextBoxStyle == null || alternateTextBoxStyle == null)
+            {
+                Console.WriteLine("Error: Required styles not loaded.");
+                return;
+            }
+
+            // Determine new styles based on toggle state
+            var newTextBlockStyle = isUsingDefaultStyle ? alternateTextBlockStyle : defaultTextBlockStyle;
+            var newTextBoxStyle = isUsingDefaultStyle ? alternateTextBoxStyle : defaultTextBoxStyle;
+
+            isUsingDefaultStyle = !isUsingDefaultStyle;
+
+            // Update ViewModel properties
+            if (DataContext is BookedSlotsViewModel viewModel)
+            {
+                viewModel.MittwochTextBlockStyle = newTextBlockStyle; // Update TextBlock style
+                viewModel.MittwochEditingStyle = newTextBoxStyle;    // Update TextBox style
+            }
+
+            TimetableDataGrid.Dispatcher.Invoke(() =>
+            {
+                TimetableDataGrid.UpdateLayout();
+            }, System.Windows.Threading.DispatcherPriority.Render);
+
+            Console.WriteLine($"Switched to TextBlock style: {GetStyleInfo(newTextBlockStyle)}");
+            Console.WriteLine($"Switched to TextBox editing style: {GetStyleInfo(newTextBoxStyle)}");
+        }
+
+
+
+
+
+        private void ApplyStylesToCell(DataGridCell cell, Style textBlockStyle, Style textBoxStyle)
+        {
+            if (cell.Column is DataGridTemplateColumn column)
+            {
+                // Modify the CellTemplate (TextBlock)
+                if (column.CellTemplate != null)
+                {
+                    var textBlock = FindChild<TextBlock>(cell.Content as ContentPresenter);
+                    if (textBlock != null)
+                    {
+                        textBlock.Style = textBlockStyle;
+                        Console.WriteLine($"Applied style to TextBlock: {GetStyleInfo(textBlockStyle)}");
+                    }
+                }
+
+                // Modify the CellEditingTemplate (TextBox)
+                if (column.CellEditingTemplate != null)
+                {
+                    var editingTemplate = column.CellEditingTemplate.LoadContent() as TextBox;
+                    if (editingTemplate != null)
+                    {
+                        editingTemplate.Style = textBoxStyle;
+                        Console.WriteLine($"Applied style to TextBox (edit mode): {GetStyleInfo(textBoxStyle)}");
+                    }
+                }
+            }
+        }
+
+
+
+
+        private string GetStyleInfo(Style style)
+        {
+            if (style == null) return "None";
+
+            // Search for the style key in the local ResourceDictionary
+            var resourceDictionary = new ResourceDictionary
+            {
+                Source = new Uri("Views/Resources/Styles/DataGrid/DataGridCellStyles.xaml", UriKind.Relative)
+            };
+
+            foreach (var key in resourceDictionary.Keys)
+            {
+                if (resourceDictionary[key] == style)
+                {
+                    return key.ToString();
+                }
+            }
+
+            return $"TargetType: {style.TargetType.Name}";
+        }
+
+        private Style LoadControlStyle(string styleKey)
+        {
+            try
+            {
+                var resourceDictionary = new ResourceDictionary
+                {
+                    Source = new Uri("Views/Resources/Styles/DataGrid/DataGridControlStyles.xaml", UriKind.Relative)
+                };
+
+                return resourceDictionary[styleKey] as Style ?? throw new Exception($"Style '{styleKey}' not found in DataGridControlStyles.xaml.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading control style '{styleKey}': {ex.Message}");
+                return null; // Return null if the style can't be loaded
+            }
+        }
+
 
     }
 }

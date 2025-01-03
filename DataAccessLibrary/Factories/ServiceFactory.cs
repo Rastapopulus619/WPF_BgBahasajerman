@@ -6,6 +6,7 @@ using System.Reflection;
 using Bgb_DataAccessLibrary.Helpers.ExtensionMethods;
 using Bgb_DataAccessLibrary.Contracts;
 using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+using Bgb_DataAccessLibrary.Contracts.IServices.IResources;
 
 namespace Bgb_DataAccessLibrary.Factories
 {
@@ -81,7 +82,7 @@ namespace Bgb_DataAccessLibrary.Factories
 
                 foreach (var property in viewModelType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 {
-                    if (property.CanWrite && (property.PropertyType == typeof(IServiceFactory) || property.PropertyType == typeof(IEventAggregator)))
+                    if (property.CanWrite && (property.PropertyType == typeof(IServiceFactory) || property.PropertyType == typeof(IEventAggregator) || property.PropertyType == typeof(IResourceDictionaryLoader)))
                 {
                         var service = _serviceProvider.GetService(property.PropertyType);
 

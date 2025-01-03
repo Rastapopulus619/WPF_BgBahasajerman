@@ -10,7 +10,8 @@ namespace BgB_TeachingAssistant.Helpers
                 "CornerRadius",
                 typeof(CornerRadius),
                 typeof(CustomProperties),
-                new FrameworkPropertyMetadata(new CornerRadius(0), FrameworkPropertyMetadataOptions.Inherits)
+                //new FrameworkPropertyMetadata(new CornerRadius(0), FrameworkPropertyMetadataOptions.Inherits)
+                new FrameworkPropertyMetadata(new CornerRadius(0), FrameworkPropertyMetadataOptions.None)
             );
 
         public static void SetCornerRadius(UIElement element, CornerRadius value)

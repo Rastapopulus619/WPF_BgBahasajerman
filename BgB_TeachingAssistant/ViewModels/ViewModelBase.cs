@@ -1,5 +1,9 @@
 ﻿using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+using BgB_TeachingAssistant.Services.Resources;
 using MVVM_UtilitiesLibrary.BaseClasses;
+using System.Windows;
+using Bgb_DataAccessLibrary.Contracts.IServices.IResources;
+using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
@@ -11,12 +15,32 @@ namespace BgB_TeachingAssistant.ViewModels
         public IEventAggregator EventAggregator { get; set; }
         public List<Delegate> EventHandlers { get; set; } = new List<Delegate>();
         public int EventHandlersCount => EventHandlers.Count;
-
+        public IResourceDictionaryLoader ResourceDictionaryLoader { get; set; }
+        public readonly IReadOnlyDictionary<string, object> _resources;
+        public readonly IReadOnlyDictionary<string, Style> _styles;
         public ViewModelBase(IServiceFactory serviceFactory)
         {
             LogViewModelCreation();
 
             serviceFactory.ConfigureViewModelBaseServices(this);
+
+            // Use GetMergedResources instead of CreateMergedResourceDictionary
+            _resources = ResourceDictionaryLoader.GetMergedResources();
+
+            if (_resources == null || !_resources.Any())
+            {
+                Console.WriteLine("Resource dictionaries are empty or null after loading.");
+                throw new InvalidOperationException("Resource dictionaries are not initialized.");
+            }
+
+            Console.WriteLine($"Loaded resources: {_resources.Count}");
+
+            // Filter styles
+            _styles = _resources
+                .Where(pair => pair.Value is Style)
+                .ToDictionary(pair => pair.Key, pair => (Style)pair.Value);
+
+            Console.WriteLine($"Loaded styles: {_styles.Count}");
 
             if (EventAggregator == null)
             {
@@ -110,6 +134,15 @@ namespace BgB_TeachingAssistant.ViewModels
 
             // Log the subscriptions after clearing
             EventAggregator.LogSubscriptions();
+        }
+        public object GetResource(string key)
+        {
+            if (_styles.TryGetValue(key, out var resource))
+            {
+                return resource;
+            }
+
+            throw new KeyNotFoundException($"Resource with key '{key}' not found.");
         }
 
         // IDisposable implementation for cleaning up subscriptions
