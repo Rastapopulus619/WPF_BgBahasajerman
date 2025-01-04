@@ -69,11 +69,27 @@ namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
             get => _currency;
             set => SetProperty(ref _currency, value);
         }
-
+        private decimal? _currencyRate; // Nullable
+        public decimal? CurrencyRate
+        {
+            get => _currencyRate;
+            set => SetProperty(ref _currencyRate, value);
+        }
         public decimal? Preis
         {
             get => _preis;
             set => SetProperty(ref _preis, value);
+        }
+        public decimal? IDRPrice
+        {
+            get
+            {
+                if (CurrencyRate.HasValue && Preis.HasValue)
+                {
+                    return Preis.Value * CurrencyRate.Value;
+                }
+                return null; // Return null if either value is missing
+            }
         }
         public string PreisDisplayValue
         {
@@ -86,7 +102,17 @@ namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
             get => _discountAmount;
             set => SetProperty(ref _discountAmount, value);
         }
-
+        public decimal? IDRDiscountAmount
+        {
+            get
+            {
+                if (CurrencyRate.HasValue && DiscountAmount.HasValue)
+                {
+                    return DiscountAmount.Value * CurrencyRate.Value;
+                }
+                return null; // Return null if either value is missing
+            }
+        }
         public string Content
         {
             get => _content;
@@ -122,8 +148,11 @@ namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
                    WeekdayName == other.WeekdayName &&
                    Level == other.Level &&
                    Currency == other.Currency &&
+                   CurrencyRate == other.CurrencyRate && // Include in comparison
                    Preis == other.Preis &&
+                   IDRPrice == other.IDRPrice &&
                    DiscountAmount == other.DiscountAmount &&
+                   IDRDiscountAmount == other.IDRDiscountAmount &&
                    Content == other.Content &&
                    IsEditable == other.IsEditable &&
                    IsValid == other.IsValid &&

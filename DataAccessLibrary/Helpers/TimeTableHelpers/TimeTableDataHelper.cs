@@ -6,7 +6,7 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
 {
     public class TimeTableDataHelper : ITimeTableDataHelper
     {
-        public ObservableCollection<TimeTableRow> CloneTimetableData(ObservableCollection<TimeTableRow> original)
+        public ObservableCollection<TimeTableRow> CloneTimeTableData(ObservableCollection<TimeTableRow> original)
         {
             if (original == null) return null;
 
@@ -70,7 +70,7 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
             };
         }
 
-        public bool AreTimetableDataEqual(ObservableCollection<TimeTableRow> original, ObservableCollection<TimeTableRow> updated)
+        public bool AreTimeTableDataEqual(ObservableCollection<TimeTableRow> original, ObservableCollection<TimeTableRow> updated)
         {
             // Null checks for both collections + Check if counts are different
             if (original == null || updated == null || original.Count != updated.Count)
@@ -123,7 +123,7 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
             var differences = new List<SlotEntry>();
 
             if (original == null || updated == null)
-                throw new InvalidOperationException("Timetable data is null.");
+                throw new InvalidOperationException("TimeTable data is null.");
 
             for (int i = 0; i < original.Count; i++)
             {

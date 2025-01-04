@@ -33,7 +33,7 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
 
             var timeSlots = await _queryExecutor.ExecuteQueryAsync<string>("GetAllLessonTimeSpanStrings");
 
-            List<TimeTableRow> timetableRows = new List<TimeTableRow>();
+            List<TimeTableRow> timeTableRows = new List<TimeTableRow>();
 
                 //int additionValue = 7;
                 
@@ -51,10 +51,10 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
                     Sonntag = GetDayEntryForDayTheRightWay(dt, i + 49)
                 };
 
-                timetableRows.Add(row);
+                timeTableRows.Add(row);
             }
 
-            return new ObservableCollection<TimeTableRow>(timetableRows);
+            return new ObservableCollection<TimeTableRow>(timeTableRows);
         }
         private SlotEntry GetDayEntryForDayTheRightWay(DataTable dt, int slotNumber)
         {
@@ -82,6 +82,7 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
                 WeekdayName = row.IsNull("WeekdayName") ? "-" : row.Field<string>("WeekdayName"),
                 Level = row.IsNull("Level") ? null : row.Field<string>("Level"),
                 Currency = row.IsNull("Currency") ? null : row.Field<string>("Currency"),
+                CurrencyRate = row.IsNull("CurrencyRate") ? null : (decimal?)row.Field<decimal>("CurrencyRate"), // Use as decimal directly
                 Preis = row.IsNull("Preis") ? null : (decimal?)row.Field<decimal>("Preis"),
                 PreisDisplayValue = GeneratePreisDisplayValue(
                     row.IsNull("Currency") ? null : row.Field<string>("Currency"),
@@ -91,7 +92,7 @@ namespace Bgb_DataAccessLibrary.Data.DataServices
                 Content = row.IsNull("StudentName") ? "-" : row.Field<string>("StudentName")
             };
         }
-        private string GeneratePreisDisplayValue(string? currency, decimal? preis, decimal? discountAmount)
+        public string GeneratePreisDisplayValue(string? currency, decimal? preis, decimal? discountAmount)
         {
             if (currency == null || preis == null)
                 return string.Empty;

@@ -66,6 +66,12 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _areLevelsVisible;
             set => SetProperty(ref _areLevelsVisible, value, nameof(AreLevelsVisible));
         }
+        private bool _isOverlayVisible = true;
+        public bool IsOverlayVisible
+        {
+            get => _isOverlayVisible;
+            set => SetProperty(ref _isOverlayVisible, value, nameof(IsOverlayVisible));
+        }
         private string _pricesButtonContent = "Show Prices";
         public string PricesButtonContent
         {
@@ -97,7 +103,12 @@ namespace BgB_TeachingAssistant.ViewModels
             }
         }
 
-
+        private TotalPricesDisplayModel _totalPricesDisplayModel = new();
+        public TotalPricesDisplayModel TotalPricesDisplayModel
+        {
+            get => _totalPricesDisplayModel;
+            set => SetProperty(ref _totalPricesDisplayModel, value, nameof(TotalPricesDisplayModel));
+        }
         private string _testValue = "Initial Value";
         public string TestValue
         {
@@ -170,25 +181,43 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _students;
             set => SetProperty(ref _students, value, nameof(Students));
         }
-        private ObservableCollection<TimeTableRow> _timetableDataBackup;
-        private ObservableCollection<TimeTableRow> _timetableData;
-        public ObservableCollection<TimeTableRow> TimetableData
+        private ObservableCollection<TimeTableRow> _timeTableDataBackup;
+        private ObservableCollection<TimeTableRow> _timeTableData;
+        public ObservableCollection<TimeTableRow> TimeTableData
         {
-            get => _timetableData;
+            get => _timeTableData;
             set
             {
-                if (SetProperty(ref _timetableData, value, nameof(TimetableData)))
+                if (SetProperty(ref _timeTableData, value, nameof(TimeTableData)))
                 {
                     // UnsubscribeFromSlotEntryChanges(); // Clean up old subscriptions
-                    SubscriptionManager.UnsubscribeFromSlotEntryChanges(_timetableData, SlotEntryPropertyChanged);
-                    if (!_isDisposed && _timetableData != null)
+                    SubscriptionManager.UnsubscribeFromSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged);
+                    if (!_isDisposed && _timeTableData != null)
                     {
                         //SubscribeToSlotEntryChanges(); // Subscribe to new data
-                        SubscriptionManager.SubscribeToSlotEntryChanges(_timetableData, SlotEntryPropertyChanged); // Subscribe to new data
+                        SubscriptionManager.SubscribeToSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged); // Subscribe to new data
                     }
+
+                    FetchTotalPricesRowCollection(); // Update totals row data whenever data changes
                 }
             }
         }
+        //public double CalculatedRowHeight => TimeTableData.Count > 0 ? DataGridHeight / TimeTableData.Count : 30;
+
+        private ObservableCollection<TotalPricesRow> _totalPricesData;
+        public ObservableCollection<TotalPricesRow> TotalPricesData
+        {
+            get => _totalPricesData;
+            set => SetProperty(ref _totalPricesData, value, nameof(TotalPricesData));
+        }
+
+        private bool _totalsAreVisible = false;
+        public bool TotalsAreVisible
+        {
+            get => _totalsAreVisible;
+            set => SetProperty(ref _totalsAreVisible, value, nameof(TotalsAreVisible));
+        }
+
         #endregion
         #region Dependencies
         #region IServices
@@ -210,6 +239,8 @@ namespace BgB_TeachingAssistant.ViewModels
         public ICommand TogglePricesVisibilityCommand { get; }
         public ICommand ToggleCellStyleCommand { get; }
         public ICommand ToggleShowLevels { get; }
+        public ICommand ToggleShowTotals { get; }
+        public ICommand CloseOverlayCommand { get; }
         #endregion
         #endregion
         public BookedSlotsViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
@@ -222,6 +253,9 @@ namespace BgB_TeachingAssistant.ViewModels
             RevertChangesCommand = new RelayCommand(ShowRevertPrompt); // no async operations, so use RelayCommand
             ToggleContentVisibilityCommand = new RelayCommand(_ => IsContentVisible = !IsContentVisible);
             TogglePricesVisibilityCommand = new RelayCommand(_ => ExecuteTogglePricesVisibility());
+            // Initialize command
+            ToggleShowTotals = new RelayCommand(_ => ToggleExpansion());
+            CloseOverlayCommand = new RelayCommand(_ => IsOverlayVisible = false);
 
             DefaultCellStyle = _styles["DayCellStyle"];
             DefaultTextBlockStyle = _styles["ValidationDependentCellStyle"];
@@ -260,10 +294,15 @@ namespace BgB_TeachingAssistant.ViewModels
             try
             {
                 // Use the initializer to fetch data
-                TimetableData = await Initializer.FetchTimeTableDataAsync();
+                TimeTableData = await Initializer.FetchTimeTableDataAsync();
                 Students = await Initializer.FetchStudentListAsync();
 
+                TotalPricesData = new ObservableCollection<TotalPricesRow>();
+
+                TotalPricesDisplayModel.Refresh(TimeTableData);
+
                 SaveState();
+
                 Console.WriteLine("Initialization complete.");
             }
             catch (Exception ex)
@@ -271,25 +310,27 @@ namespace BgB_TeachingAssistant.ViewModels
                 Console.WriteLine($"Error during initialization: {ex.Message}");
             }
         }
+
+
         #endregion
         #region Prompt Logic
         private async Task ShowSavePrompt()
         {
-            var differences = TimeTableDataHelper.GetDifferences(_timetableDataBackup, TimetableData);
+            var differences = TimeTableDataHelper.GetDifferences(_timeTableDataBackup, TimeTableData);
 
-            if (BookedSlotsPromptHandler.SavePromptUserChoice(differences, _timetableDataBackup)) // Delegates to BookedSlotsPromptHandler
+            if (BookedSlotsPromptHandler.SavePromptUserChoice(differences, _timeTableDataBackup)) // Delegates to BookedSlotsPromptHandler
             {
                 await BookedSlotsDataService.SaveBookedSlotsAsync(differences); // Save operation
-                TimetableData = await Initializer.FetchTimeTableDataAsync(); // Refresh data
+                TimeTableData = await Initializer.FetchTimeTableDataAsync(); // Refresh data
                 SaveState();
                 PromptService.ShowInformationPrompt("Success", $"These Changes:\n\n{BookedSlotsPromptHandler.Changes}\nhave been saved.");
             }
         }
         private void ShowRevertPrompt()
         {
-            var differences = TimeTableDataHelper.GetDifferences(_timetableDataBackup, TimetableData);
+            var differences = TimeTableDataHelper.GetDifferences(_timeTableDataBackup, TimeTableData);
 
-            if (BookedSlotsPromptHandler.RevertPromptUserChoice(differences, _timetableDataBackup)) // Delegates to BookedSlotsPromptHandler
+            if (BookedSlotsPromptHandler.RevertPromptUserChoice(differences, _timeTableDataBackup)) // Delegates to BookedSlotsPromptHandler
             {
                 RevertToSavedState();
                 PromptService.ShowInformationPrompt("Success", $"These Changes:\n\n{BookedSlotsPromptHandler.Changes}\nhave been saved.");
@@ -299,12 +340,12 @@ namespace BgB_TeachingAssistant.ViewModels
         #region State Logic
         public void SaveState()
         {
-            _timetableDataBackup = TimeTableDataHelper.CloneTimetableData(TimetableData);
+            _timeTableDataBackup = TimeTableDataHelper.CloneTimeTableData(TimeTableData);
 
             // Use intermediate variables for out parameters
             TimeTableSaveStateUpdater.UpdateCanSaveAndCancel(
-                _timetableDataBackup,
-                TimetableData,
+                _timeTableDataBackup,
+                TimeTableData,
                 out var canSave,
                 out var canCancel);
 
@@ -314,14 +355,14 @@ namespace BgB_TeachingAssistant.ViewModels
         }
         public void RevertToSavedState()
         {
-            if (_timetableDataBackup != null)
+            if (_timeTableDataBackup != null)
             {
-                TimetableData = TimeTableDataHelper.CloneTimetableData(_timetableDataBackup);
+                TimeTableData = TimeTableDataHelper.CloneTimeTableData(_timeTableDataBackup);
 
                 // Use intermediate variables for out parameters
                 TimeTableSaveStateUpdater.UpdateCanSaveAndCancel(
-                    _timetableDataBackup,
-                    TimetableData,
+                    _timeTableDataBackup,
+                    TimeTableData,
                     out var canSave,
                     out var canCancel);
 
@@ -332,6 +373,14 @@ namespace BgB_TeachingAssistant.ViewModels
         }
         #endregion
 
+        public void ToggleExpansion()
+        {
+            if (!TotalsAreVisible)
+            {
+                FetchTotalPricesRowCollection();
+            }
+            TotalsAreVisible = !TotalsAreVisible;
+        }
         private void ExecuteTogglePricesVisibility()
         {
             // Existing functionality: toggle the visibility
@@ -359,6 +408,8 @@ namespace BgB_TeachingAssistant.ViewModels
 
                 UserInputButtonUpdate(slotEntry);
 
+                TotalPricesDisplayModel.Refresh(TimeTableData);
+
                 // Optional logging
                 Console.WriteLine($"SlotEntry.Name changed: {slotEntry.Name}, IsValid: {slotEntry.IsValid}, StudentID: {slotEntry.StudentID}");
             }
@@ -367,8 +418,8 @@ namespace BgB_TeachingAssistant.ViewModels
         {
             // Leverage TimeTableSaveStateUpdater for overall state update
             TimeTableSaveStateUpdater.UpdateCanSaveAndCancel(
-                _timetableDataBackup,
-                TimetableData,
+                _timeTableDataBackup,
+                TimeTableData,
                 out var canSave,
                 out var canCancel);
 
@@ -379,22 +430,28 @@ namespace BgB_TeachingAssistant.ViewModels
             // Optional logging
             Console.WriteLine($"Updated CanSave: {CanSave}, CanCancel: {CanCancel}");
         }
+        public void FetchTotalPricesRowCollection()
+        {
+                
+
+        }
+
 
         #endregion
         #region Cleanup
         protected override void Cleanup()
         {
             // Unsubscribe from SlotEntry changes to prevent memory leaks
-            SubscriptionManager.UnsubscribeFromSlotEntryChanges(_timetableData, SlotEntryPropertyChanged);
+            SubscriptionManager.UnsubscribeFromSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged);
 
             // Unsubscribe from events (from EventAggregator)
             UnsubscribeEvents();
 
-            // Clear TimetableData to break bindings
-            if (TimetableData != null)
+            // Clear TimeTableData to break bindings
+            if (TimeTableData != null)
             {
-                TimetableData.Clear();
-                TimetableData = null; // Nullify to break binding
+                TimeTableData.Clear();
+                TimeTableData = null; // Nullify to break binding
             }
 
             _isDisposed = true; // Set the disposed flag

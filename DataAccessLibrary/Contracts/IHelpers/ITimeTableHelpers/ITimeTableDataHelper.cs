@@ -5,8 +5,8 @@ namespace Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers
 {
     public interface ITimeTableDataHelper
     {
-        ObservableCollection<TimeTableRow> CloneTimetableData(ObservableCollection<TimeTableRow> timetableData);
-        bool AreTimetableDataEqual(ObservableCollection<TimeTableRow> original, ObservableCollection<TimeTableRow> updated);
+        ObservableCollection<TimeTableRow> CloneTimeTableData(ObservableCollection<TimeTableRow> timeTableData);
+        bool AreTimeTableDataEqual(ObservableCollection<TimeTableRow> original, ObservableCollection<TimeTableRow> updated);
         List<SlotEntry> GetDifferences(ObservableCollection<TimeTableRow> original, ObservableCollection<TimeTableRow> updated);
     }
 }

@@ -15,35 +15,35 @@ namespace BgB_TeachingAssistant.Services.BookedSlotsViewModel
             _promptService = promptService;
         }
 
-        public bool SavePromptUserChoice(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timetableDataBackup)
+        public bool SavePromptUserChoice(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timeTableDataBackup)
         {
-            Changes = GenerateChangeDetails(changes, timetableDataBackup);
+            Changes = GenerateChangeDetails(changes, timeTableDataBackup);
             return _promptService.ShowOkCancelPrompt(
                 "Confirm Save",
                 $"Are you sure you want to save these changes?\n\n{Changes}");
         }
 
-        public bool RevertPromptUserChoice(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timetableDataBackup)
+        public bool RevertPromptUserChoice(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timeTableDataBackup)
         {
-            Changes = GenerateChangeDetails(changes, timetableDataBackup);
+            Changes = GenerateChangeDetails(changes, timeTableDataBackup);
             return _promptService.ShowOkCancelPrompt(
                 "Confirm Revert",
                 "Are you sure you want to revert changes?");
         }
 
-        public string GenerateChangeDetails(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timetableDataBackup)
+        public string GenerateChangeDetails(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timeTableDataBackup)
         {
             if (changes == null || !changes.Any())
                 return "No changes detected.";
 
-            if (timetableDataBackup == null)
-                throw new ArgumentNullException(nameof(timetableDataBackup), "Timetable data backup is required.");
+            if (timeTableDataBackup == null)
+                throw new ArgumentNullException(nameof(timeTableDataBackup), "TimeTable data backup is required.");
 
             var details = new StringBuilder();
 
             foreach (var slot in changes)
             {
-                var originalSlot = timetableDataBackup
+                var originalSlot = timeTableDataBackup
                     .SelectMany(row => new[] { row.Montag, row.Dienstag, row.Mittwoch, row.Donnerstag, row.Freitag, row.Samstag, row.Sonntag })
                     .FirstOrDefault(s => s?.SlotID == slot.SlotID);
 

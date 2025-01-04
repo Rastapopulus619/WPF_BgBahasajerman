@@ -13,9 +13,9 @@ namespace Bgb_DataAccessLibrary.Contracts.IServices.IData
     public interface IBookedSlotsDataService
     {
         /// <summary>
-        /// Retrieves all booked slots and organizes them into a timetable structure.
+        /// Retrieves all booked slots and organizes them into a timeTable structure.
         /// </summary>
-        /// <returns>An ObservableCollection of TimeTableRow representing the timetable.</returns>
+        /// <returns>An ObservableCollection of TimeTableRow representing the timeTable.</returns>
         Task<ObservableCollection<TimeTableRow>> GetBookedSlotsAsync();
 
         /// <summary>

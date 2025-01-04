@@ -2,7 +2,9 @@
 using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
 using BgB_TeachingAssistant.Commands;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BgB_TeachingAssistant.ViewModels
@@ -28,20 +30,80 @@ namespace BgB_TeachingAssistant.ViewModels
             get => _studentNames;
             set => SetProperty(ref _studentNames, value, nameof(StudentNames));
         }
-        public StudentViewModel(IServiceFactory serviceFactory)
-            : base(serviceFactory)
+        private ICollectionView _filteredItems;
+        public ICollectionView FilteredItems
+        {
+            get => _filteredItems;
+            set => SetProperty(ref _filteredItems, value);
+        }
+
+        private string _filterText;
+        public string FilterText
+        {
+            get => _filterText;
+            set
+            {
+                if (SetProperty(ref _filterText, value))
+                {
+                    FilteredItems.Refresh();
+                }
+            }
+        }
+        public StudentViewModel(IServiceFactory serviceFactory) : base(serviceFactory)
         {
             ServiceFactory.ConfigureServicesFor(this);
 
-            LoadStudentsCommand = new RelayCommand(async () => await LoadStudentsAsync());
-            DanCukCommand = new RelayCommand(DanCukMethod);
+            // Trigger asynchronous initialization from the constructor
+            _ = InitializeAsync();
         }
+
+        private async Task InitializeAsync()
+        {
+            // Initialize the Students collection
+            Students = new ObservableCollection<StudentModel>();
+
+            // Retrieve data and populate the collection
+            await LoadStudentsAsync();
+
+            // Set up the filtered view
+            FilteredItems = CollectionViewSource.GetDefaultView(Students);
+            FilteredItems.Filter = FilterLogic;
+        }
+
         private async Task LoadStudentsAsync()
         {
+            try
+            {
                 // Retrieve students using the data service
                 var students = await GeneralDataService.GetStudentsAsync();
-                Students = new ObservableCollection<StudentModel>(students);
+
+                // Update the existing Students collection
+                if (Students != null)
+                {
+                    Students.Clear();
+                    foreach (var student in students)
+                    {
+                        Students.Add(student);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (optional)
+                Console.WriteLine($"Error loading students: {ex.Message}");
+            }
         }
+
+        private bool FilterLogic(object item)
+        {
+            if (item is StudentModel student)
+            {
+                return string.IsNullOrEmpty(FilterText) ||
+                       student.Name.Contains(FilterText, StringComparison.OrdinalIgnoreCase);
+            }
+            return false;
+        }
+
         private async void DanCukMethod()
             {
                 try

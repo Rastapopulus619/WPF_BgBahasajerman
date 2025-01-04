@@ -6,7 +6,7 @@ namespace Bgb_DataAccessLibrary.Contracts.IServices.IBookedSlotsViewModel
 {
     public interface ISlotEntrySubscriptionManager
     {
-        void SubscribeToSlotEntryChanges(ObservableCollection<TimeTableRow> timetableData, PropertyChangedEventHandler handler);
-        void UnsubscribeFromSlotEntryChanges(ObservableCollection<TimeTableRow> timetableData, PropertyChangedEventHandler handler);
+        void SubscribeToSlotEntryChanges(ObservableCollection<TimeTableRow> timeTableData, PropertyChangedEventHandler handler);
+        void UnsubscribeFromSlotEntryChanges(ObservableCollection<TimeTableRow> timeTableData, PropertyChangedEventHandler handler);
     }
 }

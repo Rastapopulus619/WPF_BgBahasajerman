@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;
 using Bgb_DataAccessLibrary.Contracts.IModels.IStudentModels;
 using Bgb_DataAccessLibrary.Contracts.IServices.IBookedSlotsViewModel;
 using Bgb_DataAccessLibrary.Contracts.IServices.IData;
@@ -22,7 +23,7 @@ public class BookedSlotsInitializer : IBookedSlotsInitializer
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error fetching timetable data: {ex.Message}");
+            Console.WriteLine($"Error fetching timeTable data: {ex.Message}");
             throw;
         }
     }

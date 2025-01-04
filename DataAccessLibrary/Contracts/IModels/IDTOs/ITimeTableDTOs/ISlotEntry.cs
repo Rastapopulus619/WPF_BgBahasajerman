@@ -13,9 +13,12 @@ public interface ISlotEntry
     string WeekdayName { get; set; }
     string? Level { get; set; }
     string? Currency { get; set; }
+    decimal? CurrencyRate { get; set; }
     decimal? Preis { get; set; }
     decimal? DiscountAmount { get; set; }
     string Content { get; set; }
+    decimal? IDRPrice { get; } // Already Added
+    decimal? IDRDiscountAmount { get; } // New Property
     bool IsEditable { get; set; }
     bool IsValid { get; set; }
     string? Comments { get; set; }
@@ -25,3 +28,5 @@ public interface ISlotEntry
     bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null);
     bool SetPropertyWithLogging<T>(ref T field, T value, [CallerMemberName] string propertyName = null);
 }
+
+

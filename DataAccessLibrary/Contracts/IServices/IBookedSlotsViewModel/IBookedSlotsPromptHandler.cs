@@ -5,9 +5,9 @@ namespace Bgb_DataAccessLibrary.Contracts.IServices.IBookedSlotsViewModel
 {
     public interface IBookedSlotsPromptHandler
     {
-        bool SavePromptUserChoice(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timetableDataBackup);
-        bool RevertPromptUserChoice(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timetableDataBackup);
-        string GenerateChangeDetails(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timetableDataBackup);
+        bool SavePromptUserChoice(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timeTableDataBackup);
+        bool RevertPromptUserChoice(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timeTableDataBackup);
+        string GenerateChangeDetails(List<SlotEntry> changes, ObservableCollection<TimeTableRow> timeTableDataBackup);
         string Changes { get; set; }
     }
 }

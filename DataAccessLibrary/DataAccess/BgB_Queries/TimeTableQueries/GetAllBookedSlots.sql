@@ -1,1 +1,22 @@
-﻿SELECT ts.SlotID, ts.Time, ts.WeekdayNum AS DayNumber, wd.Name AS WeekdayName, s.StudentID, s.Name AS StudentName, sd.Level, sp.Currency, pl.Preis, CAST(d.Amount AS DECIMAL(10, 2)) AS DiscountAmount FROM Timeslots ts LEFT JOIN Weekdays wd ON ts.WeekdayNum = wd.DayNumber LEFT JOIN Bookedslots bs ON ts.SlotID = bs.SlotID LEFT JOIN Students s ON bs.StudentID = s.StudentID LEFT JOIN Studydetails sd ON s.StudentID = sd.StudentID LEFT JOIN Studentpricing sp ON s.StudentID = sp.StudentID LEFT JOIN Pricelist pl ON sd.Level = pl.Level AND pl.Currency = sp.Currency LEFT JOIN Discounts d ON sp.DiscountID = d.DiscountID ORDER BY ts.SlotID;
+﻿SELECT 
+    ts.SlotID, 
+    ts.Time, 
+    ts.WeekdayNum AS DayNumber, 
+    wd.Name AS WeekdayName, 
+    s.StudentID, 
+    s.Name AS StudentName, 
+    sd.Level, 
+    sp.Currency, 
+    pl.Preis, 
+    CAST(d.Amount AS DECIMAL(10, 2)) AS DiscountAmount,
+    CAST(c.CurrentRate AS DECIMAL(10, 2)) AS CurrencyRate -- Convert CurrentRate to DECIMAL
+FROM Timeslots ts
+LEFT JOIN Weekdays wd ON ts.WeekdayNum = wd.DayNumber
+LEFT JOIN Bookedslots bs ON ts.SlotID = bs.SlotID
+LEFT JOIN Students s ON bs.StudentID = s.StudentID
+LEFT JOIN Studydetails sd ON s.StudentID = sd.StudentID
+LEFT JOIN Studentpricing sp ON s.StudentID = sp.StudentID
+LEFT JOIN Pricelist pl ON sd.Level = pl.Level AND pl.Currency = sp.Currency
+LEFT JOIN Discounts d ON sp.DiscountID = d.DiscountID
+LEFT JOIN Currencies c ON sp.Currency = c.Currency -- Join on Currency
+ORDER BY ts.SlotID;

@@ -17,13 +17,13 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
             _timeTableDataHelper = timeTableDataHelper;
         }
         public void UpdateCanSaveAndCancel(
-            ObservableCollection<TimeTableRow> timetableDataBackup,
-            ObservableCollection<TimeTableRow> timetableData,
+            ObservableCollection<TimeTableRow> timeTableDataBackup,
+            ObservableCollection<TimeTableRow> timeTableData,
             out bool canSave,
             out bool canCancel)
         {
-            canCancel = !_timeTableDataHelper.AreTimetableDataEqual(timetableDataBackup, timetableData);
-            canSave = canCancel && timetableData != null && !timetableData.Any(row => !IsRowValid(row));
+            canCancel = !_timeTableDataHelper.AreTimeTableDataEqual(timeTableDataBackup, timeTableData);
+            canSave = canCancel && timeTableData != null && !timeTableData.Any(row => !IsRowValid(row));
         }
 
         private bool IsRowValid(TimeTableRow row)
@@ -41,12 +41,12 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
         {
             return slotEntry == null || slotEntry.IsValid;
         }
-        public bool NoInvalidValueExists(ObservableCollection<TimeTableRow> timetableData)
+        public bool NoInvalidValueExists(ObservableCollection<TimeTableRow> timeTableData)
         {
-            if (timetableData == null)
+            if (timeTableData == null)
                 return true;
 
-            return timetableData.All(IsRowValid);
+            return timeTableData.All(IsRowValid);
         }
     }
 }

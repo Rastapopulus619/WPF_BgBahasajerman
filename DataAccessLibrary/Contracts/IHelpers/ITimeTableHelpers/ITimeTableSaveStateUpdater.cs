@@ -11,10 +11,10 @@ namespace Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers
     public interface ITimeTableSaveStateUpdater
     {
         void UpdateCanSaveAndCancel(
-            ObservableCollection<TimeTableRow> timetableDataBackup,
-            ObservableCollection<TimeTableRow> timetableData,
+            ObservableCollection<TimeTableRow> timeTableDataBackup,
+            ObservableCollection<TimeTableRow> timeTableData,
             out bool canSave,
             out bool canCancel);
-        bool NoInvalidValueExists(ObservableCollection<TimeTableRow> timetableData);
+        bool NoInvalidValueExists(ObservableCollection<TimeTableRow> timeTableData);
     }
 }

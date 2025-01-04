@@ -12,21 +12,21 @@ namespace BgB_TeachingAssistant.Services.BookedSlotsViewModel
 {
     public class SlotEntrySubscriptionManager : ISlotEntrySubscriptionManager
     {
-            public void SubscribeToSlotEntryChanges(ObservableCollection<TimeTableRow> timetableData, PropertyChangedEventHandler handler)
+            public void SubscribeToSlotEntryChanges(ObservableCollection<TimeTableRow> timeTableData, PropertyChangedEventHandler handler)
             {
-                if (timetableData == null) throw new ArgumentNullException(nameof(timetableData));
+                if (timeTableData == null) throw new ArgumentNullException(nameof(timeTableData));
 
-                foreach (var row in timetableData)
+                foreach (var row in timeTableData)
                 {
                     SubscribeToRow(row, handler);
                 }
             }
 
-            public void UnsubscribeFromSlotEntryChanges(ObservableCollection<TimeTableRow> timetableData, PropertyChangedEventHandler handler)
+            public void UnsubscribeFromSlotEntryChanges(ObservableCollection<TimeTableRow> timeTableData, PropertyChangedEventHandler handler)
             {
-                if (timetableData == null) return;
+                if (timeTableData == null) return;
 
-                foreach (var row in timetableData)
+                foreach (var row in timeTableData)
                 {
                     UnsubscribeFromRow(row, handler);
                 }

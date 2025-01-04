@@ -130,14 +130,14 @@ namespace BgB_TeachingAssistant.Views
                 viewModel.ShowLevelsEnabled = !viewModel.ShowLevelsEnabled;
 
                 // Force layout updates
-                // TimetableDataGrid.UpdateLayout();
+                // TimeTableDataGrid.UpdateLayout();
 
-                foreach (var item in TimetableDataGrid.Items)
+                foreach (var item in TimeTableDataGrid.Items)
                 {
-                    var row = TimetableDataGrid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                    var row = TimeTableDataGrid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
                     if (row != null)
                     {
-                        foreach (var column in TimetableDataGrid.Columns)
+                        foreach (var column in TimeTableDataGrid.Columns)
                         {
                             var cell = GetCell(row, column);
                             if (cell != null)
@@ -149,13 +149,12 @@ namespace BgB_TeachingAssistant.Views
                 }
 
                 // Force the DataGrid to refresh styles
-                TimetableDataGrid.Dispatcher.Invoke(() =>
+                TimeTableDataGrid.Dispatcher.Invoke(() =>
                 {
-                    TimetableDataGrid.UpdateLayout();
+                    TimeTableDataGrid.UpdateLayout();
                 }, System.Windows.Threading.DispatcherPriority.Render);
             }
         }
-
 
         // Update Cell Style Dynamically
         private void UpdateCellStyle(DataGridCell cell, DataGridColumn column, bool showLevelsEnabled)
@@ -333,9 +332,9 @@ namespace BgB_TeachingAssistant.Views
                 viewModel.MittwochEditingStyle = newTextBoxStyle;    // Update TextBox style
             }
 
-            TimetableDataGrid.Dispatcher.Invoke(() =>
+            TimeTableDataGrid.Dispatcher.Invoke(() =>
             {
-                TimetableDataGrid.UpdateLayout();
+                TimeTableDataGrid.UpdateLayout();
             }, System.Windows.Threading.DispatcherPriority.Render);
 
             Console.WriteLine($"Switched to TextBlock style: {GetStyleInfo(newTextBlockStyle)}");
