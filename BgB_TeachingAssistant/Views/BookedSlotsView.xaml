@@ -275,6 +275,7 @@
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding Donnerstag.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                             SelectionBrush="LightCoral" SelectionOpacity="0.5"
                          Style="{Binding DataContext.DonnerstagEditingStyle, RelativeSource={RelativeSource AncestorType=UserControl}}"
                          Tag="{Binding Donnerstag}" />
                                 </DataTemplate>

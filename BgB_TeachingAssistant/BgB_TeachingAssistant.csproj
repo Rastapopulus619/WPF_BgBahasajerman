@@ -55,7 +55,6 @@
     <Folder Include="HtmlContent\TemporaryFiles\" />
     <Folder Include="Logs\" />
     <Folder Include="Models\BookedSlotsModels\" />
-    <Folder Include="Helpers\Converters\" />
     <Folder Include="Services\Navigation\" />
     <Folder Include="Services\Data\" />
     <Folder Include="Services\Communication\" />
