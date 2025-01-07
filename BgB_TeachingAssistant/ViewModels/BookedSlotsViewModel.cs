@@ -1,6 +1,5 @@
 ﻿using Bgb_DataAccessLibrary.Contracts.IHelpers.ITimeTableHelpers;
 using Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;
-using Bgb_DataAccessLibrary.Contracts.IModels.IStudentModels;
 using Bgb_DataAccessLibrary.Contracts.IServices.IBookedSlotsViewModel;
 using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
@@ -10,11 +9,15 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using Bgb_DataAccessLibrary.Contracts.IModels.IDomain.IStudentModels;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventManagement;
 
 namespace BgB_TeachingAssistant.ViewModels
 {
     class BookedSlotsViewModel : ViewModelBase
     {
+        //continue here: CLEAN UP THIS CLASS AND DELETE ALL UNUSED CODE!!
+
         public override string Name => "BookedSlots";
         private bool _isDisposed = false;
 
@@ -88,6 +91,7 @@ namespace BgB_TeachingAssistant.ViewModels
         public Style DefaultCellStyle { get; set; }
         public Style AlternateCellStyle { get; set; }
         public Style DefaultTextBlockStyle { get; set; }
+        public Style DefaultTextBoxStyle { get; set; }
         public Style ShowLevelCellStyle { get; set; }
 
         private bool _showLevelsEnabled; // Initialize with a default value
@@ -191,12 +195,31 @@ namespace BgB_TeachingAssistant.ViewModels
                 if (SetProperty(ref _timeTableData, value, nameof(TimeTableData)))
                 {
                     // UnsubscribeFromSlotEntryChanges(); // Clean up old subscriptions
-                    SubscriptionManager.UnsubscribeFromSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged);
+                    // SubscriptionManager.UnsubscribeFromSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged);
+                    SubscriptionService?.UnsubscribeFromNestedProperties(
+                        _timeTableData,
+                        SlotEntryPropertyChanged,
+                        row => new List<INotifyPropertyChanged>
+                        {
+                            row.Montag, row.Dienstag, row.Mittwoch,
+                            row.Donnerstag, row.Freitag, row.Samstag, row.Sonntag
+                        });
                     if (!_isDisposed && _timeTableData != null)
                     {
-                        //SubscribeToSlotEntryChanges(); // Subscribe to new data
-                        SubscriptionManager.SubscribeToSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged); // Subscribe to new data
+                        SubscriptionService?.SubscribeToNestedProperties(
+                            _timeTableData,
+                            SlotEntryPropertyChanged,
+                            row => new List<INotifyPropertyChanged>
+                            {
+                                row.Montag, row.Dienstag, row.Mittwoch,
+                                row.Donnerstag, row.Freitag, row.Samstag, row.Sonntag
+                            });
                     }
+                    // if (!_isDisposed && _timeTableData != null)
+                    // {
+                    //     //SubscribeToSlotEntryChanges(); // Subscribe to new data
+                    //     SubscriptionManager.SubscribeToSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged); // Subscribe to new data
+                    // }
 
                     FetchTotalPricesRowCollection(); // Update totals row data whenever data changes
                 }
@@ -226,6 +249,8 @@ namespace BgB_TeachingAssistant.ViewModels
         public IPromptService PromptService { get; set; }
         public IBookedSlotsPromptHandler BookedSlotsPromptHandler { get; set; }
         public ISlotEntrySubscriptionManager SubscriptionManager { get; set; }
+        public IPropertyChangeSubscriptionService SubscriptionService { get; set; }
+
         #endregion
         #region IHelpers
         public ITimeTableDataHelper TimeTableDataHelper { get; set; }
@@ -263,6 +288,7 @@ namespace BgB_TeachingAssistant.ViewModels
             CurrentCellStyle = _styles["DayCellStyle"];
             MittwochTextBlockStyle = _styles["ValidationDependentCellStyle"];
             MittwochEditingStyle = _styles["DataGridEditableTextBoxStyle"];
+            DefaultTextBoxStyle = _styles["DataGridEditableTextBoxStyle"];
             ShowLevelCellStyle = _styles["LevelDependentCellStyle"];
 
             ToggleShowLevels = new RelayCommand(_ =>
@@ -296,6 +322,18 @@ namespace BgB_TeachingAssistant.ViewModels
                 // Use the initializer to fetch data
                 TimeTableData = await Initializer.FetchTimeTableDataAsync();
                 Students = await Initializer.FetchStudentListAsync();
+
+
+
+                // Validate cloned data
+                var clonedData = TimeTableDataHelper.CloneTimeTableData(TimeTableData);
+                for (int i = 0; i < TimeTableData.Count; i++)
+                {
+                    Console.WriteLine($"Original: {TimeTableData[i].Montag.Name}, Cloned: {clonedData[i].Montag.Name}");
+                }
+
+
+
 
                 TotalPricesData = new ObservableCollection<TotalPricesRow>();
 
@@ -442,7 +480,17 @@ namespace BgB_TeachingAssistant.ViewModels
         protected override void Cleanup()
         {
             // Unsubscribe from SlotEntry changes to prevent memory leaks
-            SubscriptionManager.UnsubscribeFromSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged);
+            // SubscriptionManager.UnsubscribeFromSlotEntryChanges(_timeTableData, SlotEntryPropertyChanged);
+            SubscriptionService?.UnsubscribeFromNestedProperties(
+                _timeTableData,
+                SlotEntryPropertyChanged,
+                row => new List<INotifyPropertyChanged>
+                {
+                    row.Montag, row.Dienstag, row.Mittwoch,
+                    row.Donnerstag, row.Freitag, row.Samstag, row.Sonntag
+                });
+
+
 
             // Unsubscribe from events (from EventAggregator)
             UnsubscribeEvents();

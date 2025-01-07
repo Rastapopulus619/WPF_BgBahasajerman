@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using Bgb_DataAccessLibrary.Contracts.IModels.IDomain.IStudentModels;
 using Bgb_DataAccessLibrary.Models.Domain.StudentModels;
 using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
 using Bgb_DataAccessLibrary.Contracts.IServices.IData;

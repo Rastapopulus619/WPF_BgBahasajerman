@@ -1,0 +1,264 @@
+﻿<UserControl x:Class="BgB_TeachingAssistant.Views.StudentsManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:BgB_TeachingAssistant.Helpers.Converters"
+             xmlns:shared="clr-namespace:Bgb_SharedLibrary.SharedCollections;assembly=Bgb_SharedLibrary"
+             xmlns:attached="clr-namespace:BgB_TeachingAssistant.Helpers.AttachedProperties"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="#18191a">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:ColumnWidthConverter x:Key="ColumnWidthConverter" />
+
+            <!-- Register the BooleanToVisibilityConverter -->
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+            <Style x:Key="CustomInputTextBoxStyle" TargetType="TextBox">
+                <Setter Property="Background" Value="#18191a" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderBrush" Value="White" />
+                <Setter Property="CaretBrush" Value="White" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Validation.ErrorTemplate">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid>
+                                <!-- Validation Feedback -->
+                                <DockPanel>
+                                    <Border Background="Red" DockPanel.Dock="Right" Width="20" Height="20" CornerRadius="10" 
+                                ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}">
+                                        <TextBlock Text="!" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Foreground="White" />
+                                    </Border>
+                                    <AdornedElementPlaceholder Name="customAdorner" />
+                                </DockPanel>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Grid>
+                                <!-- TextBox Border -->
+                                <Border CornerRadius="5"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="0.75">
+                                    <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                                </Border>
+
+                                <!-- Placeholder Text -->
+                                <TextBlock Text="{TemplateBinding Tag}" 
+                               Foreground="Gray" 
+                               Margin="10,0,0,0" 
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False"
+                               Visibility="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, 
+                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <!-- Trigger for focus -->
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="BorderBrush" Value="LightGray" />
+                    </Trigger>
+                    <!-- Trigger for mouse over -->
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="LightGray" />
+                    </Trigger>
+                    <!-- Trigger for validation errors -->
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="BorderBrush" Value="Red" />
+                        <Setter Property="ToolTip" Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource Self}}" />
+                    </Trigger>
+                    <!-- Trigger for disabled state -->
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.5" />
+                        <Setter Property="Cursor" Value="No" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <!-- Merge External Style Files -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/DataGrid/DataGridStyles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/DataGrid/DataGridColumnHeaderStyles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/DataGrid/DataGridCellStyles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Buttons/Buttons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+
+
+        </ResourceDictionary>
+
+               
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.4*"/>
+            <!-- First column -->
+            <ColumnDefinition Width="4*"/>
+            <!-- Second column -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Column -->
+        <Border Background="#353535" Grid.Column="0" Margin="10" CornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <!-- Buttons and ComboBox -->
+                    <RowDefinition Height="*"/>
+                    <!-- DataGrid fills remaining space -->
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Margin="10">
+                    <Button Content="Hello Click Me!" 
+                            Style="{StaticResource SaveButton}"
+                            Command="{Binding DanCukCommand}" 
+                            Width="150" 
+                            Margin="0,0,0,5"/>
+                    <Button Content="Load Students" 
+                            Style="{StaticResource SaveButton}"
+                            Command="{Binding LoadStudentsCommand}" 
+                            Width="150" 
+                            Margin="0,0,0,5"/>
+                    <ComboBox Name="StudentComboBox" ItemsSource="{Binding StudentNames}" />
+                    <TextBox Width="200" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <DataGrid x:Name="StudentListGrid"
+                              ItemsSource="{Binding FilteredItems, NotifyOnTargetUpdated=True}"
+                              TargetUpdated="DataGrid_TargetUpdated"
+                              SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
+                              Style="{StaticResource DataGridTimeTableStyle}"
+                              CellStyle="{Binding CurrentCellStyle}"
+                              ColumnHeaderStyle="{StaticResource TimeTableColumnHeaderStyle}"
+                              MaxWidth="400"
+                              SelectionMode="Single"
+                              CanUserResizeRows="False"
+                              CanUserResizeColumns="False"
+                              CanUserSortColumns="False"
+                              CanUserReorderColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              AutoGenerateColumns="False" 
+                              HorizontalAlignment="Stretch" 
+                              VerticalAlignment="Stretch" 
+                              SelectionUnit="FullRow"
+                              HorizontalGridLinesBrush="White" 
+                              VerticalGridLinesBrush="White"
+                              HorizontalScrollBarVisibility="Disabled"
+                              HeadersVisibility="Column"
+                              Margin="10"
+                              Loaded="DataGrid_Loaded">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="#" Binding="{Binding StudentNumber}" Width="1*" />
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="2*" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="6*" />
+                            <DataGridTextColumn Header="ID" Binding="{Binding StudentID}" Width="1.5*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+        <!-- Right Column -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <!-- Buttons and ComboBox -->
+                <RowDefinition Height="2*"/>
+                <!-- DataGrid fills remaining space -->
+            </Grid.RowDefinitions>
+            <Border Background="#353535" Grid.Row="0" Margin="10" CornerRadius="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+                    <!-- Picture Section -->
+                    <Border Grid.Row="0" Background="Gray" CornerRadius="5" Padding="5" Margin="10">
+                        <Image Source="{Binding SelectedStudentData.Picture}" Stretch="Uniform" />
+                    </Border>
+                    <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="6*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        
+
+
+
+
+
+
+                        <!-- Study Details Section -->
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Title:" VerticalAlignment="Center" Margin="5" Foreground="White"/>
+                        <ComboBox  Grid.Column="1" Grid.Row="1"
+                                   VerticalAlignment="Center"
+                                   ItemsSource="{x:Static shared:AllowedTitles.Titles}" 
+                                   SelectedItem="{Binding SelectedStudentData.Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                   Margin="5"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Study Status:" VerticalAlignment="Center" Margin="5" Foreground="White"/>
+                        <ComboBox Grid.Column="1" Grid.Row="2"
+                                  VerticalAlignment="Center"
+                                  ItemsSource="{Binding StudyStatuses}" 
+                                  SelectedItem="{Binding SelectedStudyStatus, Mode=TwoWay}" 
+                                  Margin="5" />
+                        <ComboBox Grid.Column="1" Grid.Row="3"
+                                  VerticalAlignment="Center"
+                                  ItemsSource="{Binding StudyStatuses}" 
+                                  SelectedItem="{Binding SelectedStudyStatus, Mode=TwoWay}" 
+                                  Margin="5" />
+                        <!-- <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource CustomInputTextBoxStyle}" Text="{Binding SelectedStudentData.StudyStatus, Mode=TwoWay}" VerticalAlignment="Center" Margin="5" /> -->
+                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Goal:" VerticalAlignment="Center" Margin="5"  Foreground="White"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource CustomInputTextBoxStyle}" Text="{Binding SelectedStudentData.Goal, Mode=TwoWay}" VerticalAlignment="Center" Margin="5" />
+                        <TextBlock Grid.Column="0" Grid.Row="4" Text="Level:" VerticalAlignment="Center" Margin="5"  Foreground="White"/>
+                        <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource CustomInputTextBoxStyle}" Text="{Binding SelectedStudentData.Level, Mode=TwoWay}" VerticalAlignment="Center" Margin="5" />
+                    </Grid>
+
+                </Grid>
+            </Border>
+            <Border Background="#353535" Grid.Row="1" Margin="10" CornerRadius="10">
+                <TextBox Grid.Row="1" Grid.Column="1"
+                         Style="{StaticResource CustomInputTextBoxStyle}"
+                         Tag="Enter City of Residence"
+                         Text="{Binding SelectedStudentData.CityOfResidence, 
+                                UpdateSourceTrigger=PropertyChanged, 
+                                ValidatesOnDataErrors=True, 
+                                NotifyOnValidationError=True}" />
+            </Border>
+
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using Bgb_DataAccessLibrary.Contracts.IModels.IDomain.IStudentModels;
 using Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;
-using Bgb_DataAccessLibrary.Contracts.IModels.IStudentModels;
 
 namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
 {

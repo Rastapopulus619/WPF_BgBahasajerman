@@ -53,6 +53,15 @@
     <ProjectReference Include="..\Bgb_SharedLibrary\Bgb_SharedLibrary.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="DataAccess\BgB_Queries\StudentQueries\GetStudyStatuses.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DataAccess\BgB_Queries\StudentQueries\GetAllStudentsManagerData.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DataAccess\BgB_Queries\StudentQueries\GetStudentsManagerDataByStudentID.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="DataAccess\BgB_Queries\StudentQueries\BlankForCopy.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

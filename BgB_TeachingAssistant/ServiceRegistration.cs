@@ -7,6 +7,7 @@ using Bgb_DataAccessLibrary.Contracts.IMessages;
 using Bgb_DataAccessLibrary.Contracts.IModels.IDTOs.ITimeTableDTOs;
 using Bgb_DataAccessLibrary.Contracts.IServices.IBookedSlotsViewModel;
 using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventAggregators;
+using Bgb_DataAccessLibrary.Contracts.IServices.ICommunication.IEventManagement;
 using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 using Bgb_DataAccessLibrary.Contracts.IServices.IDialog;
 using Bgb_DataAccessLibrary.Contracts.IServices.ILogging;
@@ -22,6 +23,7 @@ using Bgb_DataAccessLibrary.Helpers.TimeTableHelpers;
 using Bgb_DataAccessLibrary.Logger;
 using Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs;
 using Bgb_DataAccessLibrary.Services.Communication.EventAggregators;
+using Bgb_DataAccessLibrary.Services.Communication.EventManagement;
 using BgB_TeachingAssistant.Services;
 using BgB_TeachingAssistant.Services.BookedSlotsViewModel;
 using BgB_TeachingAssistant.Services.Dialog;
@@ -79,6 +81,7 @@ namespace BgB_TeachingAssistant
             services.AddTransient<StudentProfileDataService>();
             services.AddTransient<IDataServiceTestClass, DataServiceTestClass>();
             services.AddTransient<IBookedSlotsDataService, BookedSlotsDataService>();
+            services.AddTransient<IStudentsManagerDataService, StudentsManagerDataService>();
 
         }
 
@@ -91,6 +94,8 @@ namespace BgB_TeachingAssistant
 
         private static void RegisterOtherServices(IServiceCollection services)
         {
+            //ViewModel Model Property changed event subscription service
+            services.AddTransient<IPropertyChangeSubscriptionService, PropertyChangeSubscriptionService>();
 
             //TimeTableServices
             services.AddTransient<ITimeTableDataHelper, TimeTableDataHelper>();

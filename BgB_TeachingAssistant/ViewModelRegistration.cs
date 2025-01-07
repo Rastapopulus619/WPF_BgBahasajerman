@@ -10,7 +10,7 @@ namespace BgB_TeachingAssistant
         {
             // Register individual ViewModels as specific types and as IPageViewModel
             services.AddTransient<DashboardViewModel>();
-            services.AddTransient<StudentViewModel>();
+            services.AddTransient<StudentsManagerViewModel>();
             services.AddTransient<PackageViewModel>();
             services.AddTransient<TestPage1ViewModel>();
             services.AddTransient<BookedSlotsViewModel>();
@@ -19,7 +19,7 @@ namespace BgB_TeachingAssistant
             // probably from older navigation system: ******** delete if not needed ********
             // Register them as IPageViewModel for collection injection
             //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<DashboardViewModel>());
-            //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<StudentViewModel>());
+            //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<StudentsManagerViewModel>());
             //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<PackageViewModel>());
             //services.AddTransient<IPageViewModel>(provider => provider.GetRequiredService<TestPage1ViewModel>());
 
@@ -35,8 +35,8 @@ namespace BgB_TeachingAssistant
         },
         new PageDescriptor
         {
-            Name = "Student",
-            ViewModelType = typeof(StudentViewModel),
+            Name = "StudentsManager",
+            ViewModelType = typeof(StudentsManagerViewModel),
             Icon = "C:\\Programmieren\\ProgrammingProjects\\WPF\\WPF_BgBahasajerman\\BgB_TeachingAssistant\\Views\\Resources\\Icons\\StudentManagerIconv2.png"
         },
         new PageDescriptor

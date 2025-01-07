@@ -1,4 +1,4 @@
-﻿using Bgb_DataAccessLibrary.Contracts.IModels.IStudentModels;
+﻿using Bgb_DataAccessLibrary.Contracts.IModels.IDomain.IStudentModels;
 
 namespace Bgb_DataAccessLibrary.Models.Domain.StudentModels
 {

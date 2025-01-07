@@ -148,11 +148,11 @@ namespace Bgb_DataAccessLibrary.Models.DTOs.TimeTableDTOs
                    WeekdayName == other.WeekdayName &&
                    Level == other.Level &&
                    Currency == other.Currency &&
-                   CurrencyRate == other.CurrencyRate && // Include in comparison
+                   // CurrencyRate == other.CurrencyRate && // Include in comparison
                    Preis == other.Preis &&
-                   IDRPrice == other.IDRPrice &&
+                   // IDRPrice == other.IDRPrice &&
                    DiscountAmount == other.DiscountAmount &&
-                   IDRDiscountAmount == other.IDRDiscountAmount &&
+                   // IDRDiscountAmount == other.IDRDiscountAmount &&
                    Content == other.Content &&
                    IsEditable == other.IsEditable &&
                    IsValid == other.IsValid &&

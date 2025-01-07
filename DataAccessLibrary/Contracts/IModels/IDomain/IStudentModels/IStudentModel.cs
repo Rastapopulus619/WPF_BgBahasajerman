@@ -1,4 +1,4 @@
-﻿namespace Bgb_DataAccessLibrary.Contracts.IModels.IStudentModels;
+﻿namespace Bgb_DataAccessLibrary.Contracts.IModels.IDomain.IStudentModels;
 
 public interface IStudentModel
 {

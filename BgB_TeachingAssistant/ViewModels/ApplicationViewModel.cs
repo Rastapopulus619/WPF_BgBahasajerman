@@ -27,7 +27,7 @@ namespace BgB_TeachingAssistant.ViewModels
             if (PageDescriptors == null || !PageDescriptors.Any())
                 throw new InvalidOperationException("No page descriptors provided.");
 
-            _navigationService.NavigateTo(PageDescriptors.First(descriptor => descriptor.ViewModelType == typeof(DashboardViewModel)));
+            _navigationService.NavigateTo(PageDescriptors.First(descriptor => descriptor.ViewModelType == typeof(StudentsManagerViewModel)));
 
             ChangeViewModelCommand = new RelayCommand(
                 parameter => _navigationService.NavigateTo((IPageDescriptor)parameter),

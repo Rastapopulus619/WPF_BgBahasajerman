@@ -8,6 +8,7 @@ using Bgb_DataAccessLibrary.Contracts.IServices.IData;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryExecutor;
 using Bgb_DataAccessLibrary.Contracts.IDataAccess.IQueryLoaders;
+using Bgb_DataAccessLibrary.Contracts.IModels.IDomain.IStudentModels;
 
 namespace Bgb_DataAccessLibrary.Data.DataServices
 {

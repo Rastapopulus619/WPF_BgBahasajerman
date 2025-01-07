@@ -7,8 +7,8 @@
         <local:DashboardView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewModel:StudentViewModel}">
-        <local:StudentView />
+    <DataTemplate DataType="{x:Type viewModel:StudentsManagerViewModel}">
+        <local:StudentsManagerView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewModel:PackageViewModel}">

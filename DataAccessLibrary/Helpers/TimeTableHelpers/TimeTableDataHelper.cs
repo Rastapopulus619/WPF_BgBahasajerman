@@ -51,6 +51,7 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
         private SlotEntry CloneSlotEntry(SlotEntry original)
         {
             if (original == null) return null;
+
             return new SlotEntry
             {
                 StudentID = original.StudentID,
@@ -61,14 +62,17 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
                 WeekdayName = original.WeekdayName,
                 Level = original.Level,
                 Currency = original.Currency,
+                CurrencyRate = original.CurrencyRate, // Include the raw field
                 Preis = original.Preis,
-                DiscountAmount = original.DiscountAmount,
+                DiscountAmount = original.DiscountAmount, // Include the raw field
                 Content = original.Content,
                 IsEditable = original.IsEditable,
                 IsValid = original.IsValid,
                 Comments = original.Comments
             };
         }
+
+
 
         public bool AreTimeTableDataEqual(ObservableCollection<TimeTableRow> original, ObservableCollection<TimeTableRow> updated)
         {
@@ -89,13 +93,16 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
         {
             if (row1 == null || row2 == null) return false;
 
-            return AreSlotEntriesEqual(row1.Montag, row2.Montag) &&
-                   AreSlotEntriesEqual(row1.Dienstag, row2.Dienstag) &&
-                   AreSlotEntriesEqual(row1.Mittwoch, row2.Mittwoch) &&
-                   AreSlotEntriesEqual(row1.Donnerstag, row2.Donnerstag) &&
-                   AreSlotEntriesEqual(row1.Freitag, row2.Freitag) &&
-                   AreSlotEntriesEqual(row1.Samstag, row2.Samstag) &&
-                   AreSlotEntriesEqual(row1.Sonntag, row2.Sonntag);
+            var result = AreSlotEntriesEqual(row1.Montag, row2.Montag) &&
+                         AreSlotEntriesEqual(row1.Dienstag, row2.Dienstag) &&
+                         AreSlotEntriesEqual(row1.Mittwoch, row2.Mittwoch) &&
+                         AreSlotEntriesEqual(row1.Donnerstag, row2.Donnerstag) &&
+                         AreSlotEntriesEqual(row1.Freitag, row2.Freitag) &&
+                         AreSlotEntriesEqual(row1.Samstag, row2.Samstag) &&
+                         AreSlotEntriesEqual(row1.Sonntag, row2.Sonntag);
+
+            Console.WriteLine($"Rows Equal: {result}");
+            return result;
         }
 
         private bool AreSlotEntriesEqual(SlotEntry entry1, SlotEntry entry2)
@@ -110,6 +117,7 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
                    entry1.WeekdayName == entry2.WeekdayName &&
                    entry1.Level == entry2.Level &&
                    entry1.Currency == entry2.Currency &&
+                   entry1.CurrencyRate == entry2.CurrencyRate && // Include new property
                    entry1.Preis == entry2.Preis &&
                    entry1.DiscountAmount == entry2.DiscountAmount &&
                    entry1.Content == entry2.Content &&
@@ -117,6 +125,7 @@ namespace Bgb_DataAccessLibrary.Helpers.TimeTableHelpers
                    entry1.IsValid == entry2.IsValid &&
                    entry1.Comments == entry2.Comments;
         }
+
 
         public List<SlotEntry> GetDifferences(ObservableCollection<TimeTableRow> original, ObservableCollection<TimeTableRow> updated)
         {
